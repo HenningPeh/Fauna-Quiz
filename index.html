@@ -1521,16 +1521,16 @@ function setImage(src, isDetail=false) {
 updateImageHint();
 
 speciesImage.addEventListener('click', () => {
-  if (window.innerWidth <= 750) {
-    // KLEINE SCREENS: Overlay öffnen
+  const isSmall =
+    window.innerWidth <= 750 ||
+    window.matchMedia('(orientation: portrait)').matches;
+
+  if (isSmall) {
     detailImg.src = speciesImage.src;
     overlay.style.display = 'flex';
-
-    // alte Desktop-Logik deaktivieren
-    return; // verhindert, dass die Mousemove-Logik ausgeführt wird
+    return;
   }
 
-  // GROSSE SCREENS: bestehende Desktop-Detailbild-Logik
   showDetailDesktop(speciesImage.src);
 });
 
