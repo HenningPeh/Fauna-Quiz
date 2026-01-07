@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Dongle&family=Exo:ital,wght@0,100..900;1,100..900&family=SUSE:ital,wght@0,100..900;1,100..900&family=Tilt+Neon&display=swap" rel="stylesheet">
+  <title>Weitere Informationen</title>
+
+  <style>
+    :root {
+      --bg-main: #f4f5f2;
+      --bg-card: #ffffff;
+      --text-main: #1f2a24;
+      --text-muted: #6b7c72;
+      --green-dark: #2f5d46;
+    }
+html, body {
+  height: 100%;
+  margin: 0;
+}
+    body {
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.2;
+    }
+
+/* --- Obere Menüleiste --- */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  background: var(--bg-card);
+  border-bottom: 1px solid #dde3dd;
+}
+
+.top-nav-inner {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1.1% 10%;
+  display: flex;
+  align-items: baseline;
+  gap: 54px;
+}
+
+.nav-primary {
+  color: var(--green-dark);
+  text-decoration: none;
+  font-family: "Cairo", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0;
+  font-size: 35px;
+}
+
+.nav-secondary {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.nav-secondary:hover {
+  color: var(--green-dark);
+}
+    main {
+      max-width: 70%;
+      margin: 40px auto;
+      padding: 0 20px 0px;
+    }
+    details summary {
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    details[open] summary {
+      color: #0066cc;
+    }
+
+    section {
+      background: var(--bg-card);
+      padding: 22px 22px 18px;
+      border-radius: 14px;
+      margin-bottom: 22px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      line-height: 1.6;
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 24px;
+    }
+
+    a {
+      color: var(--green-dark);
+    }
+
+    ul {
+      padding-left: 18px;
+    }
+     footer {
+  flex-shrink: 0;
+  width: 100%;
+  background: var(--bg-card);
+  border-top: 1px solid #dde3dd;
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 16px 0;
+  text-align: center;
+}
+
+
+  footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: var(--green-dark);
+  text-decoration: underline;
+}
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="top-nav">
+  <div class="top-nav-inner">
+    <a href="index.html" class="nav-primary">Fauna Quiz</a>
+    <a href="info.html" class="nav-secondary">Weitere Informationen</a>
+  </div>
+</nav>
+
+  <main>
+
+    <h1>Weitere Informationen</h1>
+    
+    <section>
+      <h2>Wie funktioniert's?</h2>
+      <p>
+        Durch den Klick auf eine der Kategorien öffnet sich die Einstellunge für das Quiz. 
+        Hier können die Anzahl der Bilder für die Runde sowie das Schwierigkeitslevel und der Antwortmodus eingestellt werden. 
+        Mit dem Klick auf "Quiz starten" beginnt das Quiz und Ziel ist es hier, die auf dem Foto abgebildeten Arten richtig zu bestimmen. 
+        Dazu kann bei Multiple Choice einfach der zur gezeigten Art passende Name angeklickt werden und bei der Texteingabe muss der richtige Name eingetippt werden. 
+        Bei der Texteingabe wird sowohl der wissenschaftliche Name, als auch der Trivialname als richtige Lösung akzeptiert. 
+        Bei Trivialnamen gilt allerdings zu beachten, dass es für manche Arten sehr viele verschiedene Trivialnamen gibt. 
+        Für jede Art sind hier aber nur 1-3 verbreitete Trivialnamen als richtige Lösung hinterlegt.<br><br>
+
+        <strong>Artkomplexe</strong><br>
+        Nicht alle heimischen Arten lassen sich anhand äußerer Merkmale sicher bestimmen. 
+        Des weiteren gibt es Arten, die sehr variabel in den äußeren Merkmalen sind, bei denen es zu Überscheidungen der Merkmalsausprägungen mit anderen Arten kommen kann.
+        In so einem Fall lassen sich nur Individuen mit typischer Merkmalsausprägung mit größerer Sicherheit einer Art zuordnen. 
+        In vielen Fällen können anhand des Habitats, des Verbreitungsgebietes, der Jahrezeit sowie der äußeren Merkmale aber zumindest Vermutungen in Bezug auf die Art aufgestellt werden.
+        Da in diesem Quiz nur äußere Merkmale gezeigt und keine Angaben zum Habitat, zum Fundort oder der Jahreszeit gemacht werden, müssen solche schwer zu trennenden Arten als Artkomplexe zusammengefasst werden. 
+        Welche Arten für das Quiz als Artkomplex zusammengefasst wurden, ist in den Info-Blöcke zum Aufklappen weiter unten für jede Tiergruppe dokumentiert.
+
+
+      </p>
+    </section>
+    
+    <section>
+      <h2>Mehr zum Quiz</h2>
+      <p>
+        Diese Website soll als Möglichkeit dienen, Artenkenntnis von verschiedene Tiergruppen zu trainieren. 
+        Viele der gezeigten Arten sind über die Wintermonate kaum zu beobachten und teilweise auch im Sommerhalbjahr nur für einen kurzen Zeitraum aktiv, 
+        sodass das Wissen über die Bestimmungsmerkmale langsam verblasst, bis die Art das nächste mal beobachtet werden kann. 
+        Um die Merkmale in der Zwischenzeit in Erinnerung zu halten, kann diese Website als Wiederholungsmöglichkeit genutzt werden. <br><br>
+        
+        Zur Zeit ist keine der Tiergruppen vollständig, da von vielen Tierarten noch keine geeigneten Fotos vorhanden sind.
+        Weitere Kategorien wie "Heuschrecken" und "Käfer" sollen später noch folgen. Für die Kategorien "Amphibien" und "Heuschrecken" sollen auch die jeweiligen Rufe und Gesänge als Audio-Dateien noch folgen. Hier fehlen aber noch nahezu alle Aufnahmen.
+        Wer dazu beitragen möchte, diese Lücken zu schließen, ist herzlich dazu eingeladen, eigene Fotos oder Ton-Aufnahmen von fehlenden oder unterrepräsentierten Arten beizusteuern.
+        Die "künstlerische Qualität" der Fotos spielt dabei keine Rolle, es kommt einzig darauf an, dass die jeweilige Art anhand des Fotos oder der Audiodatei sicher bestimmt werden kann. <br><br>
+        
+        Es werden ausschließlich Fotos von Tieren in freier Wildbahn genutzt, da Tiere in Gefangenschaft oder aus der Zucht teilweise z.B. andere Körperhaltungen oder eine andere Färbung zeigen. 
+        Alle verwendeten Fotos sind echte Fotos und allenfalls geringfügig nachbearbeitet. Mit Hilfe von KI erzeugte Fotos werden nicht verwendet.<br><br>
+        Für weitere Details zu den jeweiligen Artengruppen siehe die folgenden Info-Blöcke zum Aufklappen.  
+        <details>
+        <summary>Amphibien</summary>
+
+        <p>
+          Aktuell sind Fotos von 13 der 21 heimischen Amphibien-Arten enthalten. <br><br>
+          Artkomplexe:<br>
+          Seefrosch, Teichfrosch und Kleiner Wasserfrosch werden zu dem Art-Komplex "Grünfrosch (Pelophylax spec.)" zusammengefasst. <br><br>
+          
+          Fotos folgender Arten fehlen noch:<br>
+          Wechselkröte (Bufotes viridis)<br>
+          Knoblauchkröte (Pelobates fuscus)<br>
+          Europäischer Laubfrosch (Hyla arborea)<br>
+          Rotbauchunke (Bombina bombina)<br>
+          Moorfrosch (Rana arvalis)<br>
+          Springfrosch (Rana dalmatina)<br>
+        </p>
+        </details>
+        <details>
+        <summary>Reptilien</summary>
+
+        <p>
+          Aktuell sind Fotos von 8 der 14 heimischen Reptilien-Arten enthalten.<br><br>
+          Artkomplexe:<br>
+          Östliche und Westliche Smaragdeidechse werden zu dem Art-Komplex "Smaragdeidechse (Lacerta bilineata/viridis)" zusammengefasst. <br><br>
+          
+          Fotos folgender Arten fehlen noch:<br>
+          Europäische Sumpfschildkröte (Emys orbicularis) <br>
+          Barren-Ringelnatter (Natrix helvetica) <br>
+          Würfelnatter (Natrix tessellata) <br>
+          Äskulapnatter (Zamenis longissimus) <br>
+          Aspisviper (Vipera aspis)<br>
+          Kreuzotter (Vipera berus)<br>
+        </p>
+        </details>
+        <details>
+        <summary>Säugetiere</summary>
+
+        <p>
+          Aktuell sind Fotos von 27 der 107 heimischen Säugetier-Arten enthalten.<br><br>
+          
+          Fotos folgender Arten fehlen noch:<br>
+          Alpenfledermaus (Hypsugo savii)<br>
+          Alpenspitzmaus (Sorex alpinus)<br>
+          Alpenwaldmaus (Apodemus alpicola)<br>
+          Baummarder (Martes martes)<br>
+          Baumschläfer (Dryomys nitedula)<br>
+          Bechsteinfledermaus (Myotis bechsteinii)<br>
+          Biber (Castor fiber)<br>
+          Brandmaus (Apodemus agrarius)<br>
+          Braunbrustigel (Erinaceus europaeus)<br>
+          Braunes Langohr (Plecotus auritus)<br>
+          Breitflügelfledermaus (Eptesicus serotinus)<br>
+          Damhirsch (Dama dama)<br>
+          Elch (Alces alces)<br>
+          Erdmaus (Microtus agrestis)<br>
+          Feldhamster (Cricetus cricetus)<br>
+          Feldmaus (Microtus arvalis)<br>
+          Feldspitzmaus (Crocidura leucodon)<br>
+          Fischotter (Lutra lutra)<br>
+          Fransenfledermaus (Myotis nattereri)<br>
+          Gartenschläfer (Eliomys quercinus)<br>
+          Gartenspitzmaus (Crocidura suaveolens)<br>
+          Gelbhalsmaus (Apodemus flavicollis)<br>
+          Graues Langohr (Myotis brandtii)<br>
+          Großes Mausohr (Myotis myotis)<br>
+          Haselmaus (Muscardinus avellanarius)<br>
+          Hausratte (Rattus rattus)<br>
+          Hausspitzmaus (Crocidura russula)<br>
+          Kegelrobbe (Halichoerus grypus)<br>
+          Kleinabendsegler (Nyctalus leisleri)<br>
+          Kleine Bartfledermaus (Myotis mystacinus)<br>
+          Kleine Hufeisennase (Rhinolophus hipposideros)<br>
+          Kleinwühlmaus (Microtus subterraneus)<br>
+          Luchs (Lynx lynx)<br>
+          Marderhund (Nyctereutes procyonoides)<br>
+          Maulwurf (Talpa europaea)<br>
+          Mauswiesel (Mustela nivalis)<br>
+          Mink (Neovison vison)<br>
+          Mopsfledermaus (Barbastella barbastellus)<br>
+          Mückenfledermaus (Pipistrellus pygmaeus)<br>
+          Nordfledermaus (Eptesicus nilssonii)<br>
+          Nymphenfledermaus (Myotis alcathoe)<br>
+          Ostschermaus (Arvicola amphibius)<br>
+          Rauhautfledermaus (Pipistrellus nathusii)<br>
+          Rötelmaus (Myodes glareolus)<br>
+          Schabrackenspitzmaus (Sorex coronatus)<br>
+          Schneehase (Lepus timidus)<br>
+          Schneemaus (Chionomys nivalis)<br>
+          Phocoena phocoena (Schweinswal)<br>
+          Sikahirsch (Cervus nippon)<br>
+          Steinbock (Capra ibex)<br>
+          Steinmarder (Martes foina)<br>
+          Sumpfmaus (Alexandromys oeconomus)<br>
+          Sumpfspitzmaus (Neomys anomalus)<br>
+          Teichfledermaus (Myotis dasycneme)<br>
+          Waldbirkenmaus (Sicista betulina)<br>
+          Waldmaus (Apodemus sylvaticus)<br>
+          Waldspitzmaus (Sorex araneus)<br>
+          Wanderratte (Rattus norvegicus)<br>
+          Wasserspitzmaus (Neomys fodiens)<br>
+          Weißrandfledermaus (Pipistrellus kuhlii)<br>
+          Weißschnauzendelfin (Lagenorhynchus albirostris)<br>
+          Westliche Hausmaus (Mus domesticus)<br>
+          Wildkaninchen (Oryctolagus cuniculus)<br>
+          Wildkatze (Felis silvestris)<br>
+          Wimperfledermaus (Myotis emarginatus)<br>
+          Wolf (Canis lupus)<br>
+          Zweifarbfledermaus (Vespertilio murinus)<br>
+          Zwergfledermaus (Pipistrellus pipistrellus)<br>
+          Zwergmaus (Micromys minutus)<br>
+          Zwergspitzmaus (Sorex minutus)<br>
+          Zwergwal (Balaenoptera acutorostrata)<br>
+          Östliche Hausmaus (Mus musculus)<br>
+        </p>
+        </details>
+        <details>
+        <summary>Libellen</summary>
+
+        <p>
+          Aktuell sind Fotos von 59 der 81 heimischen Libellen-Arten enthalten. <br><br>
+          
+          Fotos folgender Arten fehlen noch:<br>
+          Sibirische Winterlibelle (Sympecma paedisca)<br>
+          Mond-Azurjungfer (Coenagrion lunulatum)<br>
+          Vogel-Azurjungfer (Coenagrion ornatum)<br>
+          Zwerglibelle (Nehalennia speciosa)<br>
+          Alpen-Mosaikjungfer (Aeshna caerulea)<br>
+          Hochmoor-Mosaikjungfer (Aeshna subarctica)<br>
+          Schabracken-Königslibelle (Anax ephippiger)<br>
+          Asiatische Keiljungfer (Stylurus flavipes)<br>
+          Gelbe Keiljungfer (Gomphus simillimus)<br>
+          Gestreifte Quelljungfer (Cordulegaster bidentata)<br>
+          Zweifleck (Epitheca bimaculata)<br>
+          Gekielter Flussfalke (Oxygastra curtisii)<br>
+          Alpen-Smaragdlibelle (Somatochlora alpestris)<br>
+          Arktische Smaragdlibelle (Somatochlora arctica)<br>
+          Zierliche Moosjungfer (Leucorrhinia caudalis)<br>
+          Östlicher Blaupfeil (Orthetrum albistylum)<br>
+          Sumpf-Heidelibelle (Sympetrum depressiusculum)<br>
+          Südliche Heidelibelle (Sympetrum meridionale)<br>
+          Gemeine Heidelibelle (Sympetrum vulgatum)<br>
+        </p>
+        </details>
+        <details>
+        <summary>Tagfalter</summary>
+
+        <p>
+          Aktuell sind Fotos von 136 der 184 heimischen Tagfalter-Arten enthalten. <br><br>
+          
+          Artkomplexe:<br>
+          Hufeisenklee- und Weißkleegelbling werden zu dem Artkomplex "Goldene Acht (Colias hyale/alfaceriensis)" zusammengefasst.<br>
+          Echter und Kryptischer Senfweißling werden zu dem Artkomplex "Schmalflügelweißling (Leptidea juvernica/sinapis)" zusammengefasst. <br>
+          Großer und Kleiner Sonnenröschen-Bläuling werden zu dem Artkomplex "Sonnenröschen-Bläuling (Aricia agestis/artaxerxes)" zusammengefasst. <br>
+          Argus-, Ginster- und Kronwicken-Bläuling werden zu dem Artkomplex "Silberfleck-Bläuling (Plebejus argus/idas/argyrognomon)" zusammengefasst.<br>
+          Großer und Kleiner Waldportier werden zu dem Artkomplex "Waldportier (Hipparchia fagi/alcyone)" zusammengefasst. <br>
+          Wachtelweizen-, Ehrenpreis- und Östlicher Scheckenfalter werden zu dem Artkomplex "Scheckenfalter (Melitaea athalia/aurelia/britomartis)" zusammengefasst. <br><br>
+          
+          Fotos folgender Arten fehlen noch:<br>
+          Steppenheiden-Würfel-Dickkopffalter (Pyrgus carthami)<br>
+          Schwarzbrauner Würfel-Dickkopffalter (Pyrgus serratulae)<br>
+          Spätsommer-Würfel-Dickkopffalter (Pyrgus cirsii)<br>
+          Sonnenröschen-Würfel-Dickkopffalter (Pyrgus alveus)<br>
+          Graumelierter Alpen-Würfel-Dickkopffalter (Pyrgus andromedae)<br>
+          Fahlfleckiger Alpen-Würfel-Dickkopffalter (Pyrgus cacaliae)<br>
+          Alpen-Sonnenröschen-Würfel-Dickkopffalter (Pyrgus warrenensis)<br>
+          Alpenweißling (Pontia callidice)<br>
+          Pelargonien-Bläuling  (Cacyreus marshalli)<br>
+          Heller Alpenbläuling (Agriades orbitulus)<br>
+          Mittlerer Perlmuttfalter (Fabriciana niobe)<br>
+          Brombeer-Perlmuttfalter (Brenthis daphne)<br>
+          Ähnlicher Perlmuttfalter (Boloria napaea)<br>
+          Alpenmatten-Perlmuttfalter (Boloria pales)<br>
+          Östlicher Scheckenfalter (Melitaea britomartis)<br>
+          Amerikanischer Distelfalter (Vanessa virginiensis)<br>
+          Gelbgefleckter Schwärzling (Erebia manto)<br>
+          Knochs Schwärzling (Erebia epiphron)<br>
+          Ähnlicher Schwärzling (Erebia eriphyle)<br>
+          Kleiner Schwärzling (Erebia melampus)<br>
+          Unpunktierter Schwärzling (Erebia pharte)<br>
+          Graubindiger Schwärzling (Erebia aethiops)<br>
+          Felsen-Schwärzling (Erebia gorge)<br>
+          Gelbbindiger Schwärzling (Erebia meolans)<br>
+          Grünschillernder Schwärzling (Erebia tyndarus)<br>
+          Weißbindiger Bergwald-Schwärzling (Erebia euryale)<br>
+          Marmorierter Schwärzling (Erebia montana)<br>
+          Doppelaugen-Schwärzling (Erebia oeme)<br>
+          Graubrauner Schwärzling (Erebia pandrose)<br>
+          Eis-Schwärzling (Erebia pluto)<br>
+          Wasser-Schwärzling (Erebia pronoe)<br>
+          Freyers Alpen-Schwärzling (Erebia styx)<br>
+        </p>
+        </details>
+        <details>
+        <summary>Nachtfalter</summary>
+
+        <p>
+          Von den ca. 3700 heimischen Nachtfalterarten sollen hier nur einige der häufigen und gut bestimmbaren Arten abgebildet werde. Aktuell sind Fotos von 20 tagaktive Nachtfalter-Arten enthalten.
+        </details>
+      </p>
+      <br>
+      Da mit <a href="https://www.computerbirding.com/what/cbirding_2018.php" target="_blank">Computerbirding.com</a> die Kategorie "Vögel" bereit sehr gut abgedeckt ist, fehlt diese Kategorie hier. 
+    </section>
+
+    <section>
+      <h2>Empfehlungen und weiterführende Links</h2>
+      <p>
+        Für das Lernen der bestimmungsrelevanten Merkmale gibt es für die verschiedenen Tiergruppen gute digitale Resscourcen. 
+      Bestimmungsbücher sind meist ein guter Einstieg, hat man aber nicht immer zur Hand. 
+      Daher folgen hier einige sehr nützliche Links und Empfehlungen, die bei dem Bestimmen und dem verbessern der eigenen Arten-Kenntnisse helfen können.  
+      </p>
+      <strong>Libellen</strong>
+      <ul>
+        <li><a href="https://www.joergteumer.de/libellen-europas" target="_blank">Libellen Europas - Bestimmungsmerkmale und Fotos</a></li>
+        <li><a target="_blank">Libellen ID Europa - App mit allen heimischen Libellen-Arten und ihren Merkmalen</a></li>
+      </ul>
+
+
+      <strong>Tagfalter</strong>
+
+      <ul>
+        <li><a href="https://www.youtube.com/@daniel_schmidt." target="_blank">Youtube-Kanal von Daniel Schmidt - Bestimmung von Tagfaltern</a></li>
+        <li><a href="https://www.youtube.com/@tonikasiske6169" target="_blank">Youtube-Kanal von Toni Kasiske - Bestimmung und Suche von Tag- und Nachtfaltern</a></li>
+        <li><a href="https://assets.vlinderstichting.nl/docs/0b095bc2-0387-4785-9f7e-5f7a987b3468.pdf" target="_blank">A Photographic Guide - BUTTERFLIES of Central Europe & Britain (PDF)</a></li>
+        <li><a href="https://www.ufz.de/tagfalter-monitoring/index.php?de=41776" target="_blank">Bestimmungstafeln für viele Tagfaltergruppen (PDF)</a></li>
+      </ul>
+
+      <strong>Vögel</strong>
+
+      <ul>
+        <li><a href="https://www.computerbirding.com/what/cbirding_2018.php" target="_blank">Computerbirding - Vogelbestimmungs-Spiel</a></li>
+        <li><a href="https://www.youtube.com/@KalleNibbenhagen" target="_blank">Youtube-Kanal von Kalle Nibbenhagen - Beobachtung und Bestimmung von Vögeln</a></li>
+        <li><a target="_blank">Der Kosmos Vogelführer - App mit allen heimischen Vogel-Arten und ihren Merkmalen</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Danksagung</h2>
+      <p>
+        Großer Dank gilt Daniel Schmidt für das Beisteuern seiner umfassenden Fotosammlung! 
+        Eine Website wie diese wäre ohne eine Vielzahl von Fotos möglichst vieler veschiedener Arten nicht denkbar.
+      </p>
+    </section>
+
+    <section>
+      <h2>Kontakt</h2>
+      <p>
+        Wenn du Probleme, Fragen oder Feedback hast, erreichst du mich hier:
+        <br />
+        <a href="mailto:henning.pehlemann@gmx.de">henning.pehlemann@gmx.de</a>
+      </p>
+    </section>
+
+  </main>
+<footer>
+  <div class="page">
+    <a href="impressum.html">Impressum</a>
+  </div>
+</footer>
+</body>
+</html>

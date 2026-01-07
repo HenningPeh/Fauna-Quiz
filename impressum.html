@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Dongle&family=Exo:ital,wght@0,100..900;1,100..900&family=SUSE:ital,wght@0,100..900;1,100..900&family=Tilt+Neon&display=swap" rel="stylesheet">
+  <title>Impressum</title>
+  <style>
+  :root {
+      --bg-main: #f4f5f2;
+      --bg-card: #ffffff;
+      --text-main: #1f2a24;
+      --text-muted: #6b7c72;
+      --green-dark: #2f5d46;
+    }
+html, body {
+  height: 100%;
+  margin: 0;
+}
+    body {
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.2;
+    }
+    a { color: #007bff; }
+    .btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #007422;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+.btn:hover {
+  background: #0056b3;
+}
+main{
+  line-height: 1.6;
+  padding: 5%;
+}
+/* --- Obere Menüleiste --- */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  background: var(--bg-card);
+  border-bottom: 1px solid #dde3dd;
+}
+
+.top-nav-inner {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1.1% 10%;
+  display: flex;
+  align-items: baseline;
+  gap: 54px;
+}
+
+.nav-primary {
+  color: var(--green-dark);
+  text-decoration: none;
+  font-family: "Cairo", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0;
+  font-size: 35px;
+}
+
+.nav-secondary {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.nav-secondary:hover {
+  color: var(--green-dark);
+}
+
+  </style>
+</head>
+<body>
+<nav class="top-nav">
+  <div class="top-nav-inner">
+  <a href="index.html" class="nav-primary">Fauna Quiz</a>
+  <a href="info.html" class="nav-secondary">Weitere Informationen</a>
+  </div>
+</nav>
+<main>
+<h1>Impressum</h1>
+
+<p><strong>Verantwortlich gemäß § 5 TMG:</strong><br>
+Henning Pehlemann <br>
+Auf dem Thie 1 <br>
+37120 Bovenden
+</p>
+
+<p>Kontakt:<br>
+E-Mail: henning.pehlemann@gmx.de <br>
+</p>
+
+</main>
+</body>
+</html>
