@@ -1520,18 +1520,6 @@ function setImage(src, isDetail=false) {
 // einfach einmal aufrufen, damit der Text wechselt
 updateImageHint();
 
-imageEl.addEventListener("click", async (e) => {
-
-  // 👉 Mobile? Dann NICHTS machen
-  if (
-    window.innerWidth <= 750 ||
-    window.matchMedia("(orientation: portrait)").matches
-  ) {
-    return;
-  }
-
-  e.stopPropagation();
-
 speciesImage.addEventListener('click', () => {
   const isSmall =
     window.innerWidth <= 750 ||
@@ -1545,7 +1533,6 @@ speciesImage.addEventListener('click', () => {
 
   showDetailDesktop(speciesImage.src);
 });
-
 
 
 // Klick auf Overlay schließt es wieder
