@@ -104,7 +104,6 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
 }
 
 .category-button {
-  --btn-width: 100%; /* optional: aktuelle Breite */
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -168,13 +167,13 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
 
 /* Titel innerhalb Label */
 .category-label .cat_title {
-  font-size: calc(1.1 * var(--btn-width)); /* 15% der Button-Breite */
+  font-size: 18px;
   font-weight: 700;
 }
 
 /* Untertitel einblenden bei Hover */
 .category-label .cat_untertitel {
-  font-size: calc(0.8 * var(--btn-width)); /* 10% der Button-Breite */
+ font-size: 12px;
   opacity: 0;
   max-height: 0;
   overflow: hidden;
@@ -199,12 +198,10 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
 
 @media (orientation: portrait) {
   .category-label .cat_title {
-    font-size: calc(4 * var(--btn-width)); /* 15% der Button-Breite */
+    font-size: 28px;
   }
   .category-label .cat_untertitel {
-    font-size: calc(2 * var(--btn-width)); /* 15% der Button-Breite */
-    opacity: 1;
-    max-height: 40px;
+    font-size: 16px;
   }
 }
 
