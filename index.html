@@ -201,45 +201,90 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
    Quiz-Karte
    =============================== */
 #quiz {
+  --quiz-content-width: clamp(280px, 80vw, 600px);
   background: var(--bg-card);
   border-radius: 16px;
   box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-  max-width: 650px;
   width: 90%;
   margin: 2rem auto;
-  padding: 1.25rem 1.75rem;
+  padding:
+    clamp(0.75rem, 2vh, 1.25rem)
+    clamp(1rem, 3vw, 1.75rem);
   display: flex;
   flex-direction: column;
   position: relative;
+  max-height: 95svh;
+  width: 100%;
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: clamp(0.6rem, 1.5vh, 1.25rem);
+}
+@media (max-height: 900px) {
+  #quiz {
+    --quiz-content-width: clamp(260px, 65vw, 480px);
+  }
 }
 
-#quiz-status {
-  display: flex;
-  justify-content: flex-start;      /* linksbündig im eigenen Container */
-  width: 100%;
-  max-width: 600px;                 /* gleiche max-width wie #image-wrapper */
-  margin: 0 auto 5px;              /* zentriert in der Quiz-Karte, Abstand unten */
-  gap: 1rem;
-  color: var(--text-muted);
-  font-weight: bold;
-  font-size: 1.125rem; /* 18px */
-  box-sizing: border-box;           /* damit Padding korrekt gerechnet wird */
+@media (max-height: 800px) {
+  #quiz {
+    --quiz-content-width: clamp(240px, 60vw, 420px);
+  }
 }
-#image-wrapper-container {
-  position: relative; /* damit der Status absolut relativ zu Container sitzt */
-  display: inline-block;
+
+@media (max-height: 700px) {
+  #quiz {
+    --quiz-content-width: clamp(220px, 55vw, 360px);
+  }
 }
+
+@media (max-height: 650px) {
+  #quiz {
+    --quiz-content-width: clamp(200px, 50vw, 300px);
+  }
+}
+
+@media (max-height: 550px) {
+  #quiz {
+    --quiz-content-width: clamp(180px, 45vw, 260px);
+  }
+}
+
 
 #quiz-status-wrapper {
   display: flex;
   justify-content: flex-start;  /* linksbündig im Wrapper */
   width: 100%;
-  max-width: 600px;             /* gleiche Breite wie #image-wrapper */
   margin: 0 auto 10px;          /* zentriert in Quiz-Karte, Abstand unten */
   gap: 1rem;                     /* optional */
   color: var(--text-muted);
   font-weight: bold;
-  font-size: 1.125rem; /* 18px */
+  flex-shrink: 1;
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+#quiz-status {
+  display: flex;
+  justify-content: flex-start;      /* linksbündig im eigenen Container */
+  width: 100%;           
+  margin: 0 auto 5px;              /* zentriert in der Quiz-Karte, Abstand unten */
+  gap: 1rem;
+  color: var(--text-muted);
+  font-weight: bold;
+  box-sizing: border-box;   
+  flex-shrink: 1;
+  font-size: clamp(0.8rem, 1.8vh, 1.125rem);
+  line-height: 1.1;
+  margin-bottom: 0.25rem;        /* damit Padding korrekt gerechnet wird */
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+
 }
 
 
@@ -251,13 +296,19 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
 #image-wrapper {
   aspect-ratio: 3 / 2;
   width: 100%;
-  max-width: 600px;
   overflow: hidden;
   position: relative;
   margin: 0 auto 1rem;
   border-radius: 5px;
   cursor: pointer;
   position: relative;
+  flex: 1 1 auto;
+  max-height: 50svh;
+  min-height: 160px;
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+
 }
 
 img { 
@@ -295,13 +346,17 @@ img {
    =============================== */
 input[type="text"] {
   width: 80%;
-  max-width: 520px;
-  padding: 0.875rem 1.125rem;
-  font-size: 1.125rem;
-  border-radius: 0.875rem;
   border: 2px solid #dde3dd;
   background: #fff;
   color: var(--text-main);
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(0.85rem, 2.1vh, 1.125rem);
+  padding: clamp(0.45rem, 1.8vh, 0.875rem)
+           clamp(0.65rem, 2.5vh, 1.125rem);
+
+  border-radius: clamp(0.5rem, 1.5vh, 0.875rem);
 }
 
 #question-area{
@@ -309,12 +364,13 @@ input[type="text"] {
 }
 
 #answer-container {
-  min-height: 70px;
+  min-height: 0;
+  flex-shrink: 1;
+  margin-bottom: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-bottom: 1.5rem;
 }
 
 #answer-container .revealed-answer {
@@ -328,20 +384,24 @@ input[type="text"] {
 .mc-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-top: 1.25rem;
   width: 100%;
-  max-width: 600px;
+  flex-shrink: 1;
+  gap: clamp(0.4rem, 1.5vh, 1rem);
+  margin-top: clamp(0.4rem, 1.2vh, 1.25rem);
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+
 }
 
 .mc-option {
-  padding: 1rem 0;
   border-radius: 14px;
   background: #fff;
   border: 2px solid #dde3dd;
   cursor: pointer;
   text-align: center;
   width: 100%;
+  padding: clamp(0.5rem, 1.5vh, 1rem) 0;
 }
 
 /* Hover für noch aktive Optionen */
@@ -382,13 +442,14 @@ input[type="text"] {
 }
 
 .mc-trivial { 
-  font-weight: 700; 
-  color: var(--text-main); 
+  font-size: clamp(0.8rem, 1.9vh, 1rem);
+  line-height: 1.15;
 }
 
 .mc-scientific { 
   font-style: italic; 
-  font-size: 0.875rem; 
+  font-size: clamp(0.7rem, 1.5vh, 0.875rem);
+  line-height: 1.1;
   color: var(--text-muted); 
 }
 
@@ -406,26 +467,34 @@ input[type="text"] {
    Buttons unten
    =============================== */
 #button-container {
-  position: absolute;
-  bottom: 1.25rem;
+  margin-top: auto;
   left: 0;
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 0.625rem;
-  padding: 0;
+  gap: clamp(0.4rem, 1.2vh, 0.625rem);
+  flex-shrink: 0;
+  padding-bottom: 0;
+  padding-top: clamp(0.4rem, 1.2vh, 0.8rem);
 }
 
 #button-container button {
-  padding: 1rem 2rem;
-  font-size: 1.125rem;
-  border-radius: 0.75rem;
+  font-size: clamp(0.85rem, 2.1vh, 1.125rem);
+  padding: clamp(0.45rem, 1.8vh, 0.95rem)
+           clamp(0.9rem, 3vh, 1.75rem);
+  border-radius: clamp(0.5rem, 1.4vh, 0.75rem);
 }
 
 #reveal-button {
   background: var(--accent);
   color: #2b2b2b;
 }
+
+#next-button {
+  background: var(--accent);
+  color: #2b2b2b;
+}
+
 /* Standard: große Bildschirme */
 /* Wrapper um Quiz-Karte + Button */
 #quiz-wrapper {
@@ -501,15 +570,22 @@ input[type="text"] {
   .category-label .cat_title { font-size: 1rem; }
   .category-label .cat_untertitel { font-size: 0.75rem; }
   button { font-size: 1rem; padding: 0.75rem 1.25rem; }
-  #image-wrapper,
   #quiz-status,
   #quiz-status-wrapper,
   .mc-grid{
     width: 100%;
   }
-  
+  #image-wrapper{
+    width: 100%;
+    max-height: 30svh;
+  }
   input[type="text"] {
     width: 70%;
+  }
+  #quiz{
+    background: none;
+      border-radius: 0;
+      box-shadow: none;
   }
   .quiz-summary-card{
    margin: 20px;
@@ -534,10 +610,14 @@ input[type="text"] {
     touch-action: pinch-zoom; /* erlaubt Pinch-Zoom auf Touchscreens */
     cursor: grab;
   }
+  #answer-container {
+    min-height: 40px;
+    margin-bottom: 0.75rem;
+  }
 
 }
 
-@media (max-width: 400px) {
+@media (max-width: 400px), (orientation: portrait) {
   .category-label .cat_title { font-size: 0.875rem; }
   .category-label .cat_untertitel { font-size: 0.7rem; }
   button { font-size: 0.875rem; padding: 0.5rem 1rem; }
@@ -1521,16 +1601,16 @@ function setImage(src, isDetail=false) {
 updateImageHint();
 
 speciesImage.addEventListener('click', () => {
-  const isSmall =
-    window.innerWidth <= 750 ||
-    window.matchMedia('(max-aspect-ratio: 1/1)').matches;
-
-  if (isSmall) {
+  if (window.innerWidth <= 950) {
+    // KLEINE SCREENS: Overlay öffnen
     detailImg.src = speciesImage.src;
     overlay.style.display = 'flex';
-    return;
+
+    // alte Desktop-Logik deaktivieren
+    return; // verhindert, dass die Mousemove-Logik ausgeführt wird
   }
 
+  // GROSSE SCREENS: bestehende Desktop-Detailbild-Logik
   showDetailDesktop(speciesImage.src);
 });
 
