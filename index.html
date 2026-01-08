@@ -102,6 +102,7 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
 }
 
 .category-button {
+  --btn-width: 100%; /* optional: aktuelle Breite */
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -152,7 +153,6 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
   padding: 4px 6px;
   color: #fff;
   pointer-events: none;
-  font-size: 14px;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -166,13 +166,13 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
 
 /* Titel innerhalb Label */
 .category-label .cat_title {
-  font-size: 18px;
+  font-size: calc(1.1 * var(--btn-width)); /* 15% der Button-Breite */
   font-weight: 700;
 }
 
 /* Untertitel einblenden bei Hover */
 .category-label .cat_untertitel {
-  font-size: 12px;
+  font-size: calc(0.8 * var(--btn-width)); /* 10% der Button-Breite */
   opacity: 0;
   max-height: 0;
   overflow: hidden;
@@ -195,6 +195,14 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
   }
 }
 
+@media (max-width: 969px) {
+  .category-label .cat_title {
+    font-size: calc(1.4 * var(--btn-width)); /* 15% der Button-Breite */
+  }
+  .category-label .cat_untertitel {
+    font-size: calc(0.9 * var(--btn-width)); /* 15% der Button-Breite */
+  }
+}
 
 
 /* ===============================
