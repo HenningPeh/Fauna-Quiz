@@ -2,7 +2,11 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://fauna-quiz.de/">
+<title>Fauna-Quiz – Heimische Tiere online bestimmen</title>
+<meta name="description" content="Übe heimische Tierarten mit unserem interaktiven Quiz sicher zu bestimmen. Kostenlos für Anfänger und Fortgeschrittene.">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Dongle&family=Exo:ital,wght@0,100..900;1,100..900&family=SUSE:ital,wght@0,100..900;1,100..900&family=Tilt+Neon&display=swap" rel="stylesheet">
@@ -20,6 +24,9 @@
 html, body {
   height: 100%;
   margin: 0;
+  box-sizing: border-box;
+  width: 100%;
+  overflow-x: hidden; /* optional, um horizontales Scrollen zu verhindern */
 }
 body {
   display: flex;
@@ -30,6 +37,7 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   margin: 0;
+  width: 100%;
 }
 
 main.page {
@@ -37,6 +45,8 @@ main.page {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  justify-content: center;  /* zentriert quiz-config horizontal */
+  width: 100%;               /* volle Breite */
 }
 
 button {
@@ -59,7 +69,6 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
 #quiz-summary {
   display: none;
 }
-
 /* ===============================
    Quiz Status
    =============================== */
@@ -79,8 +88,6 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
   transform: translate(-50%, -50%);
   margin: 0;
 }
-
-  
 /* ===============================
    Kategorien-Buttons
    =============================== */
@@ -186,36 +193,18 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
   max-height: 40px;
 }
 
-/* -------------------
-   Responsive Anpassungen
-   ------------------- */
-@media (max-width: 1300px) {
-  #category-buttons {
-    grid-template-columns: repeat(2, 1fr); /* 2 Spalten auf Tablet */
-    grid-auto-rows: 1fr;
-    height: auto;
-  }
-}
 
-@media (orientation: portrait) {
-  .category-label .cat_title {
-    font-size: 28px;
-  }
-  .category-label .cat_untertitel {
-    font-size: 16px;
-  }
-}
 
 /* ===============================
    Quiz-Karte
    =============================== */
 #quiz {
-  --quiz-content-width: clamp(280px, 80vw, 600px);
+  --quiz-content-width: clamp(260px, 80vw, 700px);
   background: var(--bg-card);
   border-radius: 16px;
   box-shadow: 0 15px 40px rgba(0,0,0,0.08);
   width: 90%;
-  margin: 2rem auto;
+  margin: 0.5rem auto;
   padding:
     clamp(0.75rem, 2vh, 1.25rem)
     clamp(1rem, 3vw, 1.75rem);
@@ -227,36 +216,7 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
   max-width: var(--quiz-content-width);
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: clamp(0.6rem, 1.5vh, 1.25rem);
-}
-@media (max-height: 900px) {
-  #quiz {
-    --quiz-content-width: clamp(260px, 65vw, 480px);
-  }
-}
-
-@media (max-height: 800px) {
-  #quiz {
-    --quiz-content-width: clamp(240px, 60vw, 420px);
-  }
-}
-
-@media (max-height: 700px) {
-  #quiz {
-    --quiz-content-width: clamp(220px, 55vw, 360px);
-  }
-}
-
-@media (max-height: 650px) {
-  #quiz {
-    --quiz-content-width: clamp(200px, 50vw, 300px);
-  }
-}
-
-@media (max-height: 550px) {
-  #quiz {
-    --quiz-content-width: clamp(180px, 45vw, 260px);
-  }
+  padding-bottom: clamp(0.6rem, 0.5vh, 0.65rem);
 }
 
 
@@ -295,19 +255,28 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
   margin-right: auto;
 
 }
-
+#status{
+  display: none;
+  position: absolute;
+  z-index: 0;
+}
 
 /* ===============================
    Bilder & Hinweise
    =============================== */
-#image-wrapper-container { display: inline-block; position: relative; }
+#image-wrapper-container { 
+  display: inline-block; 
+  position: relative;
+  width: auto;
+  margin-bottom: 0;
+}
 
 #image-wrapper {
   aspect-ratio: 3 / 2;
   width: 100%;
   overflow: hidden;
   position: relative;
-  margin: 0 auto 1rem;
+  margin: 0 0 0;
   border-radius: 5px;
   cursor: pointer;
   position: relative;
@@ -321,7 +290,6 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
 }
 
 img { 
-  margin-bottom: 10px; 
   border-radius: 5px; 
 }
 
@@ -380,6 +348,7 @@ input[type="text"] {
   align-items: center;
   justify-content: center;
   text-align: center;
+  margin-top: 0;
 }
 
 #answer-container .revealed-answer {
@@ -485,6 +454,7 @@ input[type="text"] {
   flex-shrink: 0;
   padding-bottom: 0;
   padding-top: clamp(0.4rem, 1.2vh, 0.8rem);
+  margin-bottom: 0;
 }
 
 #button-container button {
@@ -495,13 +465,14 @@ input[type="text"] {
 }
 
 #reveal-button {
-  background: var(--accent);
-  color: #2b2b2b;
+  background: var(--green-mid);
+  color: #fff;
 }
 
 #next-button {
-  background: var(--accent);
-  color: #2b2b2b;
+  background: var(--green-mid);
+  color: #fff;
+  margin-bottom: 0;
 }
 
 /* Standard: große Bildschirme */
@@ -510,7 +481,8 @@ input[type="text"] {
   display: flex;
   flex-direction: column;
   align-items: flex-start; /* linksbündig */
-  margin-top: 20px;        /* Abstand unter Nav-Leiste */
+  margin-top: 0;        /* Abstand unter Nav-Leiste */
+  max-height: 95vh; 
 }
 
 #abort-button {
@@ -529,22 +501,7 @@ input[type="text"] {
 }
 
 /* ≤1300px: nur optisch ggf. anpassen, bleibt zentriert */
-@media (max-width: 1150px) {
-  #abort-button {
-    margin: 1rem auto 0;
-    display: none;              /* initially hidden */
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    background: #c41425;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    position: relative;          /* Position relativ zum nächsten positioned ancestor (z.B. body) */
-    top: auto;                   /* Abstand unter der Nav-Leiste */
-    left: auto; 
-  }
-}
+
 
 
 
@@ -562,75 +519,8 @@ input[type="text"] {
    Media Queries für Smartphones & Tablets
    =============================== */
 
-@media (max-width: 750px), (orientation: portrait) {
-  #quiz { width: 90%; margin: 1rem auto; padding: 1.25rem; }
 
-  input[type="text"] { width: 100%; }
-   #category-buttons { 
-    grid-template-columns: 1fr; 
-    grid-auto-rows: 1fr; /* statt auto */
-    min-height: 0;       /* wichtig für Flexbox */
-  }
-  #button-container {
-    position: static;   /* NICHT mehr absolut */
-    width: 100%;
-    margin-top: 1rem;
-  }
-  .category-label .cat_title { font-size: 1rem; }
-  .category-label .cat_untertitel { font-size: 0.75rem; }
-  button { font-size: 1rem; padding: 0.75rem 1.25rem; }
-  #quiz-status,
-  #quiz-status-wrapper,
-  .mc-grid{
-    width: 100%;
-  }
-  #image-wrapper{
-    width: 100%;
-    max-height: 30svh;
-  }
-  input[type="text"] {
-    width: 70%;
-  }
-  #quiz{
-    background: none;
-      border-radius: 0;
-      box-shadow: none;
-  }
-  .quiz-summary-card{
-   margin: 20px;
-  }
-  #detail-overlay {
-    display: none;               /* initially hidden */
-    position: fixed;             /* über die gesamte Seite */
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.7);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
 
-  #detail-overlay img {
-    max-width: 95%;
-    max-height: 95%;
-    object-fit: contain;
-    touch-action: pinch-zoom; /* erlaubt Pinch-Zoom auf Touchscreens */
-    cursor: grab;
-  }
-  #answer-container {
-    min-height: 40px;
-    margin-bottom: 0.75rem;
-  }
-
-}
-
-@media (max-width: 400px), (orientation: portrait) {
-  .category-label .cat_title { font-size: 0.875rem; }
-  .category-label .cat_untertitel { font-size: 0.7rem; }
-  button { font-size: 0.875rem; padding: 0.5rem 1rem; }
-}
 
 .page {
   width: 100%;
@@ -654,7 +544,7 @@ input[type="text"] {
 .top-nav-inner {
   max-width: 100%;
   margin: 0 auto;
-  padding: 0.4% 10%;
+  padding: 0.05% 10%;
   display: flex;
   align-items: baseline;
   gap: 54px;
@@ -669,13 +559,13 @@ input[type="text"] {
   font-style: normal;
   font-variation-settings:
     "slnt" 0;
-  font-size: 35px;
+  font-size: 28px;
 }
 
 .nav-secondary {
   text-decoration: none;
   color: var(--text-muted);
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .nav-secondary:hover {
@@ -690,7 +580,9 @@ h1 {
   margin: 40px auto;
   text-align: center;
 }
-
+.config-category-select{
+  font-size: 20px;
+}
 .custom-slider {
   display: flex;
   position: relative;
@@ -769,7 +661,7 @@ h1 {
 }
 #back-to-categories {
   position: absolute;
-  top: 0;
+  top: 20px;
   left: 20px;
   background: #c41425;
   color: white;
@@ -782,9 +674,13 @@ h1 {
   display: none;
   margin-top: 20px;
   position: relative; /* nötig für absolute Positionierung des Back-Buttons */
-  padding: 20px;
   background: var(--bg-main);
   border-radius: 12px;
+  width: 100%;           /* nimmt Containerbreite */
+  flex-direction: column;
+  align-items: center;   /* Inhalte horizontal zentrieren */
+  padding: 2rem;
+  margin: 0 auto;
 }
 .config-category-title {
   font-size: 38px;      /* größer */
@@ -866,47 +762,6 @@ h1 {
   justify-content: flex-start;
   font-size: 18px;
 }
-.summary-image {
-  max-width: 70%;
-  margin: 0 auto 14px;
-  display: block;
-  border-radius: 12px;
-}
-
-/* Klassen je nach Ergebnis */
-.summary-image.perfect {
-  content: url("img/100.jpg");
-}
-
-.summary-image.great {
-  content: url("img/80.jpg");
-}
-
-.summary-image.good {
-  content: url("img/50.jpg");
-}
-
-.summary-image.okay {
-  content: url("img/25.jpg");
-}
-
-.summary-image.oops {
-  content: url("img/0.jpg");
-}
-.summary-image.perfect { content: url("https://djstoxqzmcgwqjliubst.supabase.co/storage/v1/object/public/Fotos/Zusammenfassung/HPR_7042-DxO_DeepPRIME%20XD2s_XD.webp"); }
-.summary-image.great    { content: url("https://djstoxqzmcgwqjliubst.supabase.co/storage/v1/object/public/Fotos/Zusammenfassung/Vulpes_vulpes_ssp_fulvus_6568085.jpg"); }
-.summary-image.good     { content: url("https://djstoxqzmcgwqjliubst.supabase.co/storage/v1/object/public/Fotos/Zusammenfassung/Pica_pica_Oulu_Finland_2020-09-20.jpg"); }
-.summary-image.okay     { content: url("https://djstoxqzmcgwqjliubst.supabase.co/storage/v1/object/public/Fotos/Zusammenfassung/Sciurus_vulgaris_185836872.jpg"); }
-.summary-image.oops     { content: url("https://djstoxqzmcgwqjliubst.supabase.co/storage/v1/object/public/Fotos/Zusammenfassung/Bufo_bufo_2015_G3.jpg"); }
-
-.summary-image {
-  width: 70%;       /* Breite anpassen */
-  height: auto; 
-  object-fit: contain; /* skaliert das Bild proportional, füllt Container ohne Verzerrung */
-  display: block;
-  margin: 0 auto 14px;
-  border-radius: 12px;
-}
 .summary-quote {
   text-align: center;
   font-style: italic;
@@ -956,6 +811,588 @@ footer a:hover {
   text-decoration: underline;
 }
 
+/* ===============================
+   Media Queries für Smartphones & Tablets
+   =============================== */
+
+
+@media (max-width: 1300px) {
+  #category-buttons {
+    grid-template-columns: repeat(2, 1fr); /* 2 Spalten auf Tablet */
+    grid-auto-rows: 1fr;
+    height: auto;
+  }
+}
+
+@media (max-width: 1250px) {
+  #abort-button {
+    margin: 1rem auto 0;
+    display: none;              /* initially hidden */
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background: #c41425;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;          /* Position relativ zum nächsten positioned ancestor (z.B. body) */
+    top: auto;                   /* Abstand unter der Nav-Leiste */
+    left: auto; 
+  }
+}
+
+@media (max-height: 900px) {
+  #quiz {
+    --quiz-content-width: clamp(260px, 65vw, 480px);
+  }
+}
+
+@media (max-height: 800px) {
+  #quiz {
+    --quiz-content-width: clamp(240px, 60vw, 420px);
+  }
+}
+@media (max-width: 750px), (orientation: portrait) {
+  #quiz { 
+    width: 90%; 
+    margin: 1rem auto; 
+    padding: 1.25rem; 
+  }
+   #category-buttons { 
+    grid-template-columns: 1fr; 
+    grid-auto-rows: 1fr; /* statt auto */
+    min-height: 0;       /* wichtig für Flexbox */
+  }
+  #button-container {
+    position: static;   /* NICHT mehr absolut */
+    width: 100%;
+    margin-top: 1rem;
+  }
+  button { 
+    font-size: 1rem; 
+    padding: 0.75rem 1.25rem; 
+  }
+  #quiz-status,
+  #quiz-status-wrapper,
+  .mc-grid{
+  width: 100%;
+  }
+  #image-wrapper{
+    width: 100%;
+    max-height: 30svh;
+  }
+  input[type="text"] {
+    width: 70%;
+  }
+  #quiz{
+    background: none;
+      border-radius: 0;
+      box-shadow: none;
+  }
+  .quiz-summary-card{
+   margin: 20px;
+  }
+  #answer-container {
+    min-height: 40px;
+    margin-bottom: 0.75rem;
+  }
+}
+@media (max-height: 700px) {
+  #quiz {
+    --quiz-content-width: clamp(220px, 55vw, 360px);
+  }
+}
+
+@media (max-height: 650px) {
+  #quiz {
+    --quiz-content-width: clamp(200px, 50vw, 300px);
+  }
+}
+
+@media (max-height: 550px) {
+  #quiz {
+    --quiz-content-width: clamp(180px, 45vw, 260px);
+  }
+}
+
+@media (max-width: 400px){
+  button { font-size: 0.875rem; padding: 0.5rem 1rem; }
+}
+
+@media (orientation: portrait) {
+  .nav-primary{
+    font-size: 4vh;
+  }
+  .nav-secondary{
+    font-size: 1.7vh;
+  }
+  .top-nav-inner{
+      padding: 2vh 4vh;
+      gap: 15%;
+  }
+  .top-nav{
+    position: static;
+    background: none;
+  }
+  main{
+    background-color: var(--green-light);
+  }
+
+  #category-buttons { 
+    grid-template-columns: 1fr; 
+    grid-auto-rows: 1fr; /* statt auto */
+    min-height: 0;       /* wichtig für Flexbox */
+  }
+  #button-container {
+    position: static;   /* NICHT mehr absolut */
+    width: 100%;
+    margin-top: 1rem;
+  }
+  button { 
+    font-size: 1rem; 
+    padding: 0.75rem 1.25rem; 
+  }
+  .category-label .cat_title {
+    font-size: 1.1rem;
+  }
+  .category-label .cat_untertitel {
+    font-size: 0.8rem;
+  }
+
+#back-to-categories {
+  position: absolute;
+  top: 1vh;
+  left: 1vh;
+  background: #c41425;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+#quiz-config {
+  width: 100%;        /* statt 100vw */
+  display: none;
+  flex-direction: column;
+  align-items: center; /* zentriert alle direkten Kinder horizontal */
+  background: none;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 12px;
+  box-sizing: border-box;
+
+}
+#config-category-title{
+  margin-top: 8vh;
+  margin-bottom: 2vh;
+}
+.config-category-subtitle{
+  margin-top: 0;
+}
+.slider-container {
+  display: flex;
+  flex-direction: column; /* Label über den Buttons */
+  align-items: center;    /* zentriert Label + Buttons */
+  width: 100%;
+  margin-bottom: 2vh;     /* Abstand zwischen den Slidern */
+  text-align: center;
+}
+
+.custom-slider {
+  display: flex;
+  position: relative;
+
+  background: #eee;
+  border-radius: 8px;
+  user-select: none;
+}
+.config-category-select{
+  font-size: 1rem;
+}
+.slider-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: #eee;
+  border-radius: 8px;
+  position: relative;
+  justify-content: center;
+}
+
+.slider-option {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1;
+  font-weight: 600;
+}
+
+.slider-thumb {
+  position: absolute;
+  top: 0;
+  width: 25%; 
+  height: 100%;
+  background: #5f8f73;
+  border-radius: 8px;
+  transition: left 0.2s;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  pointer-events: none; 
+}
+
+.slider-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.2vh;
+  margin-top: 1.5vh;
+}
+.slider-buttons button {
+  padding: 1.5vh 2.5vh;
+  border: none;
+  border-radius: 8px;
+  background: #d6d6d6;      
+  color: #1f2a24;           
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.2s, color 0.2s;
+}
+#start-quiz-btn {
+  font-size: 1.5rem;
+  padding: 2vh 4vh;
+  margin-top: 8vh;
+  border-radius: 10px;
+} 
+
+/*
+#image-wrapper-container { 
+  display: inline-block; 
+  position: relative; }
+
+#image-wrapper {
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  flex: 1 1 auto;
+  max-height: 50svh;
+  min-height: 160px;
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+img { 
+  margin-bottom: 10px; 
+  border-radius: 5px; 
+}
+
+#image-toggle-hint {
+  position: absolute;
+  bottom: 100%;
+  right: 4px;
+  margin-bottom: 2px;
+  color: black;
+  font-size: 1.25rem;
+  padding: 1px 5px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+#species-image.preview { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  transform: none !important; 
+}
+
+#species-image.detail { 
+  width: auto; 
+  height: auto; 
+  object-fit: unset; 
+}
+  */
+#detail-overlay {
+    display: none;               
+    position: fixed;             
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+#detail-overlay img {
+  max-width: none;
+  max-height: 90vh;
+  object-fit: contain;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  cursor: grab;
+  transform-origin: inherit;
+}
+
+
+
+
+input[type="text"] {
+  font-size: clamp(16px, 2.1vh, 1.85rem); /* Minimum 16px */
+}
+
+.mc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  gap: 0.5rem;
+  max-width: var(--quiz-content-width);
+  margin: 0 auto;
+}
+
+
+.mc-option {
+  width: 100%;
+  min-width: 0;                /* 🔥 ENTSCHEIDEND */
+  box-sizing: border-box;
+
+  padding: 1.5rem 0.5rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  gap: 0.3rem;
+}
+
+.mc-option:not(.disabled):hover {
+  border-color:   #dde3dd;
+  background-color: #fff;
+}
+
+.mc-option.correct {
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+  color: white;
+}
+.mc-option.correct .mc-trivial,
+.mc-option.correct .mc-scientific {
+  color: #ffffff;
+}
+
+.mc-option.wrong {
+  background: #c41425;
+  border-color: #c41425;
+  color: white;
+}
+.mc-option.wrong .mc-trivial,
+.mc-option.wrong .mc-scientific {
+  color: #ffffff;
+}
+
+.mc-trivial,
+.mc-scientific {
+  max-width: 100%;
+  white-space: normal;
+  word-break: normal;
+  margin: 0;
+
+  line-height: 1.15;
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+}
+
+.mc-scientific {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+
+.mc-option.disabled { 
+  pointer-events: none;
+  opacity: 1; 
+}
+
+
+#button-container {
+  margin-bottom: 0;
+}
+
+#button-container button {
+  margin-bottom: 0;
+}
+
+#reveal-button {
+  background: var(--accent);
+  color: #2b2b2b;
+  margin-bottom: 0;
+}
+
+#next-button {
+  background: var(--accent);
+  color: #2b2b2b;
+  margin-bottom: 0;
+}
+
+
+#quiz-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  margin-top: 3vh;
+  width: 90%;    
+
+}
+/*
+#abort-button {
+  display: none;              
+  position: absolute;          
+  top: 100px;                  
+  left: 20px;                 
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background: #c41425;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+}
+
+#photo-meta, #photo-id, #photo-credit {
+  font-size: 1.75rem;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+*/
+#quiz {
+  --quiz-content-width: clamp(280px, 80vw, 800px);
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+  width: 90%;
+  margin: 1rem auto;
+  padding:
+    clamp(0.75rem, 2vh, 1.25rem)
+    clamp(1rem, 3vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  max-height: 95svh;
+  width: 100%;
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: clamp(0.6rem, 1.5vh, 1.25rem);
+  background-color: #fff;
+  max-height: 95vh; 
+}
+#status{
+  display: none;
+  position: absolute;
+}
+/*
+  #quiz-status,
+  #quiz-status-wrapper,
+  .mc-grid{
+  width: 100%;
+  }
+  #image-wrapper{
+    width: 100%;
+    max-height: 30svh;
+  }
+  input[type="text"] {
+    width: 100%;
+  }
+*/
+
+
+  #detail-overlay {
+    display: none;            
+    position: fixed;            
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    background: none;
+  }
+
+  #detail-overlay img {
+    max-width: 98%;
+    max-height: 98%;
+    object-fit: contain;
+    touch-action: pinch-zoom; 
+    cursor: grab;
+    border-radius: 0;
+  }
+
+#quiz-summary {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: none;               /* wichtig */
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+.quiz-summary-card {
+  background: var(--bg-main);
+  padding: 7vw 10vw;
+  border-radius: 16px;
+  max-width: 520px;
+  width: 90%;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+
+  display: flex;
+  flex-direction: column;
+  gap: 28px;              /* 🔹 Hauptabstand */
+}
+.quiz-summary-card h2 {
+  margin: 0;
+  font-size: 6vw;
+  font-weight: 700;
+}
+.summary-item {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 3.4vw;
+}
+.summary-quote {
+  text-align: center;
+  font-style: italic;
+  margin: 10px 0 20px;
+  color: #5f8f73;
+}
+
+footer{
+  background: none;
+  text-align: center;
+  padding-top: 8vh 2vh;
+  padding-bottom: 8vh;
+  color: var(--text-muted);
+  font-size: 2.5vh;
+  position: static;
+  }
+}
+
+
 </style>
 </head>
 <body>
@@ -973,13 +1410,14 @@ footer a:hover {
   <p id="category-loading">Lade Kategorien...</p>
 </div>
 <button id="abort-button" style="background:#c41425; color:white;">Quiz abbrechen</button>
+
 <div id="quiz" class="top-offset" style="display:none;">
   <div id="quiz-status">
     <div id="quiz-timer" style="display: none;">00:00</div>
     <div id="quiz-counter">0 / 0 Richtig</div>
   </div>
   <div id="image-wrapper-container">
-    <div id="image-toggle-hint">Zum Vergrößern des Bildes klicken</div>
+    <div id="image-toggle-hint">click to zoom ⤵</div>
     <div id="image-wrapper">
         <img id="species-image" src="" alt="" style="display:none;" />
         <span id="photo-id"></span>
@@ -997,9 +1435,12 @@ footer a:hover {
       <button id="reveal-button" style="background:#1e9d20; color:white;">Auflösen</button>
       <button id="next-button" style="display:none;">Weiter</button>
     </div>
-    <div class="status" id="status"></div>
+    <div class="status" id="status" style="display: none;"></div>
   </div>
 </div>
+
+
+
 
 
 
@@ -1010,7 +1451,7 @@ footer a:hover {
   <h3 class="config-category-subtitle">Quiz-Einstellungen</h3>
 <button id="back-to-categories">Zurück</button>
 <div class="slider-container">
-  <label style="font-size: 20px;">max. Anzahl von Bildern:</label>
+  <label class="config-category-select">max. Anzahl von Bildern:</label>
   <div id="num-photos-buttons" class="slider-buttons">
   <button data-value="10">10</button>
   <button data-value="30">30</button>
@@ -1022,7 +1463,7 @@ footer a:hover {
 </div>
 
 <div class="slider-container">
-  <label style="font-size: 20px;">Schwierigkeitslevel:</label>
+  <label class="config-category-select">Schwierigkeitslevel:</label>
   <div id="difficulty-buttons" class="slider-buttons">
     <button data-value="1">1</button>
     <button data-value="2">2</button>
@@ -1032,7 +1473,7 @@ footer a:hover {
 </div>
 
 <div class="slider-container">
-  <label style="font-size: 20px;">Antwortmodus:</label>
+  <label class="config-category-select">Antwortmodus:</label>
   <div id="answer-mode-buttons" class="slider-buttons">
     <button data-value="mc">Multiple Choice</button>
     <button data-value="text">Texteingabe</button>
@@ -1088,9 +1529,18 @@ const quizConfigEl = document.getElementById("quiz-config");
 const startQuizBtn = document.getElementById("start-quiz-btn");
 const speciesImageEl = document.getElementById('species-image');
 const imageHintEl = document.getElementById('image-toggle-hint');
-const overlay = document.getElementById('detail-overlay');
-const detailImg = document.getElementById('detail-image');
 const speciesImage = document.getElementById('species-image');
+const overlay = document.getElementById("detail-overlay");
+const detailImg = document.getElementById("detail-image");
+
+let scale = 1;
+let posX = 0;
+let posY = 0;
+let startDist = 0;
+let dragging = false;
+let startX = 0;
+let startY = 0;
+
 
 imageEl.style.cursor = "pointer";
 const SCALE = 0.8; // Detailbild auf 80% der Originalgröße
@@ -1280,6 +1730,12 @@ function formatSpeciesLabel(item) {
 // UI-Hilfsfunktionen
 // =========================
 
+function addBreaksAtAllowedChars(str) {
+  // Erlaubte Trennstellen: Leerzeichen, Bindestrich, Slash
+  // Nach jedem dieser Zeichen fügen wir einen Zero-Width Space ein
+  return str.replace(/([ \-/])/g, "$1\u200B");
+}
+
 function resetUI() {
   const container = document.getElementById('answer-container');
   container.innerHTML = '';
@@ -1318,7 +1774,16 @@ function resetImageState() {
   imageEl.style.visibility = "visible";
 }
 
+
+function resetAnswerButtons() {
+  const buttons = document.querySelectorAll(".mc-option");
+  buttons.forEach(btn => {
+    btn.classList.remove("correct", "wrong", "disabled");
+  });
+}
+
 function focusAnswer() {
+  if (window.matchMedia("(orientation: portrait)").matches) return; // nur Desktop
   const input = document.getElementById("answer-input");
   if (input) input.focus();
 }
@@ -1330,26 +1795,31 @@ function focusAnswer() {
 
 function buildAnswerUI(item) {
   const container = document.getElementById('answer-container');
-  container.innerHTML = "";     // 👈 sauber machen
+  container.innerHTML = ""; // sauber machen
+  resetAnswerButtons();
 
   if (selectedAnswerMode === "text") {
     const input = document.createElement('input');
     input.type = 'text';
     input.id = 'answer-input';
     input.placeholder = 'Namen eingeben...';
-    input.autocomplete = 'off';
-    input.spellcheck = false;
+
+    // ---- Mobile-Tastatur optimieren ----
+    input.autocomplete = 'off';       // keine Browser-Vorschläge
+    input.spellcheck = false;         // keine Rechtschreibprüfung
+    input.autocorrect = 'off';        // keine Autokorrektur auf iOS/Android
+    input.autocapitalize = 'none';    // keine automatische Großschreibung
+    input.inputMode = 'text';         // generische Text-Tastatur
 
     container.appendChild(input);
     answerInputEl = input;
+    setTimeout(focusAnswer, 0);
 
-    input.focus();              // 👈 richtig!
     input.addEventListener("input", checkAnswer);
 
     revealButtonEl.style.display = 'inline-block';
     return;
   }
-
 
   // Multiple Choice
   const correctItem = item;
@@ -1364,18 +1834,28 @@ function buildAnswerUI(item) {
     option.className = "mc-option";
     option.dataset.sciname = opt.scientific_name;
 
-    const trivial =
+    const trivialText =
       Array.isArray(opt.trivialname) && opt.trivialname.length
         ? opt.trivialname[0]
         : opt.scientific_name;
 
-    option.innerHTML = `
-      <span class="mc-trivial">${trivial}</span><br>
-      <span class="mc-scientific">(${opt.scientific_name})</span>
-    `;
+    const trivial = document.createElement("span");
+    trivial.className = "mc-trivial";
+    trivial.lang = "de";
+    trivial.textContent = addBreaksAtAllowedChars(trivialText);
+
+    const scientific = document.createElement("span");
+    scientific.className = "mc-scientific";
+    scientific.lang = "la";
+    scientific.textContent = `(${opt.scientific_name})`;
+
+    option.append(trivial, scientific);
 
     option.onclick = () =>
-      handleMCClick(option, opt.scientific_name === correctItem.scientific_name);
+      handleMCClick(
+        option,
+        opt.scientific_name === correctItem.scientific_name
+      );
 
     grid.appendChild(option);
   });
@@ -1483,51 +1963,42 @@ function revealAnswer() {
 // Detailbild-Logik
 // =========================
 
+const MOBILE_MAX_WIDTH = 900;
 
+// ---------- DESKTOP: Inline-Detailbild ----------
 imageEl.addEventListener("click", async (e) => {
-  if (window.innerWidth <= 750) return; // <--- Mobile: nichts tun (Overlay hat eigenen Listener)
+  if (window.innerWidth <= MOBILE_MAX_WIDTH) return;
+
   e.stopPropagation();
   if (!currentItem) return;
 
   const wrapper = document.getElementById("image-wrapper");
   const rect = wrapper.getBoundingClientRect();
-
   const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;  
+  const mouseY = e.clientY - rect.top;
 
-
-  // ZURÜCK ZUR VORSCHAU
-
+  // 🔙 Zurück zur Vorschau
   if (showingDetail) {
-  showingDetail = false;
-
-  imageEl.className = "preview";
-
-  // 🔴 ALLE Detail-Styles entfernen
-  imageEl.style.width = "";
-  imageEl.style.height = "";
-  imageEl.style.transform = "translate(0,0)";
-  imageEl.style.objectFit = "";
-
-  await setImageAndWait(imageEl, currentItem.url_vorschau);
-  imageEl.style.visibility = "visible";
-  setTimeout(focusAnswer, 0);
-  updateImageHint();
-  return;
+    showingDetail = false;
+    imageEl.className = "preview";
+    imageEl.style.width = "";
+    imageEl.style.height = "";
+    imageEl.style.transform = "translate(0,0)";
+    imageEl.style.objectFit = "";
+    await setImageAndWait(imageEl, currentItem.url_vorschau);
+    imageEl.style.visibility = "visible";
+    setTimeout(focusAnswer, 0);
+    updateImageHint();
+    return;
   }
 
-
-  // DETAIL ANZEIGEN
+  // 🔍 Detail anzeigen
+  const detailUrl = await loadDetailImage(currentItem.url_detail);
+  if (!detailUrl) return;
 
   showingDetail = true;
   imageEl.className = "detail";
   imageEl.style.visibility = "hidden";
-
-  const detailUrl = await loadDetailImage(currentItem.url_detail);
-  if (!detailUrl) {
-  console.warn("Fallback auf Vorschau");
-  return; // KEIN Zustandswechsel!
-  }
   await setImageAndWait(imageEl, detailUrl);
 
   const imgW = imageEl.naturalWidth * SCALE;
@@ -1544,91 +2015,220 @@ imageEl.addEventListener("click", async (e) => {
   const ty = Math.min(0, Math.max(rect.height - imgH, -relY * (imgH - rect.height)));
 
   imageEl.style.transform = `translate(${tx}px, ${ty}px)`;
-
-  // Referenz speichern für eventuelle Drag-Optimierung (optional)
-  startTranslateX = tx;
-  startTranslateY = ty;
-
   imageEl.style.visibility = "visible";
   setTimeout(focusAnswer, 0);
-
-  // Referenz für Mousemove
-  startMouseX = mouseX;
-  startMouseY = mouseY;
-  startTranslateX = tx;
-  startTranslateY = ty;
-
-  // Hinweis aktualisieren
   updateImageHint();
 });
 
+// Mousemove nur auf Desktop
 document.getElementById("image-wrapper").addEventListener("mousemove", (e) => {
-  if (!showingDetail) return;
+  if (!showingDetail || window.innerWidth <= MOBILE_MAX_WIDTH) return;
 
-  const wrapper = e.currentTarget;
-  const rect = wrapper.getBoundingClientRect();
-
-  const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
-
+  const rect = e.currentTarget.getBoundingClientRect();
   const imgW = imageEl.offsetWidth;
   const imgH = imageEl.offsetHeight;
 
-  const relX = mouseX / rect.width;
-  const relY = mouseY / rect.height;
+  const relX = (e.clientX - rect.left) / rect.width;
+  const relY = (e.clientY - rect.top) / rect.height;
 
-  const moveX = Math.min(0, Math.max(rect.width - imgW, -relX * (imgW - rect.width)));
-  const moveY = Math.min(0, Math.max(rect.height - imgH, -relY * (imgH - rect.height)));
+  const x = Math.min(0, Math.max(rect.width - imgW, -relX * (imgW - rect.width)));
+  const y = Math.min(0, Math.max(rect.height - imgH, -relY * (imgH - rect.height)));
 
-  imageEl.style.transform = `translate(${moveX}px, ${moveY}px)`;
+  imageEl.style.transform = `translate(${x}px, ${y}px)`;
 });
 
-function updateImageHint() {
-  const hintEl = document.getElementById("image-toggle-hint");
-  if (!hintEl) return;
 
-  // Prüfen, ob gerade Detailbild angezeigt wird
-  if (showingDetail) {
-    hintEl.textContent = "click to zoom out ⤵";
+
+// ---------- MOBILE: Overlay ----------
+let overlayScale = 1;
+let overlayPosX = 0;
+let overlayPosY = 0;
+let overlayStartDist = 0;
+let overlayStartX = 0;
+let overlayStartY = 0;
+let overlayDragging = false;
+let overlayStartScale = 1;
+let pinchCenterX = 0;
+let pinchCenterY = 0;
+
+// Für Tap-to-close
+let touchStartTime = 0;
+let touchStartX = 0;
+let touchStartY = 0;
+const TAP_MAX_DURATION = 250; // ms
+const TAP_MAX_MOVEMENT = 10;  // px
+
+// Mobile Click: Detailbild laden und Overlay öffnen
+speciesImage.addEventListener('click', async () => {
+  if (window.innerWidth > MOBILE_MAX_WIDTH || !currentItem) return;
+
+  const detailUrl = await loadDetailImage(currentItem.url_detail);
+  if (!detailUrl) return;
+
+  detailImg.src = detailUrl;
+  overlay.style.display = 'flex';
+
+  overlayScale = 1;
+  overlayPosX = 0;
+  overlayPosY = 0;
+  overlayDragging = false;
+  overlayStartDist = 0;
+
+  // Transform anwenden, sobald Bild geladen
+  detailImg.onload = updateOverlayTransform;
+});
+
+// Transform-Funktion mit vierseitiger Begrenzung
+function clampOverlayPosition() {
+  const imgW = detailImg.naturalWidth * overlayScale;
+  const imgH = detailImg.naturalHeight * overlayScale;
+  const vw = overlay.clientWidth;
+  const vh = overlay.clientHeight;
+
+  // Horizontal clamping
+  if (imgW <= vw) {
+    overlayPosX = (vw - imgW) / 2; // Bild kleiner als Viewport → zentrieren
   } else {
-    hintEl.textContent = "click to zoom in ⤵";
+    overlayPosX = Math.min(0, Math.max(vw - imgW, overlayPosX));
+  }
+
+  // Vertikal clamping
+  if (imgH <= vh) {
+    overlayPosY = (vh - imgH) / 2; // Bild kleiner als Viewport → zentrieren
+  } else {
+    overlayPosY = Math.min(0, Math.max(vh - imgH, overlayPosY));
   }
 }
 
+function updateOverlayTransform() {
+  const imgW = detailImg.naturalWidth * overlayScale;
+  const imgH = detailImg.naturalHeight * overlayScale;
+  const vw = overlay.clientWidth;
+  const vh = overlay.clientHeight;
 
-// Beispiel: beim Setzen eines neuen Bildes
-function setImage(src, isDetail=false) {
-  imageEl.src = src;
-  imageEl.style.display = "block";
-  imageEl.classList.toggle("detail", isDetail);
-  imageEl.classList.toggle("preview", !isDetail);
-  updateImageHint();
-}
+  // Maximal erlaubte Verschiebung berechnen
+  const maxOffsetX = Math.max(0, (imgW - vw) / 2);
+  const maxOffsetY = Math.max(0, (imgH - vh) / 2);
 
-// Und am Ende deines bestehenden Klickhandlers für das Bild
-// einfach einmal aufrufen, damit der Text wechselt
-updateImageHint();
-
-speciesImage.addEventListener('click', () => {
-  if (window.innerWidth <= 950) {
-    // KLEINE SCREENS: Overlay öffnen
-    detailImg.src = speciesImage.src;
-    overlay.style.display = 'flex';
-
-    // alte Desktop-Logik deaktivieren
-    return; // verhindert, dass die Mousemove-Logik ausgeführt wird
+  // Horizontal begrenzen
+  if (imgW <= vw) {
+    overlayPosX = 0;
+  } else {
+    overlayPosX = Math.min(maxOffsetX, Math.max(-maxOffsetX, overlayPosX));
   }
 
-  // GROSSE SCREENS: bestehende Desktop-Detailbild-Logik
-  showDetailDesktop(speciesImage.src);
+  // Vertikal begrenzen
+  if (imgH <= vh) {
+    overlayPosY = 0;
+  } else {
+    overlayPosY = Math.min(maxOffsetY, Math.max(-maxOffsetY, overlayPosY));
+  }
+
+  // Transform anwenden
+  detailImg.style.transform = `translate(${overlayPosX}px, ${overlayPosY}px) scale(${overlayScale})`;
+
+  // Force GPU repaint, um Linien zu vermeiden
+  detailImg.style.willChange = "transform";
+}
+
+// -------------------- Touchmove für Pinch & Drag --------------------
+detailImg.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+
+  const vw = overlay.clientWidth;
+  const vh = overlay.clientHeight;
+  const imgW = detailImg.naturalWidth * overlayScale;
+  const imgH = detailImg.naturalHeight * overlayScale;
+
+  if (e.touches.length === 2) {
+    const dist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+
+    const newScale = Math.min(Math.max(overlayStartScale * (dist / overlayStartDist), 1), 5);
+
+    let newPosX = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - pinchCenterX * (newScale / overlayScale);
+    let newPosY = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - pinchCenterY * (newScale / overlayScale);
+
+    const maxOffsetX = Math.max(0, (detailImg.naturalWidth * newScale - vw) / 2);
+    const maxOffsetY = Math.max(0, (detailImg.naturalHeight * newScale - vh) / 2);
+
+    overlayPosX = Math.min(maxOffsetX, Math.max(-maxOffsetX, newPosX));
+    overlayPosY = Math.min(maxOffsetY, Math.max(-maxOffsetY, newPosY));
+
+    overlayScale = newScale;
+    updateOverlayTransform();
+
+  } else if (overlayDragging && e.touches.length === 1) {
+    let newPosX = e.touches[0].clientX - overlayStartX;
+    let newPosY = e.touches[0].clientY - overlayStartY;
+
+    const maxOffsetX = Math.max(0, (imgW - vw) / 2);
+    const maxOffsetY = Math.max(0, (imgH - vh) / 2);
+
+    overlayPosX = Math.min(maxOffsetX, Math.max(-maxOffsetX, newPosX));
+    overlayPosY = Math.min(maxOffsetY, Math.max(-maxOffsetY, newPosY));
+
+    updateOverlayTransform();
+  }
+}, { passive: false });
+
+// Drag & Pinch-Zoom + Tap-to-close
+detailImg.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 2) {
+    overlayStartDist = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    overlayStartScale = overlayScale;
+
+    pinchCenterX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - overlayPosX;
+    pinchCenterY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - overlayPosY;
+
+  } else if (e.touches.length === 1) {
+    overlayDragging = true;
+    overlayStartX = e.touches[0].clientX - overlayPosX;
+    overlayStartY = e.touches[0].clientY - overlayPosY;
+
+    // Für Tap-to-close merken
+    touchStartTime = Date.now();
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }
+}, { passive: false });
+
+// Touchend: Drag beenden + Tap-to-close prüfen
+detailImg.addEventListener("touchend", (e) => {
+  overlayDragging = false;
+
+  if (e.touches.length === 0 && e.changedTouches.length === 1) {
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchStartX;
+    const dy = touch.clientY - touchStartY;
+    const dt = Date.now() - touchStartTime;
+
+    if (dt < 250 && Math.hypot(dx, dy) < 10) {
+      // Kurzer Tap → Overlay schließen
+      overlay.style.display = 'none';
+      detailImg.src = '';
+    }
+  }
+});
+
+detailImg.addEventListener("touchcancel", () => overlayDragging = false);
+
+// Overlay über Hintergrund schließen
+overlay.addEventListener('click', (e) => {
+  if (e.target === overlay) {
+    overlay.style.display = 'none';
+    detailImg.src = '';
+  }
 });
 
 
-// Klick auf Overlay schließt es wieder
-overlay.addEventListener('click', () => {
-  overlay.style.display = 'none';
-  detailImg.src = ''; // Optional: vorheriges Bild zurücksetzen
-});
+
+
 
 // =========================
 // Kategorien & Laden der Daten
@@ -1909,6 +2509,10 @@ function loadNextImage() {
   buildAnswerUI(currentItem);
 
   updateQuizStatus();
+  if (selectedAnswerMode === "text" && window.innerWidth > MOBILE_MAX_WIDTH) {
+    setTimeout(focusAnswer, 0); // kleine Verzögerung, damit das Feld im DOM ist
+  }
+  updateImageHint();
 }
 
 
