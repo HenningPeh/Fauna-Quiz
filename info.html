@@ -1,32 +1,44 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+<meta charset="UTF-8" />
+<link rel="canonical" href="https://fauna-quiz.de/">
+<title>Fauna-Quiz – Heimische Tiere online bestimmen</title>
+<meta name="description" content="Übe heimische Tierarten mit unserem interaktiven Quiz sicher zu bestimmen. Kostenlos für Anfänger und Fortgeschrittene.">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Dongle&family=Exo:ital,wght@0,100..900;1,100..900&family=SUSE:ital,wght@0,100..900;1,100..900&family=Tilt+Neon&display=swap" rel="stylesheet">
-  <title>Weitere Informationen</title>
-
-  <style>
-    :root {
-      --bg-main: #f4f5f2;
-      --bg-card: #ffffff;
-      --text-main: #1f2a24;
-      --text-muted: #6b7c72;
-      --green-dark: #2f5d46;
-    }
+<style>
+  :root {
+  --bg-main: #f4f5f2;
+  --bg-card: #ffffff;
+  --green-dark: #2f5d46;
+  --green-mid: #5f8f73;
+  --green-light: #e3ede6;
+  --accent: #c9b458;
+  --text-main: #1f2a24;
+  --text-muted: #6b7c72;
+}
 html, body {
   height: 100%;
   margin: 0;
+  box-sizing: border-box;
+  width: 100%;
+  overflow-x: hidden; /* optional, um horizontales Scrollen zu verhindern */
 }
-    body {
-      background: var(--bg-main);
-      color: var(--text-main);
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      line-height: 1.2;
-    }
-
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  margin: 0;
+  width: 100%;
+}
 /* --- Obere Menüleiste --- */
 .top-nav {
   position: sticky;
@@ -34,12 +46,13 @@ html, body {
   z-index: 2000;
   background: var(--bg-card);
   border-bottom: 1px solid #dde3dd;
+  flex-shrink: 0;
 }
 
 .top-nav-inner {
   max-width: 100%;
   margin: 0 auto;
-  padding: 1.1% 10%;
+  padding: 0.05% 10%;
   display: flex;
   align-items: baseline;
   gap: 54px;
@@ -54,54 +67,56 @@ html, body {
   font-style: normal;
   font-variation-settings:
     "slnt" 0;
-  font-size: 35px;
+  font-size: 28px;
 }
 
 .nav-secondary {
   text-decoration: none;
   color: var(--text-muted);
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .nav-secondary:hover {
   color: var(--green-dark);
 }
-    main {
-      max-width: 70%;
-      margin: 40px auto;
-      padding: 0 20px 0px;
-    }
-    details summary {
-      font-weight: 600;
-      cursor: pointer;
-    }
+main {
+  max-width: 80%;
+  margin: 40px auto;
+  padding: 0 20px 0px;
+  background-color: transparent;
+}
 
-    details[open] summary {
-      color: #0066cc;
-    }
+details summary {
+  font-weight: 600;
+  cursor: pointer;
+}
 
-    section {
-      background: var(--bg-card);
-      padding: 22px 22px 18px;
-      border-radius: 14px;
-      margin-bottom: 22px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-      line-height: 1.6;
-    }
+details[open] summary {
+  color: #0066cc;
+}
 
-    section h2 {
-      margin-top: 0;
-      font-size: 24px;
-    }
+section {
+  background: var(--bg-card);
+  padding: 22px 22px 18px;
+  border-radius: 14px;
+  margin-bottom: 22px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  line-height: 1.6;
+}
 
-    a {
-      color: var(--green-dark);
-    }
+section h2 {
+  margin-top: 0;
+  font-size: 24px;
+}
 
-    ul {
-      padding-left: 18px;
-    }
-     footer {
+a {
+  color: var(--green-dark);
+}
+
+ul {
+  padding-left: 18px;
+}
+footer {
   flex-shrink: 0;
   width: 100%;
   background: var(--bg-card);
@@ -112,8 +127,7 @@ html, body {
   text-align: center;
 }
 
-
-  footer a {
+footer a {
   color: var(--text-muted);
   text-decoration: none;
 }
@@ -122,40 +136,87 @@ footer a:hover {
   color: var(--green-dark);
   text-decoration: underline;
 }
+
+
+@media (orientation: portrait) {
+  .nav-primary{
+    font-size: 4vh;
+  }
+  .nav-secondary{
+    font-size: 1.7vh;
+  }
+  .top-nav-inner{
+      padding: 2vh 4vh;
+      gap: 15%;
+  }
+  .top-nav{
+    position: static;
+    background: none;
+  }
+  main{
+    max-width: 100%;
+    margin: 0 0;
+    padding: 5vh 20px 0;
+    background-color: var(--green-light);
+  }
+  main h1 {
+  margin-top: 0;
+  font-size: 4vh;
+  }
+  section {
+  background: none;
+  padding: 22px 2vh 18px;
+  border-radius: 0;
+  margin-bottom: 0;
+  box-shadow: none;
+  line-height: 1.6;
+  }
+  section h2 {
+    margin-top: 0;
+    font-size: 3vh;
+  }
+footer{
+  background: none;
+  text-align: center;
+  padding-top: 8vh 2vh;
+  padding-bottom: 8vh;
+  color: var(--text-muted);
+  font-size: 2.5vh;
+  position: static;
+  }
+}
   </style>
 </head>
 
 <body>
 
   <!-- Navigation -->
-  <nav class="top-nav">
+<nav class="top-nav">
   <div class="top-nav-inner">
-    <a href="index.html" class="nav-primary">Fauna Quiz</a>
-    <a href="info.html" class="nav-secondary">Weitere Informationen</a>
+  <a href="index.html" class="nav-primary">Fauna Quiz</a>
+  <a href="info.html" class="nav-secondary">Weitere Informationen</a>
   </div>
 </nav>
 
-  <main>
+<main>
 
     <h1>Weitere Informationen</h1>
     
     <section>
       <h2>Wie funktioniert's?</h2>
       <p>
-        Mit ca. 48.000 Arten bietet Deutschland Lebensraum für eine große Vielfalt von Tieren.
-        Für eine kleine Auswahl davon können hier im Quiz heimische Arten bestimmt werden.
-        Durch den Klick auf eine der Kategorien öffnen sich die Einstellungen für das Quiz. 
+        Durch den Klick auf eine der Kategorien öffnet sich die Einstellunge für das Quiz. 
         Hier können die Anzahl der Bilder für die Runde sowie das Schwierigkeitslevel und der Antwortmodus eingestellt werden. 
         Mit dem Klick auf "Quiz starten" beginnt das Quiz und Ziel ist es hier, die auf dem Foto abgebildeten Arten richtig zu bestimmen. 
         Dazu kann bei Multiple Choice einfach der zur gezeigten Art passende Name angeklickt werden und bei der Texteingabe muss der richtige Name eingetippt werden. 
-        Bei der Texteingabe wird sowohl der wissenschaftliche Name als auch der Trivialname als richtige Lösung akzeptiert. 
+        Bei der Texteingabe wird sowohl der wissenschaftliche Name, als auch der Trivialname als richtige Lösung akzeptiert. 
         Bei Trivialnamen gilt allerdings zu beachten, dass es für manche Arten sehr viele verschiedene Trivialnamen gibt. 
         Für jede Art sind hier aber nur 1-3 verbreitete Trivialnamen als richtige Lösung hinterlegt.<br><br>
 
         <strong>Artkomplexe</strong><br>
         Nicht alle heimischen Arten lassen sich anhand äußerer Merkmale sicher bestimmen. 
-        Des weiteren gibt es Arten, die sehr variabel in den äußeren Merkmalen sind, Hier kann es zu Überscheidungen der Merkmalsausprägungen mit anderen Arten kommen.
-        In so einem Fall lassen sich nur Individuen mit typischer Merkmalsausprägung sicher einer Art zuordnen. 
+        Des weiteren gibt es Arten, die sehr variabel in den äußeren Merkmalen sind, bei denen es zu Überscheidungen der Merkmalsausprägungen mit anderen Arten kommen kann.
+        In so einem Fall lassen sich nur Individuen mit typischer Merkmalsausprägung mit größerer Sicherheit einer Art zuordnen. 
         In vielen Fällen können anhand des Habitats, des Verbreitungsgebietes, der Jahrezeit sowie der äußeren Merkmale aber zumindest Vermutungen in Bezug auf die Art aufgestellt werden.
         Da in diesem Quiz nur äußere Merkmale gezeigt und keine Angaben zum Habitat, zum Fundort oder der Jahreszeit gemacht werden, müssen solche schwer zu trennenden Arten als Artkomplexe zusammengefasst werden. 
         Welche Arten für das Quiz als Artkomplex zusammengefasst wurden, ist in den Info-Blöcke zum Aufklappen weiter unten für jede Tiergruppe dokumentiert.
@@ -167,8 +228,8 @@ footer a:hover {
     <section>
       <h2>Mehr zum Quiz</h2>
       <p>
-        Diese Website soll als Möglichkeit dienen, spielerisch seine Artenkenntnis von verschiedene Tiergruppen zu trainieren.
-        Viele der gezeigten Insektenarten sind über die Wintermonate kaum zu beobachten und teilweise auch im Sommerhalbjahr nur für einen kurzen Zeitraum aktiv, 
+        Diese Website soll als Möglichkeit dienen, Artenkenntnis von verschiedene Tiergruppen zu trainieren. 
+        Viele der gezeigten Arten sind über die Wintermonate kaum zu beobachten und teilweise auch im Sommerhalbjahr nur für einen kurzen Zeitraum aktiv, 
         sodass das Wissen über die Bestimmungsmerkmale langsam verblasst, bis die Art das nächste mal beobachtet werden kann. 
         Um die Merkmale in der Zwischenzeit in Erinnerung zu halten, kann diese Website als Wiederholungsmöglichkeit genutzt werden. <br><br>
         
@@ -176,8 +237,8 @@ footer a:hover {
         Weitere Kategorien wie "Heuschrecken" und "Käfer" sollen später noch folgen. Für die Kategorien "Amphibien" und "Heuschrecken" sollen auch die jeweiligen Rufe und Gesänge als Audio-Dateien noch folgen. Hier fehlen aber noch nahezu alle Aufnahmen.
         Wer dazu beitragen möchte, diese Lücken zu schließen, ist herzlich dazu eingeladen, eigene Fotos oder Ton-Aufnahmen von fehlenden oder unterrepräsentierten Arten beizusteuern.
         Die "künstlerische Qualität" der Fotos spielt dabei keine Rolle, es kommt einzig darauf an, dass die jeweilige Art anhand des Fotos oder der Audiodatei sicher bestimmt werden kann. <br><br>
-        <strong>Hinweise zu den Bildern</strong><br>
-        Es werden ausschließlich Fotos von Tieren in freier Wildbahn genutzt.
+        
+        Es werden ausschließlich Fotos von Tieren in freier Wildbahn genutzt, da Tiere in Gefangenschaft oder aus der Zucht teilweise z.B. andere Körperhaltungen oder eine andere Färbung zeigen. 
         Alle verwendeten Fotos sind echte Fotos und allenfalls geringfügig nachbearbeitet. Mit Hilfe von KI erzeugte Fotos werden nicht verwendet.<br><br>
         Für weitere Details zu den jeweiligen Artengruppen siehe die folgenden Info-Blöcke zum Aufklappen.  
         <details>
@@ -193,6 +254,7 @@ footer a:hover {
           Knoblauchkröte (Pelobates fuscus)<br>
           Europäischer Laubfrosch (Hyla arborea)<br>
           Rotbauchunke (Bombina bombina)<br>
+          Moorfrosch (Rana arvalis)<br>
           Springfrosch (Rana dalmatina)<br>
         </p>
         </details>
@@ -210,6 +272,7 @@ footer a:hover {
           Würfelnatter (Natrix tessellata) <br>
           Äskulapnatter (Zamenis longissimus) <br>
           Aspisviper (Vipera aspis)<br>
+          Kreuzotter (Vipera berus)<br>
         </p>
         </details>
         <details>
@@ -222,12 +285,16 @@ footer a:hover {
           Alpenfledermaus (Hypsugo savii)<br>
           Alpenspitzmaus (Sorex alpinus)<br>
           Alpenwaldmaus (Apodemus alpicola)<br>
+          Baummarder (Martes martes)<br>
           Baumschläfer (Dryomys nitedula)<br>
           Bechsteinfledermaus (Myotis bechsteinii)<br>
+          Biber (Castor fiber)<br>
           Brandmaus (Apodemus agrarius)<br>
           Braunbrustigel (Erinaceus europaeus)<br>
           Braunes Langohr (Plecotus auritus)<br>
           Breitflügelfledermaus (Eptesicus serotinus)<br>
+          Damhirsch (Dama dama)<br>
+          Elch (Alces alces)<br>
           Erdmaus (Microtus agrestis)<br>
           Feldhamster (Cricetus cricetus)<br>
           Feldmaus (Microtus arvalis)<br>
@@ -250,6 +317,7 @@ footer a:hover {
           Luchs (Lynx lynx)<br>
           Marderhund (Nyctereutes procyonoides)<br>
           Maulwurf (Talpa europaea)<br>
+          Mauswiesel (Mustela nivalis)<br>
           Mink (Neovison vison)<br>
           Mopsfledermaus (Barbastella barbastellus)<br>
           Mückenfledermaus (Pipistrellus pygmaeus)<br>
@@ -257,16 +325,19 @@ footer a:hover {
           Nymphenfledermaus (Myotis alcathoe)<br>
           Ostschermaus (Arvicola amphibius)<br>
           Rauhautfledermaus (Pipistrellus nathusii)<br>
+          Rötelmaus (Myodes glareolus)<br>
           Schabrackenspitzmaus (Sorex coronatus)<br>
           Schneehase (Lepus timidus)<br>
           Schneemaus (Chionomys nivalis)<br>
-          Schweinswal (Phocoena phocoena)<br>
+          Phocoena phocoena (Schweinswal)<br>
           Sikahirsch (Cervus nippon)<br>
+          Steinbock (Capra ibex)<br>
           Steinmarder (Martes foina)<br>
           Sumpfmaus (Alexandromys oeconomus)<br>
           Sumpfspitzmaus (Neomys anomalus)<br>
           Teichfledermaus (Myotis dasycneme)<br>
           Waldbirkenmaus (Sicista betulina)<br>
+          Waldmaus (Apodemus sylvaticus)<br>
           Waldspitzmaus (Sorex araneus)<br>
           Wanderratte (Rattus norvegicus)<br>
           Wasserspitzmaus (Neomys fodiens)<br>
@@ -302,7 +373,6 @@ footer a:hover {
           Asiatische Keiljungfer (Stylurus flavipes)<br>
           Gelbe Keiljungfer (Gomphus simillimus)<br>
           Gestreifte Quelljungfer (Cordulegaster bidentata)<br>
-          Große Zangenlibelle (Onychogomphus uncatus)<br>
           Zweifleck (Epitheca bimaculata)<br>
           Gekielter Flussfalke (Oxygastra curtisii)<br>
           Alpen-Smaragdlibelle (Somatochlora alpestris)<br>
@@ -344,9 +414,6 @@ footer a:hover {
           Ähnlicher Perlmuttfalter (Boloria napaea)<br>
           Alpenmatten-Perlmuttfalter (Boloria pales)<br>
           Östlicher Scheckenfalter (Melitaea britomartis)<br>
-          Westlicher Scheckenfalter (Melitaea parthenoides)<br>
-          Wachtelweizen-Scheckenfalter (Melitaea athalia)<br>
-          Ehrenpreis-Scheckenfalter (Melitaea aurelia)<br>
           Amerikanischer Distelfalter (Vanessa virginiensis)<br>
           Gelbgefleckter Schwärzling (Erebia manto)<br>
           Knochs Schwärzling (Erebia epiphron)<br>
@@ -357,9 +424,9 @@ footer a:hover {
           Felsen-Schwärzling (Erebia gorge)<br>
           Gelbbindiger Schwärzling (Erebia meolans)<br>
           Grünschillernder Schwärzling (Erebia tyndarus)<br>
+          Weißbindiger Bergwald-Schwärzling (Erebia euryale)<br>
           Marmorierter Schwärzling (Erebia montana)<br>
           Doppelaugen-Schwärzling (Erebia oeme)<br>
-          Rundaugen-Schwärzling (Erebia medusa)<br>
           Graubrauner Schwärzling (Erebia pandrose)<br>
           Eis-Schwärzling (Erebia pluto)<br>
           Wasser-Schwärzling (Erebia pronoe)<br>
@@ -370,17 +437,17 @@ footer a:hover {
         <summary>Nachtfalter</summary>
 
         <p>
-          Von den ca. 3700 heimischen Nachtfalterarten sollen hier nur einige der häufigen und gut bestimmbaren Arten abgebildet werde. Aktuell sind Fotos von 20 tagaktiven Nachtfalter-Arten enthalten.
+          Von den ca. 3700 heimischen Nachtfalterarten sollen hier nur einige der häufigen und gut bestimmbaren Arten abgebildet werde. Aktuell sind Fotos von 20 tagaktive Nachtfalter-Arten enthalten.
         </details>
       </p>
       <br>
-      Da mit <a href="https://www.computerbirding.com/what/cbirding_2018.php" target="_blank">Computerbirding.com</a> die Kategorie "Vögel" bereits sehr gut abgedeckt ist, fehlt diese Kategorie hier. 
+      Da mit <a href="https://www.computerbirding.com/what/cbirding_2018.php" target="_blank">Computerbirding.com</a> die Kategorie "Vögel" bereit sehr gut abgedeckt ist, fehlt diese Kategorie hier. 
     </section>
 
     <section>
       <h2>Empfehlungen und weiterführende Links</h2>
       <p>
-      Für das Lernen der bestimmungsrelevanten Merkmale gibt es für die verschiedenen Tiergruppen gute digitale Resscourcen. 
+        Für das Lernen der bestimmungsrelevanten Merkmale gibt es für die verschiedenen Tiergruppen gute digitale Resscourcen. 
       Bestimmungsbücher sind meist ein guter Einstieg, hat man aber nicht immer zur Hand. 
       Daher folgen hier einige sehr nützliche Links und Empfehlungen, die bei dem Bestimmen und dem verbessern der eigenen Arten-Kenntnisse helfen können.  
       </p>
@@ -420,13 +487,13 @@ footer a:hover {
     <section>
       <h2>Kontakt</h2>
       <p>
-        Falls du Feedback, Fragen oder Probleme hast, erreichst du mich hier:
+        Wenn du Probleme, Fragen oder Feedback hast, erreichst du mich hier:
         <br />
         <a href="mailto:fauna-quiz@posteo.de">fauna-quiz@posteo.de</a>
       </p>
     </section>
 
-  </main>
+</main>
 <footer>
   <div class="page">
     <a href="impressum.html">Impressum</a>
