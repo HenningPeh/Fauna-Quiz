@@ -925,14 +925,16 @@ footer a:hover {
 
 @media (orientation: portrait) {
   .nav-primary{
-    font-size: 3.7vh;
+    font-size: clamp(10px, 2rem, 100px);
+    white-space: nowrap;
   }
   .nav-secondary{
-    font-size: 1.6vh;
+    font-size: clamp(7px, 0.8rem, 16px);
   }
   .top-nav-inner{
       padding: 2vh 4vh;
       gap: 15%;
+      align-items: last baseline;
   }
   .top-nav{
     position: static;
