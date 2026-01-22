@@ -140,14 +140,16 @@ footer a:hover {
 
 @media (orientation: portrait) {
   .nav-primary{
-    font-size: 4vh;
+    font-size: clamp(10px, 2rem, 100px);
+    white-space: nowrap;
   }
   .nav-secondary{
-    font-size: 1.7vh;
+    font-size: clamp(7px, 0.8rem, 16px);
   }
   .top-nav-inner{
       padding: 2vh 4vh;
       gap: 15%;
+      align-items: last baseline;
   }
   .top-nav{
     position: static;
@@ -214,7 +216,7 @@ footer{
         Für jede Art sind hier aber nur 1-3 verbreitete Trivialnamen als richtige Lösung hinterlegt.<br><br>
 
         <strong>Artkomplexe</strong><br>
-        Nicht alle heimischen Arten lassen sich anhand äußerer Merkmale sicher bestimmen. 
+        Nicht alle heimischen und etablierten Arten lassen sich anhand äußerer Merkmale sicher bestimmen. 
         Des weiteren gibt es Arten, die sehr variabel in den äußeren Merkmalen sind, bei denen es zu Überscheidungen der Merkmalsausprägungen mit anderen Arten kommen kann.
         In so einem Fall lassen sich nur Individuen mit typischer Merkmalsausprägung mit größerer Sicherheit einer Art zuordnen. 
         In vielen Fällen können anhand des Habitats, des Verbreitungsgebietes, der Jahrezeit sowie der äußeren Merkmale aber zumindest Vermutungen in Bezug auf die Art aufgestellt werden.
@@ -254,7 +256,6 @@ footer{
           Knoblauchkröte (Pelobates fuscus)<br>
           Europäischer Laubfrosch (Hyla arborea)<br>
           Rotbauchunke (Bombina bombina)<br>
-          Moorfrosch (Rana arvalis)<br>
           Springfrosch (Rana dalmatina)<br>
         </p>
         </details>
@@ -272,29 +273,23 @@ footer{
           Würfelnatter (Natrix tessellata) <br>
           Äskulapnatter (Zamenis longissimus) <br>
           Aspisviper (Vipera aspis)<br>
-          Kreuzotter (Vipera berus)<br>
         </p>
         </details>
         <details>
         <summary>Säugetiere</summary>
 
         <p>
-          Aktuell sind Fotos von 27 der 107 heimischen Säugetier-Arten enthalten.<br><br>
+          Aktuell sind Fotos von 27 der 107 heimischen und etablierten Säugetier-Arten enthalten.<br><br>
           
           Fotos folgender Arten fehlen noch:<br>
           Alpenfledermaus (Hypsugo savii)<br>
           Alpenspitzmaus (Sorex alpinus)<br>
           Alpenwaldmaus (Apodemus alpicola)<br>
-          Baummarder (Martes martes)<br>
           Baumschläfer (Dryomys nitedula)<br>
           Bechsteinfledermaus (Myotis bechsteinii)<br>
-          Biber (Castor fiber)<br>
           Brandmaus (Apodemus agrarius)<br>
-          Braunbrustigel (Erinaceus europaeus)<br>
           Braunes Langohr (Plecotus auritus)<br>
           Breitflügelfledermaus (Eptesicus serotinus)<br>
-          Damhirsch (Dama dama)<br>
-          Elch (Alces alces)<br>
           Erdmaus (Microtus agrestis)<br>
           Feldhamster (Cricetus cricetus)<br>
           Feldmaus (Microtus arvalis)<br>
@@ -309,7 +304,6 @@ footer{
           Haselmaus (Muscardinus avellanarius)<br>
           Hausratte (Rattus rattus)<br>
           Hausspitzmaus (Crocidura russula)<br>
-          Kegelrobbe (Halichoerus grypus)<br>
           Kleinabendsegler (Nyctalus leisleri)<br>
           Kleine Bartfledermaus (Myotis mystacinus)<br>
           Kleine Hufeisennase (Rhinolophus hipposideros)<br>
@@ -317,7 +311,6 @@ footer{
           Luchs (Lynx lynx)<br>
           Marderhund (Nyctereutes procyonoides)<br>
           Maulwurf (Talpa europaea)<br>
-          Mauswiesel (Mustela nivalis)<br>
           Mink (Neovison vison)<br>
           Mopsfledermaus (Barbastella barbastellus)<br>
           Mückenfledermaus (Pipistrellus pygmaeus)<br>
@@ -325,27 +318,22 @@ footer{
           Nymphenfledermaus (Myotis alcathoe)<br>
           Ostschermaus (Arvicola amphibius)<br>
           Rauhautfledermaus (Pipistrellus nathusii)<br>
-          Rötelmaus (Myodes glareolus)<br>
           Schabrackenspitzmaus (Sorex coronatus)<br>
           Schneehase (Lepus timidus)<br>
           Schneemaus (Chionomys nivalis)<br>
-          Phocoena phocoena (Schweinswal)<br>
+          Schweinswal (Phocoena phocoena)<br>
           Sikahirsch (Cervus nippon)<br>
-          Steinbock (Capra ibex)<br>
           Steinmarder (Martes foina)<br>
           Sumpfmaus (Alexandromys oeconomus)<br>
           Sumpfspitzmaus (Neomys anomalus)<br>
           Teichfledermaus (Myotis dasycneme)<br>
           Waldbirkenmaus (Sicista betulina)<br>
-          Waldmaus (Apodemus sylvaticus)<br>
           Waldspitzmaus (Sorex araneus)<br>
           Wanderratte (Rattus norvegicus)<br>
           Wasserspitzmaus (Neomys fodiens)<br>
           Weißrandfledermaus (Pipistrellus kuhlii)<br>
           Weißschnauzendelfin (Lagenorhynchus albirostris)<br>
           Westliche Hausmaus (Mus domesticus)<br>
-          Wildkaninchen (Oryctolagus cuniculus)<br>
-          Wildkatze (Felis silvestris)<br>
           Wimperfledermaus (Myotis emarginatus)<br>
           Wolf (Canis lupus)<br>
           Zweifarbfledermaus (Vespertilio murinus)<br>
@@ -381,14 +369,13 @@ footer{
           Östlicher Blaupfeil (Orthetrum albistylum)<br>
           Sumpf-Heidelibelle (Sympetrum depressiusculum)<br>
           Südliche Heidelibelle (Sympetrum meridionale)<br>
-          Gemeine Heidelibelle (Sympetrum vulgatum)<br>
         </p>
         </details>
         <details>
         <summary>Tagfalter</summary>
 
         <p>
-          Aktuell sind Fotos von 136 der 184 heimischen Tagfalter-Arten enthalten. <br><br>
+          Aktuell sind Fotos von 143 der 184 heimischen und etablierten Tagfalter-Arten enthalten. <br><br>
           
           Artkomplexe:<br>
           Hufeisenklee- und Weißkleegelbling werden zu dem Artkomplex "Goldene Acht (Colias hyale/alfaceriensis)" zusammengefasst.<br>
@@ -399,12 +386,10 @@ footer{
           Wachtelweizen-, Ehrenpreis- und Östlicher Scheckenfalter werden zu dem Artkomplex "Scheckenfalter (Melitaea athalia/aurelia/britomartis)" zusammengefasst. <br><br>
           
           Fotos folgender Arten fehlen noch:<br>
-          Steppenheiden-Würfel-Dickkopffalter (Pyrgus carthami)<br>
           Schwarzbrauner Würfel-Dickkopffalter (Pyrgus serratulae)<br>
           Spätsommer-Würfel-Dickkopffalter (Pyrgus cirsii)<br>
           Sonnenröschen-Würfel-Dickkopffalter (Pyrgus alveus)<br>
           Graumelierter Alpen-Würfel-Dickkopffalter (Pyrgus andromedae)<br>
-          Fahlfleckiger Alpen-Würfel-Dickkopffalter (Pyrgus cacaliae)<br>
           Alpen-Sonnenröschen-Würfel-Dickkopffalter (Pyrgus warrenensis)<br>
           Alpenweißling (Pontia callidice)<br>
           Pelargonien-Bläuling  (Cacyreus marshalli)<br>
@@ -412,7 +397,6 @@ footer{
           Mittlerer Perlmuttfalter (Fabriciana niobe)<br>
           Brombeer-Perlmuttfalter (Brenthis daphne)<br>
           Ähnlicher Perlmuttfalter (Boloria napaea)<br>
-          Alpenmatten-Perlmuttfalter (Boloria pales)<br>
           Östlicher Scheckenfalter (Melitaea britomartis)<br>
           Amerikanischer Distelfalter (Vanessa virginiensis)<br>
           Gelbgefleckter Schwärzling (Erebia manto)<br>
@@ -420,12 +404,9 @@ footer{
           Ähnlicher Schwärzling (Erebia eriphyle)<br>
           Kleiner Schwärzling (Erebia melampus)<br>
           Unpunktierter Schwärzling (Erebia pharte)<br>
-          Graubindiger Schwärzling (Erebia aethiops)<br>
           Felsen-Schwärzling (Erebia gorge)<br>
           Gelbbindiger Schwärzling (Erebia meolans)<br>
           Grünschillernder Schwärzling (Erebia tyndarus)<br>
-          Weißbindiger Bergwald-Schwärzling (Erebia euryale)<br>
-          Marmorierter Schwärzling (Erebia montana)<br>
           Doppelaugen-Schwärzling (Erebia oeme)<br>
           Graubrauner Schwärzling (Erebia pandrose)<br>
           Eis-Schwärzling (Erebia pluto)<br>
@@ -447,7 +428,7 @@ footer{
     <section>
       <h2>Empfehlungen und weiterführende Links</h2>
       <p>
-        Für das Lernen der bestimmungsrelevanten Merkmale gibt es für die verschiedenen Tiergruppen gute digitale Resscourcen. 
+      Für das Lernen der bestimmungsrelevanten Merkmale gibt es für die verschiedenen Tiergruppen gute digitale Resscourcen. 
       Bestimmungsbücher sind meist ein guter Einstieg, hat man aber nicht immer zur Hand. 
       Daher folgen hier einige sehr nützliche Links und Empfehlungen, die bei dem Bestimmen und dem verbessern der eigenen Arten-Kenntnisse helfen können.  
       </p>
@@ -455,6 +436,11 @@ footer{
       <ul>
         <li><a href="https://www.joergteumer.de/libellen-europas" target="_blank">Libellen Europas - Bestimmungsmerkmale und Fotos</a></li>
         <li><a target="_blank">Libellen ID Europa - App mit allen heimischen Libellen-Arten und ihren Merkmalen</a></li>
+      </ul>
+
+      <strong>Heuschrecken</strong>
+      <ul>
+        <li><a target="_blank">Orthoptera - App mit allen heimischen Heuschrecken-Arten und ihren Merkmalen</a></li>
       </ul>
 
 
@@ -465,6 +451,14 @@ footer{
         <li><a href="https://www.youtube.com/@tonikasiske6169" target="_blank">Youtube-Kanal von Toni Kasiske - Bestimmung und Suche von Tag- und Nachtfaltern</a></li>
         <li><a href="https://assets.vlinderstichting.nl/docs/0b095bc2-0387-4785-9f7e-5f7a987b3468.pdf" target="_blank">A Photographic Guide - BUTTERFLIES of Central Europe & Britain (PDF)</a></li>
         <li><a href="https://www.ufz.de/tagfalter-monitoring/index.php?de=41776" target="_blank">Bestimmungstafeln für viele Tagfaltergruppen (PDF)</a></li>
+      </ul>
+
+
+      <strong>Käfer</strong>
+
+      <ul>
+        <li><a href="https://www.kerbtier.de" target="_blank">Kerbtier - Fotosammlung heimischer Käfer</a></li>
+        <li><a href="https://coleonet.de/coleo/index.htm" target="_blank">Käfer Europas - Umfassender Bestimmungsschlüssel</a></li>
       </ul>
 
       <strong>Vögel</strong>
@@ -479,7 +473,7 @@ footer{
     <section>
       <h2>Danksagung</h2>
       <p>
-        Großer Dank gilt Daniel Schmidt für das Beisteuern seiner umfassenden Fotosammlung! 
+        Großer Dank gilt Daniel Schmidt und Johanna Seefeld für das Beisteuern von Fotos!
         Eine Website wie diese wäre ohne eine Vielzahl von Fotos möglichst vieler veschiedener Arten nicht denkbar.
       </p>
     </section>
