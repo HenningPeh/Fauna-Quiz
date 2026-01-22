@@ -31,6 +31,7 @@ html, body {
   box-sizing: border-box;
   width: 100%;
   overflow-x: hidden; /* optional, um horizontales Scrollen zu verhindern */
+  touch-action: manipulation;
 }
 body {
   display: flex;
@@ -105,9 +106,8 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
 
 #category-buttons {
   display: grid;
-  flex: 1;                /* füllt den gesamten verfügbaren Raum im #category-section */
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 1fr;    /* alle Reihen gleich hoch */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);  /* statt nur 1fr */
   gap: 0;
   min-height: 0;          /* damit Flexbox richtig rechnet */
   margin: 0;
@@ -197,6 +197,11 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
   max-height: 40px;
 }
 
+/* Standard: Mobile/klein – alles untereinander wie gehabt */
+#quiz-layout {
+  display: block;
+}
+
 
 
 /* ===============================
@@ -226,10 +231,10 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
 
 #quiz-status-wrapper {
   display: flex;
-  justify-content: flex-start;  /* linksbündig im Wrapper */
+  justify-content: flex-start;  
   width: 100%;
-  margin: 0 auto 10px;          /* zentriert in Quiz-Karte, Abstand unten */
-  gap: 1rem;                     /* optional */
+  margin: 0 auto 10px;          
+  gap: 1rem;                     
   color: var(--text-muted);
   font-weight: bold;
   flex-shrink: 1;
@@ -243,17 +248,17 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
 
 #quiz-status {
   display: flex;
-  justify-content: flex-start;      /* linksbündig im eigenen Container */
+  justify-content: flex-start;      
   width: 100%;           
-  margin: 0 auto 5px;              /* zentriert in der Quiz-Karte, Abstand unten */
+  margin: 0 auto 5px;              
   gap: 1rem;
   color: var(--text-muted);
   font-weight: bold;
   box-sizing: border-box;   
   flex-shrink: 1;
-  font-size: clamp(0.8rem, 1.8vh, 1.125rem);
+  font-size: clamp(0.8rem, 1rem, 1.125rem);
   line-height: 1.1;
-  margin-bottom: 0.25rem;        /* damit Padding korrekt gerechnet wird */
+  margin-bottom: 0.25rem;        
   max-width: var(--quiz-content-width);
   margin-left: auto;
   margin-right: auto;
@@ -265,9 +270,6 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
   z-index: 0;
 }
 
-/* ===============================
-   Bilder & Hinweise
-   =============================== */
 #image-wrapper-container { 
   display: inline-block; 
   position: relative;
@@ -285,12 +287,11 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
   cursor: pointer;
   position: relative;
   flex: 1 1 auto;
-  max-height: 50svh;
-  min-height: 160px;
+  max-height: 100%;
+  min-height: 100%;
   max-width: var(--quiz-content-width);
   margin-left: auto;
   margin-right: auto;
-
 }
 
 img { 
@@ -318,13 +319,11 @@ img {
 
 #species-image.detail { 
   width: auto; 
-  height: auto; 
+  height: auto;
   object-fit: unset; 
 }
 
-/* ===============================
-   Input & Antwort
-   =============================== */
+
 input[type="text"] {
   width: 80%;
   border: 2px solid #dde3dd;
@@ -383,26 +382,25 @@ input[type="text"] {
   cursor: pointer;
   text-align: center;
   width: 100%;
-  padding: clamp(0.5rem, 1.5vh, 1rem) 0;
+  padding: clamp(0.5rem, 3.5vh, 5rem) 0;
 }
 
-/* Hover für noch aktive Optionen */
+
 .mc-option:not(.disabled):hover {
   border-color: var(--green-dark);
   background-color: var(--green-light);
   color: var(--text-main);
 }
 
-/* Wissenschaftlicher Name kleiner und in Klammern unter Trivialname */
 .mc-scientific {
   display: block;
   font-style: italic;
   font-size: 14px;
   margin-top: 5px;
-  color: inherit; /* passt sich Button-Farbe an */
+  color: inherit; 
 }
 
-/* Richtig/Falsch bleibt unverändert */
+
 .mc-option.correct {
   background: var(--green-dark);
   border-color: var(--green-dark);
@@ -424,13 +422,14 @@ input[type="text"] {
 }
 
 .mc-trivial { 
-  font-size: clamp(0.8rem, 1.9vh, 1rem);
+  font-size: clamp(0.8rem, 1rem, 1.5rem);
+  font-weight: 400;
   line-height: 1.15;
 }
 
 .mc-scientific { 
   font-style: italic; 
-  font-size: clamp(0.7rem, 1.5vh, 0.875rem);
+  font-size: clamp(0.7rem, 0.8rem, 1.1rem);
   line-height: 1.1;
   color: var(--text-muted); 
 }
@@ -445,9 +444,7 @@ input[type="text"] {
   opacity: 1; 
 }
 
-/* ===============================
-   Buttons unten
-   =============================== */
+
 #button-container {
   margin-top: auto;
   left: 0;
@@ -479,21 +476,20 @@ input[type="text"] {
   margin-bottom: 0;
 }
 
-/* Standard: große Bildschirme */
-/* Wrapper um Quiz-Karte + Button */
+
 #quiz-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* linksbündig */
-  margin-top: 0;        /* Abstand unter Nav-Leiste */
+  align-items: flex-start; 
+  margin-top: 0;        
   max-height: 95vh; 
 }
 
 #abort-button {
-  display: none;               /* initially hidden */
-  position: absolute;          /* Position relativ zum nächsten positioned ancestor (z.B. body) */
-  top: 100px;                   /* Abstand unter der Nav-Leiste */
-  left: 20px;                  /* Abstand vom linken Rand */
+  display: none;               
+  position: absolute;          
+  top: 100px;                   
+  left: 20px;                  
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   background: #c41425;
@@ -504,25 +500,11 @@ input[type="text"] {
 
 }
 
-/* ≤1300px: nur optisch ggf. anpassen, bleibt zentriert */
-
-
-
-
-
-/* ===============================
-   Foto-Credits
-   =============================== */
 #photo-meta, #photo-id, #photo-credit {
   font-size: 0.75rem;
   padding: 4px 8px;
   border-radius: 8px;
 }
-
-/* ===============================
-   Media Queries für Smartphones & Tablets
-   =============================== */
-
 
 
 
@@ -539,7 +521,7 @@ input[type="text"] {
 .top-nav {
   position: sticky;
   top: 0;
-  z-index: 2000;
+  z-index: 20;
   background: var(--bg-card);
   border-bottom: 1px solid #dde3dd;
   flex-shrink: 0;
@@ -818,7 +800,118 @@ footer a:hover {
 /* ===============================
    Media Queries für Smartphones & Tablets
    =============================== */
+/* Ab z.B. 900px Breite: zweispaltiges Layout */
+@media (orientation: landscape) {
+  .quiz-card {        /* oder wie dein Container heißt */
+  background: white;
+  padding: 12px;    /* z.B. 12–20px nach Geschmack */
+  border-radius: 8px;
+  }
+  #quiz {
+    display: flex;
+    flex-direction: column;
+    --quiz-content-width: 85vw;     /* deutlich breiter */
+    max-width: 85vw;
+    max-height: 90vh;
+  }
 
+  #quiz-layout {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  #quiz-left,
+  #quiz-right {
+    flex: 2 1 0;
+    min-width: 0; /* wichtig gegen Überlaufen */
+  }
+  .mc-trivial, 
+  .mc-scientific {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+#quiz-left {
+  /* nicht das Bild bestimmen lassen, sondern nur den Spaltenanteil */
+  flex: 4 1 0;   /* kann so bleiben, das regelt nur Verhältnis links/rechts */
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+  #quiz-right {
+    flex: 2 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Inhalt nach unten schieben */
+  }
+    #question-area {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Kinder im question-area nach unten */
+    margin-bottom: 0;
+  }
+    #button-container {
+    margin-top: 1rem;
+    justify-content: center;
+  }
+  /* Bild links nicht mehr auf volle Card-Breite strecken */
+  #image-wrapper {
+    max-width: 55vw;
+    margin-left: 0;
+    margin-right: 0;
+    max-height: 95vh;       /* deutlich höher */
+    min-height: 350px;
+    width: 100%;
+    margin: 0;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    position: relative;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  #species-image.detail {
+    width: auto;
+    height: auto;
+    object-fit: unset;
+    transform: scale(1.3);  /* 130 % */
+}
+
+  #species-image.preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: none !important;
+  }
+  /* Antwortbereich rechts voll nutzen */
+  #answer-container,
+  .mc-grid,
+  input[type="text"] {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .mc-grid{
+  grid-template-columns: repeat(2, 1fr);
+  }
+  #abort-button {
+    margin: 0rem auto 0;
+    display: none;              /* initially hidden */
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background: #c41425;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;          /* Position relativ zum nächsten positioned ancestor (z.B. body) */
+    top: auto;                   /* Abstand unter der Nav-Leiste */
+    left: auto; 
+  }
+}
 
 @media (max-width: 1300px) {
   #category-buttons {
@@ -843,19 +936,21 @@ footer a:hover {
     top: auto;                   /* Abstand unter der Nav-Leiste */
     left: auto; 
   }
+  .mc-trivial { 
+  font-size: clamp(0.8rem, 0.9rem, 1.5rem);
+  font-weight: 400;
+  line-height: 1.15;
 }
 
-@media (max-height: 900px) {
-  #quiz {
-    --quiz-content-width: clamp(260px, 65vw, 480px);
-  }
+.mc-scientific { 
+  font-style: italic; 
+  font-size: clamp(0.7rem, 0.65rem, 1.1rem);
+  line-height: 1.1;
+  color: var(--text-muted); 
+}
 }
 
-@media (max-height: 800px) {
-  #quiz {
-    --quiz-content-width: clamp(240px, 60vw, 420px);
-  }
-}
+
 @media (max-width: 750px), (orientation: portrait) {
   #quiz { 
     width: 90%; 
@@ -899,25 +994,10 @@ footer a:hover {
   #answer-container {
     min-height: 40px;
     margin-bottom: 0.75rem;
-  }
-}
-@media (max-height: 700px) {
-  #quiz {
-    --quiz-content-width: clamp(220px, 55vw, 360px);
+    margin-top: 0.8rem;
   }
 }
 
-@media (max-height: 650px) {
-  #quiz {
-    --quiz-content-width: clamp(200px, 50vw, 300px);
-  }
-}
-
-@media (max-height: 550px) {
-  #quiz {
-    --quiz-content-width: clamp(180px, 45vw, 260px);
-  }
-}
 
 @media (max-width: 400px){
   button { font-size: 0.875rem; padding: 0.5rem 1rem; }
@@ -963,6 +1043,7 @@ footer a:hover {
   }
   .category-label .cat_untertitel {
     font-size: 0.8rem;
+    display: none;
   }
 
 #back-to-categories {
@@ -1076,86 +1157,6 @@ footer a:hover {
   border-radius: 10px;
 } 
 
-/*
-#image-wrapper-container { 
-  display: inline-block; 
-  position: relative; }
-
-#image-wrapper {
-  aspect-ratio: 3 / 2;
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-  margin: 0 auto 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  position: relative;
-  flex: 1 1 auto;
-  max-height: 50svh;
-  min-height: 160px;
-  max-width: var(--quiz-content-width);
-  margin-left: auto;
-  margin-right: auto;
-
-}
-
-img { 
-  margin-bottom: 10px; 
-  border-radius: 5px; 
-}
-
-#image-toggle-hint {
-  position: absolute;
-  bottom: 100%;
-  right: 4px;
-  margin-bottom: 2px;
-  color: black;
-  font-size: 1.25rem;
-  padding: 1px 5px;
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-#species-image.preview { 
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-  transform: none !important; 
-}
-
-#species-image.detail { 
-  width: auto; 
-  height: auto; 
-  object-fit: unset; 
-}
-  */
-#detail-overlay {
-    display: none;               
-    position: fixed;             
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.7);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    overflow: hidden;
-  }
-
-#detail-overlay img {
-  max-width: none;
-  max-height: 90vh;
-  object-fit: contain;
-  touch-action: none;
-  user-select: none;
-  -webkit-user-drag: none;
-  cursor: grab;
-  transform-origin: inherit;
-}
-
-
-
 
 input[type="text"] {
   font-size: clamp(16px, 2.1vh, 1.85rem); /* Minimum 16px */
@@ -1175,14 +1176,11 @@ input[type="text"] {
   width: 100%;
   min-width: 0;                /* 🔥 ENTSCHEIDEND */
   box-sizing: border-box;
-
   padding: 1.5rem 0.5rem;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   text-align: center;
   gap: 0.3rem;
 }
@@ -1218,7 +1216,6 @@ input[type="text"] {
   white-space: normal;
   word-break: normal;
   margin: 0;
-
   line-height: 1.15;
   font-size: clamp(0.9rem, 1.5vw, 1.2rem);
 }
@@ -1264,28 +1261,7 @@ input[type="text"] {
   width: 90%;    
 
 }
-/*
-#abort-button {
-  display: none;              
-  position: absolute;          
-  top: 100px;                  
-  left: 20px;                 
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  background: #c41425;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
 
-}
-
-#photo-meta, #photo-id, #photo-credit {
-  font-size: 1.75rem;
-  padding: 4px 8px;
-  border-radius: 8px;
-}
-*/
 #quiz {
   --quiz-content-width: clamp(280px, 80vw, 800px);
   border-radius: 16px;
@@ -1311,42 +1287,60 @@ input[type="text"] {
   display: none;
   position: absolute;
 }
-/*
-  #quiz-status,
-  #quiz-status-wrapper,
-  .mc-grid{
-  width: 100%;
-  }
-  #image-wrapper{
-    width: 100%;
-    max-height: 30svh;
-  }
-  input[type="text"] {
-    width: 100%;
-  }
-*/
-
 
   #detail-overlay {
     display: none;            
     position: fixed;            
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-    background: none;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    margin: 0;
+    background-color: #2b2b2b87;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    touch-action: none;
   }
 
   #detail-overlay img {
+    position: absolute;
     max-width: 98%;
     max-height: 98%;
     object-fit: contain;
-    touch-action: pinch-zoom; 
+    user-select: none;
+    -webkit-user-drag: none;
     cursor: grab;
     border-radius: 0;
+    will-change: transform;
+  
+    /* Standardmäßig: keine Pointer-Events (Tap-to-close über Overlay) */
+    pointer-events: auto;
+
+    z-index: 9999;
+    touch-action: none;
+    backface-visibility: hidden;
+    contain: layout style paint;
+    -webkit-backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-user-select: none;
+    transform-origin: 50% 50% !important;
+  }
+  #overlay img {
+  touch-action: none; /* Browser-eigenes Scroll/Zoom deaktivieren */
+  }
+
+  /* Während Drag/Pinch: Pointer-Events aktivieren */
+  #detail-overlay.dragging img,
+  #detail-overlay.pinching img {
+    pointer-events: auto;
+    transition: none; 
   }
 
 #quiz-summary {
@@ -1418,32 +1412,42 @@ footer{
 <button id="abort-button" style="background:#c41425; color:white;">Quiz abbrechen</button>
 
 <div id="quiz" class="top-offset" style="display:none;">
-  <div id="quiz-status">
-    <div id="quiz-timer" style="display: none;">00:00</div>
-    <div id="quiz-counter">0 / 0 Richtig</div>
-  </div>
-  <div id="image-wrapper-container">
-    <div id="image-toggle-hint">click to zoom ⤵</div>
-    <div id="image-wrapper">
-        <img id="species-image" src="" alt="" style="display:none;" />
-        <span id="photo-id"></span>
-        <span id="photo-credit"></span>
+
+  <div id="quiz-layout">
+    <div id="quiz-left">
+      <div id="quiz-status">
+        <div id="quiz-timer" style="display: none;">00:00</div>
+        <div id="quiz-counter">0 / 0 Richtig</div>
+      </div>
+
+      <div id="image-wrapper-container">
+        <div id="image-toggle-hint">click to zoom ⤵</div>
+        <div id="image-wrapper">
+          <img id="species-image" src="" alt="" style="display:none;" />
+          <span id="photo-id"></span>
+          <span id="photo-credit"></span>
+        </div>
+      </div>
+    </div>
+
+    <div id="quiz-right">
+      <div id="question-area" style="display:none;">
+        <div id="answer-container"></div>
+        <div id="button-container">
+          <button id="reveal-button" style="background:#1e9d20; color:white;">Auflösen</button>
+          <button id="next-button" style="display:none;">Weiter</button>
+        </div>
+        <div class="status" id="status" style="display: none;"></div>
+      </div>
     </div>
   </div>
+
   <!-- Overlay für Detailbild auf kleinen Bildschirmen -->
   <div id="detail-overlay">
     <img id="detail-image" src="" alt="">
   </div>
-
-  <div id="question-area" style="display:none;">
-    <div id="answer-container"></div>
-    <div id="button-container">
-      <button id="reveal-button" style="background:#1e9d20; color:white;">Auflösen</button>
-      <button id="next-button" style="display:none;">Weiter</button>
-    </div>
-    <div class="status" id="status" style="display: none;"></div>
-  </div>
 </div>
+
 
 
 
@@ -1530,14 +1534,16 @@ const questionAreaEl = document.getElementById('question-area');
 const revealButtonEl = document.getElementById('reveal-button');
 const nextButtonEl = document.getElementById('next-button');
 const statusEl = document.getElementById('status');
-const categoriesWithConfig = ["Tagfalter", "Libellen", "Amphibien", "Reptilien", "Säugetiere", "Nachtfalter"];
+const categoriesWithConfig = ["Tagfalter", "Libellen", "Amphibien", "Reptilien", "Säugetiere", "Nachtfalter", "Heuschrecken", "Käfer", "Artenmix"];
 const quizConfigEl = document.getElementById("quiz-config");
 const startQuizBtn = document.getElementById("start-quiz-btn");
 const speciesImageEl = document.getElementById('species-image');
-const imageHintEl = document.getElementById('image-toggle-hint');
 const speciesImage = document.getElementById('species-image');
 const overlay = document.getElementById("detail-overlay");
 const detailImg = document.getElementById("detail-image");
+const quizSummaryEl = document.getElementById("quiz-summary");
+const abortButtonEl = document.getElementById("abort-button");
+
 
 let scale = 1;
 let posX = 0;
@@ -1549,7 +1555,7 @@ let startY = 0;
 
 
 imageEl.style.cursor = "pointer";
-const SCALE = 0.8; // Detailbild auf 80% der Originalgröße
+const SCALE = 1.3; // Detailbild auf 80% der Originalgröße
 
 let answerInputEl = null;
 let currentItem = null;
@@ -1573,6 +1579,20 @@ let speciesPointer = 0;
 let quizLength = null;
 let selectedCategory = null;
 let selectedAnswerMode = "mc"; // Standard  
+let photoPool = [];
+let shuffledPhotos = [];
+let photoIndex = 0;
+
+let nextItem = null;
+let nextImageObj = null; // für Preload
+
+let detailPreloadImg = null;
+let detailPreloadUrl = null;
+let currentDetailLoadToken = 0; // einfache „Versionierung“
+let isDetailLoading = false;
+let isDetailLoaded  = false;
+
+
 
 // =========================
 // Utility Funktionen
@@ -1626,87 +1646,78 @@ async function loadDetailImage(path) {
 }
 
 
-
 // =========================
 // QUIZ KERNLOGIK
 // =========================
 
 function nextImage() {
-  const availableSpecies = Object.keys(speciesMap).filter(
-    art => speciesMap[art].shownPointer < speciesMap[art].photos.length
-  );
+  if (photoIndex >= shuffledPhotos.length) return null;
 
-  if (availableSpecies.length === 0) return null;
-
-  // Jede Art einmal, bevor Wiederholung
-  if (speciesPointer >= speciesOrder.length) {
-    speciesPointer = 0;
-    speciesOrder = shuffle(availableSpecies);
-  }
-
-  // Ungültige Arten überspringen
-  while (
-    speciesPointer < speciesOrder.length &&
-    !speciesMap[speciesOrder[speciesPointer]]
-  ) {
-    speciesPointer++;
-  }
-
-  if (speciesPointer >= speciesOrder.length) {
-    return nextImage();
-  }
-
-  const art = speciesOrder[speciesPointer];
-  speciesPointer++;
-
-  const entry = speciesMap[art];
-  if (!entry) return nextImage();
-
-  // 👉 alle Fotos dieser Art, die noch nicht gezeigt wurden
-  const remaining = entry.photos.filter(
-    p => !shownPhotos.has(p.url_vorschau)
-  );
-
-  // Wenn alle Fotos verbraucht → Art raus
-  if (remaining.length === 0) {
-    delete speciesMap[art];
-    return nextImage();
-  }
-
-  // 👉 Zufällig eines der noch unbenutzten Fotos
-  const photo = remaining[Math.floor(Math.random() * remaining.length)];
-
-  shownPhotos.add(photo.url_vorschau);
+  const photo = shuffledPhotos[photoIndex];
+  photoIndex++;
 
   return photo;
 }
 
 
+
 function getDistractors(correctItem, allItems) {
-  const phy = correctItem.phylogeny || [];
+  const phy = Array.isArray(correctItem.phylogeny) ? correctItem.phylogeny : [];
   const correctSpecies = correctItem.scientific_name;
-  let candidates = [];
 
-  for (let i = phy.length - 1; i >= 0; i--) {
+  // Map für eindeutige Kandidaten (max. eine Instanz pro Art)
+  const candidates = new Map();
+  const uniquePush = (item) => {
+    if (!item) return;
+    if (item.scientific_name === correctSpecies) return;
+    if (!candidates.has(item.scientific_name)) {
+      candidates.set(item.scientific_name, item);
+    }
+  };
+
+  // 1) von hinten nach vorne: Gattung, Familie, Ordnung, ...
+  // Wir gehen durch die phylogeny-Ebenen von spezifisch (hinten) nach allgemein (vorn)
+  for (let i = phy.length - 1; i >= 0 && candidates.size < 3; i--) {
     const group = phy[i];
-    const matches = allItems.filter(it =>
-      it.scientific_name !== correctSpecies &&
-      Array.isArray(it.phylogeny) &&
-      it.phylogeny[i] === group
-    );
-    candidates.push(...matches);
-    if (uniqueBySpecies(candidates).length >= 3) break;
+    if (!group) continue;
+
+    for (const it of allItems) {
+      if (
+        it.scientific_name !== correctSpecies &&
+        Array.isArray(it.phylogeny) &&
+        it.phylogeny[i] === group
+      ) {
+        uniquePush(it);
+        if (candidates.size >= 3) break;
+      }
+    }
   }
 
-  if (uniqueBySpecies(candidates).length < 3) {
-    const catMatches = allItems.filter(it =>
-      it.scientific_name !== correctSpecies &&
-      it.category === correctItem.category
-    );
-    candidates.push(...catMatches);
+  // 2) Falls nach Gattung/Familie/Ordnung immer noch nicht genug:
+  if (candidates.size < 3) {
+    for (const it of allItems) {
+      if (
+        it.scientific_name !== correctSpecies &&
+        it.category === correctItem.category &&
+        !candidates.has(it.scientific_name)
+      ) {
+        uniquePush(it);
+        if (candidates.size >= 3) break;
+      }
+    }
   }
 
-  return shuffle(uniqueBySpecies(candidates)).slice(0, 3);
+  // 3) Letzter Fallback: beliebige andere Arten
+  if (candidates.size < 3) {
+    for (const it of allItems) {
+      if (it.scientific_name !== correctSpecies && !candidates.has(it.scientific_name)) {
+        uniquePush(it);
+        if (candidates.size >= 3) break;
+      }
+    }
+  }
+
+  return shuffle(Array.from(candidates.values())).slice(0, 3);
 }
 
 function uniqueBySpecies(items) {
@@ -1739,7 +1750,7 @@ function formatSpeciesLabel(item) {
 function addBreaksAtAllowedChars(str) {
   // Erlaubte Trennstellen: Leerzeichen, Bindestrich, Slash
   // Nach jedem dieser Zeichen fügen wir einen Zero-Width Space ein
-  return str.replace(/([ \-/])/g, "$1\u200B");
+  return str.replace(/([ \-\/])/g, "$1\u200B");
 }
 
 function resetUI() {
@@ -1752,21 +1763,59 @@ function resetUI() {
 }
 
 function renderImage(item) {
+  // neue „Version“ für diesen Renderdurchlauf
+  const loadToken = ++currentDetailLoadToken;
+
   imageEl.classList.remove("detail");
   imageEl.classList.add("preview");
   imageEl.style.transform = "translate(0,0)";
   imageEl.src = item.url_vorschau;
 
+  // 👉 alten Detail-Preload verwerfen
+  if (detailPreloadImg) {
+    detailPreloadImg.onload = null;
+    detailPreloadImg.onerror = null;
+    detailPreloadImg.src = ""; // laufenden Download bestmöglich abbrechen[web:31]
+    detailPreloadImg = null;
+    detailPreloadUrl = null;
+  }
+
+  // 👉 neues Detailbild im Hintergrund vorbereiten
+  if (item.url_detail) {
+    loadDetailImage(item.url_detail, loadToken).then((detailUrl) => {
+      // wenn in der Zwischenzeit weiter geklickt wurde, ignorieren
+      if (!detailUrl || loadToken !== currentDetailLoadToken) return;
+
+      detailPreloadUrl = detailUrl;
+      detailPreloadImg = new Image();
+
+      detailPreloadImg.onload = function () {
+        // falls inzwischen weitergeklickt: nichts tun
+        if (loadToken !== currentDetailLoadToken) return;
+        // hier könntest du ggf. automatisch ins Detail wechseln,
+        // oder nur fürs spätere Anzeigen gecacht lassen
+      };
+
+      detailPreloadImg.src = detailPreloadUrl;
+    });
+  }
+
   imageEl.onload = () => {
+    // auch hier: nur noch reagieren, wenn dieses Bild noch aktuell ist
+    if (loadToken !== currentDetailLoadToken) return;
+
     imageEl.style.display = 'block';
     questionAreaEl.style.display = 'block';
+
     document.getElementById('photo-id').textContent =
-    currentItem.id_nummer ? `# ${currentItem.id_nummer}` : '';
+      currentItem.id_nummer ? `# ${currentItem.id_nummer}` : '';
 
     document.getElementById('photo-credit').textContent =
       item.author ? `© ${item.author}` : '';
   };
 }
+
+
 
 function resetImageState() {
   showingDetail = false;
@@ -1853,7 +1902,7 @@ function buildAnswerUI(item) {
     const scientific = document.createElement("span");
     scientific.className = "mc-scientific";
     scientific.lang = "la";
-    scientific.textContent = `(${opt.scientific_name})`;
+    scientific.textContent = `(${addBreaksAtAllowedChars(opt.scientific_name)})`;
 
     option.append(trivial, scientific);
 
@@ -1963,6 +2012,28 @@ function revealAnswer() {
   nextButtonEl.onclick = loadNextImage;
 }
 
+function resetLayoutOnResize() {
+  // Desktop-Bild zurück in den CSS-Zustand
+  imageEl.style.width = "";
+  imageEl.style.height = "";
+  imageEl.style.transform = "";
+  imageEl.style.objectFit = "";
+  imageEl.className = showingDetail ? "detail" : "preview";
+
+  // Mobile-Overlay wieder „neutral“
+  overlayPosX = 0;
+  overlayPosY = 0;
+  overlayScale = 1;
+  overlayStartDist = 0;
+  overlayStartScale = 1;
+  activePointers.clear();
+  updateOverlayTransform(); // nutzt die neue overlay-Größe
+}
+
+window.addEventListener("resize", () => {
+  resetLayoutOnResize();
+});
+
 
 
 // =========================
@@ -1994,7 +2065,6 @@ imageEl.addEventListener("click", async (e) => {
     await setImageAndWait(imageEl, currentItem.url_vorschau);
     imageEl.style.visibility = "visible";
     setTimeout(focusAnswer, 0);
-    updateImageHint();
     return;
   }
 
@@ -2023,7 +2093,6 @@ imageEl.addEventListener("click", async (e) => {
   imageEl.style.transform = `translate(${tx}px, ${ty}px)`;
   imageEl.style.visibility = "visible";
   setTimeout(focusAnswer, 0);
-  updateImageHint();
 });
 
 // Mousemove nur auf Desktop
@@ -2044,67 +2113,38 @@ document.getElementById("image-wrapper").addEventListener("mousemove", (e) => {
 });
 
 
+// ---------- MOBILE: Overlay mit Pointer Events ----------
 
-// ---------- MOBILE: Overlay ----------
+// Zustände
+let overlayJustClosed = false;
 let overlayScale = 1;
 let overlayPosX = 0;
 let overlayPosY = 0;
-let overlayStartDist = 0;
-let overlayStartX = 0;
-let overlayStartY = 0;
-let overlayDragging = false;
-let overlayStartScale = 1;
-let pinchCenterX = 0;
-let pinchCenterY = 0;
 
-// Für Tap-to-close
-let touchStartTime = 0;
-let touchStartX = 0;
-let touchStartY = 0;
-const TAP_MAX_DURATION = 250; // ms
-const TAP_MAX_MOVEMENT = 10;  // px
+// Pan / Pinch Startzustände
+let panStartPosX = 0;
+let panStartPosY = 0;
+let panStartPointerX = 0;
+let panStartPointerY = 0;
 
-// Mobile Click: Detailbild laden und Overlay öffnen
-speciesImage.addEventListener('click', async () => {
-  if (window.innerWidth > MOBILE_MAX_WIDTH || !currentItem) return;
+let pinchStartDist = 0;
+let pinchStartScale = 1;
+let pinchStartMidX = 0;
+let pinchStartMidY = 0;
+let pinchStartPosX = 0;
+let pinchStartPosY = 0;
 
-  const detailUrl = await loadDetailImage(currentItem.url_detail);
-  if (!detailUrl) return;
 
-  detailImg.src = detailUrl;
-  overlay.style.display = 'flex';
+const activePointers = new Map(); // pointerId -> { x, y }
 
-  overlayScale = 1;
-  overlayPosX = 0;
-  overlayPosY = 0;
-  overlayDragging = false;
-  overlayStartDist = 0;
-
-  // Transform anwenden, sobald Bild geladen
-  detailImg.onload = updateOverlayTransform;
-});
-
-// Transform-Funktion mit vierseitiger Begrenzung
-function clampOverlayPosition() {
-  const imgW = detailImg.naturalWidth * overlayScale;
-  const imgH = detailImg.naturalHeight * overlayScale;
-  const vw = overlay.clientWidth;
-  const vh = overlay.clientHeight;
-
-  // Horizontal clamping
-  if (imgW <= vw) {
-    overlayPosX = (vw - imgW) / 2; // Bild kleiner als Viewport → zentrieren
-  } else {
-    overlayPosX = Math.min(0, Math.max(vw - imgW, overlayPosX));
-  }
-
-  // Vertikal clamping
-  if (imgH <= vh) {
-    overlayPosY = (vh - imgH) / 2; // Bild kleiner als Viewport → zentrieren
-  } else {
-    overlayPosY = Math.min(0, Math.max(vh - imgH, overlayPosY));
-  }
+function closeOverlay() {
+  overlay.style.display = 'none';
+  detailImg.src = '';
+  overlayOpening = false;
+  overlayJustClosed = true;
+  setTimeout(() => overlayJustClosed = false, 300);
 }
+
 
 function updateOverlayTransform() {
   const imgW = detailImg.naturalWidth * overlayScale;
@@ -2112,126 +2152,175 @@ function updateOverlayTransform() {
   const vw = overlay.clientWidth;
   const vh = overlay.clientHeight;
 
-  // Maximal erlaubte Verschiebung berechnen
+  // Wenn noch nichts geladen/gerendert ist: nichts machen
+  if (!imgW || !imgH || !vw || !vh || !isFinite(imgW) || !isFinite(imgH)) {
+    return;
+  }
+
+  // erlaubte Offsets, damit der Rand komplett sichtbar sein kann
   const maxOffsetX = Math.max(0, (imgW - vw) / 2);
   const maxOffsetY = Math.max(0, (imgH - vh) / 2);
 
-  // Horizontal begrenzen
-  if (imgW <= vw) {
-    overlayPosX = 0;
-  } else {
-    overlayPosX = Math.min(maxOffsetX, Math.max(-maxOffsetX, overlayPosX));
-  }
+  if (maxOffsetX === 0) overlayPosX = 0;
+  else overlayPosX = Math.max(-maxOffsetX, Math.min(maxOffsetX, overlayPosX));
 
-  // Vertikal begrenzen
-  if (imgH <= vh) {
-    overlayPosY = 0;
-  } else {
-    overlayPosY = Math.min(maxOffsetY, Math.max(-maxOffsetY, overlayPosY));
-  }
+  if (maxOffsetY === 0) overlayPosY = 0;
+  else overlayPosY = Math.max(-maxOffsetY, Math.min(maxOffsetY, overlayPosY));
 
-  // Transform anwenden
-  detailImg.style.transform = `translate(${overlayPosX}px, ${overlayPosY}px) scale(${overlayScale})`;
-
-  // Force GPU repaint, um Linien zu vermeiden
-  detailImg.style.willChange = "transform";
+  detailImg.style.transform =
+    `translate(${overlayPosX}px, ${overlayPosY}px) scale(${overlayScale})`;
 }
 
-// -------------------- Touchmove für Pinch & Drag --------------------
-detailImg.addEventListener("touchmove", (e) => {
+let overlayOpening = false;
+
+// Thumbnail-Klick mit Schutz (wie vorher)
+speciesImage.addEventListener('click', async (e) => {
+  // Mehrfachklicks blocken, solange wir gerade öffnen
+  if (overlayOpening) {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
+
+  if (overlayJustClosed || overlay.style.display === 'flex') {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
+
+  if (window.innerWidth > MOBILE_MAX_WIDTH || !currentItem) return;
+
+  overlayOpening = true;
+
+  // 👉 Wenn bereits vorgeladen, direkt verwenden
+  let detailUrl = detailPreloadUrl;
+  if (!detailUrl) {
+    // Fallback: on demand laden
+    detailUrl = await loadDetailImage(currentItem.url_detail);
+  }
+  if (!detailUrl) {
+    overlayOpening = false;
+    return;
+  }
+
+  detailImg.src = detailUrl;
+  overlay.style.display = 'flex';
+
+  overlayScale = 1;
+  overlayPosX = 0;
+  overlayPosY = 0;
+  pinchStartDist = 0;   // falls du hier so heißt
+  activePointers.clear();
+
+  detailImg.onload = () => {
+    updateOverlayTransform();
+    overlayOpening = false;
+  };
+}, true);
+
+
+// Overlay-Klick zum Schließen (nur Hintergrund)
+overlay.addEventListener('click', (e) => {
+
+  if (e.target !== overlay) return;
+  if (overlay.style.display !== 'flex') return;
+  closeOverlay();
+});
+
+// ---------- Pointer Events auf dem Detailbild ----------
+
+// Pointer down
+overlay.addEventListener('pointerdown', (e) => {
+  if (e.pointerType !== 'touch') return;
+
+  overlay.setPointerCapture(e.pointerId);
+  activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+  const pointers = Array.from(activePointers.values());
+
+  if (pointers.length === 2) {
+    const [p1, p2] = pointers;
+    pinchStartMidX = (p1.x + p2.x) / 2;
+    pinchStartMidY = (p1.y + p2.y) / 2;
+
+    pinchStartDist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+    pinchStartScale = overlayScale;
+    pinchStartPosX = overlayPosX;
+    pinchStartPosY = overlayPosY;
+  } else if (pointers.length === 1) {
+    const p = pointers[0];
+    panStartPosX = overlayPosX;
+    panStartPosY = overlayPosY;
+    panStartPointerX = p.x;
+    panStartPointerY = p.y;
+  }
+}, { passive: false });
+
+overlay.addEventListener('pointermove', (e) => {
+  if (e.pointerType !== 'touch') return;
+  if (!activePointers.has(e.pointerId)) return;
+
   e.preventDefault();
+  activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
-  const vw = overlay.clientWidth;
-  const vh = overlay.clientHeight;
-  const imgW = detailImg.naturalWidth * overlayScale;
-  const imgH = detailImg.naturalHeight * overlayScale;
+  const pointers = Array.from(activePointers.values());
 
-  if (e.touches.length === 2) {
-    const dist = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
+  if (pointers.length === 2 && pinchStartDist > 0) {
+    const [p1, p2] = pointers;
 
-    const newScale = Math.min(Math.max(overlayStartScale * (dist / overlayStartDist), 1), 5);
+    const currentDist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+    let newScale = pinchStartScale * (currentDist / pinchStartDist);
+    newScale = Math.max(1, Math.min(newScale, 4));
 
-    let newPosX = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - pinchCenterX * (newScale / overlayScale);
-    let newPosY = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - pinchCenterY * (newScale / overlayScale);
+    const midX = (p1.x + p2.x) / 2;
+    const midY = (p1.y + p2.y) / 2;
+    const scaleFactor = newScale / pinchStartScale;
 
-    const maxOffsetX = Math.max(0, (detailImg.naturalWidth * newScale - vw) / 2);
-    const maxOffsetY = Math.max(0, (detailImg.naturalHeight * newScale - vh) / 2);
-
-    overlayPosX = Math.min(maxOffsetX, Math.max(-maxOffsetX, newPosX));
-    overlayPosY = Math.min(maxOffsetY, Math.max(-maxOffsetY, newPosY));
+    overlayPosX = pinchStartPosX + (pinchStartMidX - midX) * (1 - scaleFactor);
+    overlayPosY = pinchStartPosY + (pinchStartMidY - midY) * (1 - scaleFactor);
 
     overlayScale = newScale;
-    updateOverlayTransform();
-
-  } else if (overlayDragging && e.touches.length === 1) {
-    let newPosX = e.touches[0].clientX - overlayStartX;
-    let newPosY = e.touches[0].clientY - overlayStartY;
-
-    const maxOffsetX = Math.max(0, (imgW - vw) / 2);
-    const maxOffsetY = Math.max(0, (imgH - vh) / 2);
-
-    overlayPosX = Math.min(maxOffsetX, Math.max(-maxOffsetX, newPosX));
-    overlayPosY = Math.min(maxOffsetY, Math.max(-maxOffsetY, newPosY));
-
-    updateOverlayTransform();
+  } else if (pointers.length === 1) {
+    const p = pointers[0];
+    const dx = p.x - panStartPointerX;
+    const dy = p.y - panStartPointerY;
+    overlayPosX = panStartPosX + dx;
+    overlayPosY = panStartPosY + dy;
   }
+
+  updateOverlayTransform();
 }, { passive: false });
 
-// Drag & Pinch-Zoom + Tap-to-close
-detailImg.addEventListener("touchstart", (e) => {
-  if (e.touches.length === 2) {
-    overlayStartDist = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-    overlayStartScale = overlayScale;
+function handlePointerUp(e) {
+  if (e.pointerType !== 'touch') return;
 
-    pinchCenterX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - overlayPosX;
-    pinchCenterY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - overlayPosY;
+  activePointers.delete(e.pointerId);
+  const pointers = Array.from(activePointers.values());
 
-  } else if (e.touches.length === 1) {
-    overlayDragging = true;
-    overlayStartX = e.touches[0].clientX - overlayPosX;
-    overlayStartY = e.touches[0].clientY - overlayPosY;
-
-    // Für Tap-to-close merken
-    touchStartTime = Date.now();
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
+  if (pointers.length === 1) {
+    const p = pointers[0];
+    panStartPosX = overlayPosX;
+    panStartPosY = overlayPosY;
+    panStartPointerX = p.x;
+    panStartPointerY = p.y;
+    pinchStartDist = 0;
+    return;
   }
-}, { passive: false });
 
-// Touchend: Drag beenden + Tap-to-close prüfen
-detailImg.addEventListener("touchend", (e) => {
-  overlayDragging = false;
-
-  if (e.touches.length === 0 && e.changedTouches.length === 1) {
-    const touch = e.changedTouches[0];
-    const dx = touch.clientX - touchStartX;
-    const dy = touch.clientY - touchStartY;
-    const dt = Date.now() - touchStartTime;
-
-    if (dt < 250 && Math.hypot(dx, dy) < 10) {
-      // Kurzer Tap → Overlay schließen
-      overlay.style.display = 'none';
-      detailImg.src = '';
-    }
+  if (pointers.length === 0) {
+    detailImg.style.transition = 'transform 0.3s ease-out';
+    setTimeout(() => {
+      overlayPosX = 0;
+      overlayPosY = 0;
+      overlayScale = 1;
+      updateOverlayTransform();
+      setTimeout(() => { detailImg.style.transition = ''; }, 300);
+    }, 50);
   }
-});
+}
 
-detailImg.addEventListener("touchcancel", () => overlayDragging = false);
-
-// Overlay über Hintergrund schließen
-overlay.addEventListener('click', (e) => {
-  if (e.target === overlay) {
-    overlay.style.display = 'none';
-    detailImg.src = '';
-  }
-});
-
+overlay.addEventListener('pointerup', handlePointerUp, { passive: false });
+overlay.addEventListener('pointercancel', handlePointerUp, { passive: false });
 
 
 
@@ -2256,9 +2345,66 @@ async function loadCategories() {
     return;
   }
 
-  const uniqueCategories = [...new Set(data.map(d => d.category))];
+  // 🔧 Wunsch-Reihenfolge der Kategorien
+const CATEGORY_ORDER = [
+  "Säugetiere",
+  "Reptilien",
+  "Amphibien",
+  "Libellen",
+  "Heuschrecken",
+  "Tagfalter",
+  "Nachtfalter",
+  "Käfer",
+  "Artenmix"
+];
+
+// Kategorien extrahieren
+const uniqueCategories = [...new Set(data.map(d => d.category))];
+
+// „Artenmix“ als virtuelle Kategorie ergänzen, falls noch nicht vorhanden
+if (!uniqueCategories.includes("Artenmix")) {
+  uniqueCategories.unshift("Artenmix"); // ganz nach vorne, oder push() ans Ende
+}
+
+
+// 🔥 Reihenfolge erzwingen
+uniqueCategories.sort((a, b) => {
+  const ia = CATEGORY_ORDER.indexOf(a);
+  const ib = CATEGORY_ORDER.indexOf(b);
+
+  // Kategorien, die NICHT in der Liste stehen, kommen ans Ende
+  if (ia === -1 && ib === -1) return a.localeCompare(b, "de");
+  if (ia === -1) return 1;
+  if (ib === -1) return -1;
+
+  return ia - ib;
+});
+
 
   uniqueCategories.forEach(cat => {
+    if (cat === "Artenmix") {
+    // Für Artenmix kannst du z.B. ein fixes Bild oder eine neutrale Grafik nehmen
+    const btn = document.createElement("div");
+    btn.className = "category-button";
+    btn.onclick = () => onCategoryClick(cat);
+
+    const img = document.createElement("img");
+    img.src = "https://djstoxqzmcgwqjliubst.supabase.co/storage/v1/object/public/Fotos/Icons/Alle_Arten.webp"; // irgendein neutrales Bild
+    img.alt = "Artenmix";
+
+    const label = document.createElement("div");
+    label.className = "category-label";
+    label.innerHTML = `
+      <div class="cat_title">Artenmix</div>
+      <div class="cat_untertitel">Bestimme Arten aus allen Gruppen</div>
+    `;
+
+    btn.appendChild(img);
+    btn.appendChild(label);
+    categoryButtonsEl.appendChild(btn);
+    return; // nächsten cat verarbeiten
+  }
+
     const images = data.filter(d => d.category === cat);
     const catImage =
       images[Math.floor(Math.random() * images.length)]?.url_vorschau || "";
@@ -2290,27 +2436,85 @@ async function loadCategories() {
   categoryLoadingEl.textContent = "";
 }
 
-function showQuizConfig(category) {
-  selectedCategory = category;
-  document.getElementById("config-category-title").textContent =
-  `${category}`;
-  categorySectionEl.style.display = "none";
-  quizConfigEl.style.display = "block";
-  selectedAnswerMode = "mc"; // immer Multiple Choice als Standard
-  document.querySelectorAll("#answer-mode-buttons button").forEach(b =>
-  b.classList.toggle("active", b.dataset.value === selectedAnswerMode)
-  );
 
-  // Vorauswahl setzen
-  selectedNumPhotos = "10";
-  selectedDifficulty = "1";
-  document.querySelectorAll("#num-photos-buttons button").forEach(b =>
-  b.classList.toggle("active", b.dataset.value === selectedNumPhotos)
-  );
-  document.querySelectorAll("#difficulty-buttons button").forEach(b =>
-  b.classList.toggle("active", b.dataset.value === selectedDifficulty)
-  );
-}
+
+// =========================
+// Quiz-Konfig
+// =========================
+
+const CATEGORY_CONFIG = {
+  "Säugetiere": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+  "Reptilien": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+  "Amphibien": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+  "Libellen": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "100", "all"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+    "Heuschrecken": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+  "Tagfalter": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "100", "all"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+  "Nachtfalter": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+    "Käfer": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+    "Artenmix": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "100", "all"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+  // fallback für Kategorien ohne speziellen Eintrag
+  "_default": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  }
+};
 
 // Anpassung der Kategorie-Auswahl
 function onCategoryClick(category) {
@@ -2327,51 +2531,108 @@ function onCategoryClick(category) {
   }
 }
 
+function showQuizConfig(category) {
+  selectedCategory = category;
+  document.getElementById("config-category-title").textContent = `${category}`;
+
+  categorySectionEl.style.display = "none";
+  quizConfigEl.style.display = "block";
+
+  const cfg = CATEGORY_CONFIG[category] || CATEGORY_CONFIG._default;
+
+  // Antwortmodus: immer gleich, nur Default setzen
+  selectedAnswerMode = "mc";
+  document.querySelectorAll("#answer-mode-buttons button").forEach(b =>
+    b.classList.toggle("active", b.dataset.value === selectedAnswerMode)
+  );
+
+  // Anzahl-Fotos: Buttons je nach Kategorie ein-/ausblenden + Default
+  selectedNumPhotos = cfg.defaultNumPhotos;
+  document.querySelectorAll("#num-photos-buttons button").forEach(b => {
+    const value = b.dataset.value;
+    const enabled = cfg.allowedNumPhotos.includes(value);
+    b.style.display = enabled ? "inline-flex" : "none";
+    b.classList.toggle("active", enabled && value === selectedNumPhotos);
+  });
+
+  // Schwierigkeit: Buttons ein-/ausblenden + Default
+  selectedDifficulty = cfg.defaultDifficulty;
+  document.querySelectorAll("#difficulty-buttons button").forEach(b => {
+    const value = b.dataset.value;
+    const enabled = cfg.allowedDifficulties.includes(value);
+    b.style.display = enabled ? "inline-flex" : "none";
+    b.classList.toggle("active", enabled && value === selectedDifficulty);
+  });
+
+  // Platz für spätere, gruppenspezifische Filter:
+  // z.B. showExtraFilters(cfg.extraFilters);
+}
+
+
+
+
 function initConfigButtons() {
-  selectedNumPhotos = "10";    // Standardwert
-  selectedDifficulty = "1";    // Standardwert
+  selectedNumPhotos = "10";
+  selectedDifficulty = "1";
+  selectedAnswerMode = "mc";
 
   const backToCategoriesBtn = document.getElementById("back-to-categories");
-
   backToCategoriesBtn.onclick = () => {
+  // Konfig verstecken
   quizConfigEl.style.display = "none";
+  showCategoryOverview();
+
+  // Quiz und Status zuverlässig verstecken
+  quizEl.style.display = "none";
+  const status = document.getElementById("quiz-status");
+  if (status) status.style.display = "none";
+
+  const abortBtn = document.getElementById("abort-button");
+  if (abortBtn) abortBtn.style.display = "none";
+
+  // Kategorien zeigen
   categorySectionEl.style.display = "block";
-  loadCategories();
-  };
+
+  // optional: zur Oberkante scrollen
+  window.scrollTo(0, 0);
+  loadCategories;
+};
 
 
   // Anzahl-Fotos Buttons
   document.querySelectorAll("#num-photos-buttons button").forEach(btn => {
-    if(btn.dataset.value === selectedNumPhotos) btn.classList.add("active");
     btn.addEventListener("click", () => {
+      if (btn.style.display === "none") return; // vorsichtshalber
       selectedNumPhotos = btn.dataset.value;
-      document.querySelectorAll("#num-photos-buttons button").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll("#num-photos-buttons button")
+        .forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
     });
   });
 
   // Schwierigkeit Buttons
   document.querySelectorAll("#difficulty-buttons button").forEach(btn => {
-    if(btn.dataset.value === selectedDifficulty) btn.classList.add("active");
     btn.addEventListener("click", () => {
+      if (btn.style.display === "none") return;
       selectedDifficulty = btn.dataset.value;
-      document.querySelectorAll("#difficulty-buttons button").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll("#difficulty-buttons button")
+        .forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
     });
   });
 
-  // Antwortmodus Buttons
+  // Antwortmodus Buttons (unverändert)
   document.querySelectorAll("#answer-mode-buttons button").forEach(btn => {
     if (btn.dataset.value === selectedAnswerMode) btn.classList.add("active");
     btn.addEventListener("click", () => {
       selectedAnswerMode = btn.dataset.value;
       document.querySelectorAll("#answer-mode-buttons button")
-      .forEach(b => b.classList.remove("active"));
+        .forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
     });
   });
-
 }
+
 
 
 
@@ -2392,57 +2653,75 @@ startQuizBtn.onclick = async () => {
 
   // Supabase-Abfrage
   let query = client.from('species_media')
-    .select('*')
-    .eq('filetype','image')
-    .eq('category', selectedCategory);
+  .select('*')
+  .eq('filetype','image');
 
-  if(difficulty !== "all") query = query.eq('difficulty', difficulty);
+if (selectedCategory !== "Artenmix") {
+  query = query.eq('category', selectedCategory);
+}
+
+if (difficulty !== "all") {
+  query = query.eq('difficulty', difficulty);
+}
+
 
   const { data, error } = await query;
   if(error || !data || data.length === 0){
     alert('Keine Bilder für diese Auswahl gefunden.');
     return;
   }
+// Alle Bilder mischen
+let filteredImages = shuffle(data);
 
-  // Alle Bilder mischen
-  let filteredImages = shuffle(data);
+// Quiz-Variablen initialisieren
+imageQueue = filteredImages;
+currentIndex = 0;
+correctCount = 0;
+shownCount = 0;
+totalShown = 0;
+shownPhotos = new Set();
+speciesMap = {};
+speciesOrder = [];
+speciesPointer = 0;
 
-  // Quiz-Variablen initialisieren
-  imageQueue = filteredImages;
-  currentIndex = 0;
-  correctCount = 0;
-  shownCount = 0;
-  totalShown = 0;
-  shownPhotos = new Set();
-  speciesMap = {};
-  speciesOrder = [];
-  speciesPointer = 0;
+// Artenmap vorbereiten (für Distractors etc.)
+for (const item of imageQueue) {
+  const art = item.scientific_name;
+  if (!speciesMap[art]) speciesMap[art] = { photos: [], shownPointer: 0 };
+  speciesMap[art].photos.push(item);
+}
 
-  // Artenmap vorbereiten
-  for (const item of imageQueue) {
-    const art = item.scientific_name;
-    if (!speciesMap[art]) speciesMap[art] = { photos: [], shownPointer: 0 };
-    speciesMap[art].photos.push(item);
-  }
+// Alle Fotos je Art mischen
+for (const art in speciesMap) {
+  speciesMap[art].photos = shuffle(speciesMap[art].photos);
+}
 
-  // Alle Fotos je Art mischen
-  for (const art in speciesMap) {
-    speciesMap[art].photos = shuffle(speciesMap[art].photos);
-  }
+// 🔴 NEU: Foto-Pool aufbauen, ggf. pro Art deckeln
+const MAX_PHOTOS_PER_SPECIES = 5; // nach Geschmack anpassen
+photoPool = [];
 
-  // Pool der Arten für den Quizzyklus
-  const allSpecies = Object.keys(speciesMap);
-  const numSpeciesInQuiz = Math.min(allSpecies.length, quizLength);
-  speciesOrder = shuffle(allSpecies).slice(0, numSpeciesInQuiz);
-  speciesPointer = 0;
+for (const art in speciesMap) {
+  const photos = speciesMap[art].photos;
+  const limited = shuffle(photos).slice(0, MAX_PHOTOS_PER_SPECIES);
+  photoPool.push(...limited);
+}
 
-  updateQuizStatus();          // Counter sofort aktualisieren
-  document.getElementById("quiz-status").style.display = "flex"; // Statusleiste sichtbar
-  document.getElementById("abort-button").style.display = "block";
-  quizEl.style.display = "block";
+// Jetzt den gesamten Pool mischen
+shuffledPhotos = shuffle(photoPool);
+photoIndex = 0;
 
-  startTimer();
-  loadNextImage();
+// Pool ggf. auf quizLength begrenzen
+if (quizLength !== Infinity) {
+  shuffledPhotos = shuffledPhotos.slice(0, quizLength);
+}
+
+updateQuizStatus();
+document.getElementById("quiz-status").style.display = "flex";
+document.getElementById("abort-button").style.display = "block";
+quizEl.style.display = "block";
+
+startTimer();
+loadNextImage();
 };
 
 function startQuizDirect(category) {
@@ -2485,9 +2764,67 @@ function updateQuizStatus() {
   document.getElementById('quiz-counter').textContent = `${correctCount} / ${shownCount} Richtig`;
 }
 
+function cancelImageLoads() {
+  // Version hochzählen → alle alten Loads werden invalid
+  currentDetailLoadToken++;
+
+  if (detailPreloadImg) {
+    detailPreloadImg.onload = null;
+    detailPreloadImg.onerror = null;
+    detailPreloadImg.src = ""; // Download abbrechen[web:31]
+    detailPreloadImg = null;
+    detailPreloadUrl = null;
+  }
+}
+
+function onPreviewClick() {
+  // Fall A: Detailbild ist schon sichtbar → zurück zur Vorschau
+  if (showingDetail && isDetailLoaded) {
+    showingDetail = false;
+    imageEl.classList.remove("detail");
+    imageEl.classList.add("preview");
+    imageEl.src = currentItem.url_vorschau;
+    return;
+  }
+
+  // Fall B: Detailbild wird gerade geladen → IGNORIEREN
+  if (isDetailLoading && !isDetailLoaded) {
+    return; // nochmaliges Klicken macht nichts
+  }
+
+  // Fall C: Detail wurde noch nicht geladen → Ladevorgang starten
+  if (!isDetailLoaded) {
+    isDetailLoading = true;
+    loadDetailForCurrentItem();
+  }
+}
+
+function loadDetailForCurrentItem() {
+  if (!currentItem || !currentItem.url_detail) return;
+
+  const img = new Image();
+  img.onload = function () {
+    isDetailLoading = false;
+    isDetailLoaded  = true;
+
+    showingDetail = true;
+    imageEl.classList.remove("preview");
+    imageEl.classList.add("detail");
+    imageEl.src = img.src;
+  };
+  img.onerror = function () {
+    isDetailLoading = false;
+    // Fehlerbehandlung
+  };
+  img.src = currentItem.url_detail;
+}
+
 // --- Nächstes Bild ---
 function loadNextImage() {
   // 🔄 Immer zuerst zurück in den Vorschau-Modus
+  isDetailLoading = false;
+  isDetailLoaded  = false;
+  cancelImageLoads();
   showingDetail = false;
 
   imageEl.className = "preview";
@@ -2496,30 +2833,71 @@ function loadNextImage() {
   imageEl.style.objectFit = "";
   imageEl.style.transform = "translate(0,0)";
 
-  if (totalShown >= quizLength) {
-    endQuiz();
-    return;
+  // Wenn wir bereits ein vorab geladenes Bild haben, verwenden:
+  if (nextItem && nextImageObj && nextImageObj.src === nextItem.url_vorschau) {
+    currentItem = nextItem;
+    nextItem = null;
+
+    shownCount++;
+    totalShown++;
+
+    resetUI();
+    // Bild direkt aus dem Preloader übernehmen
+    imageEl.src = nextImageObj.src;
+    imageEl.style.display = 'block';
+    questionAreaEl.style.display = 'block';
+
+    document.getElementById('photo-id').textContent =
+      currentItem.id_nummer ? `# ${currentItem.id_nummer}` : '';
+
+    document.getElementById('photo-credit').textContent =
+      currentItem.author ? `© ${currentItem.author}` : '';
+
+    buildAnswerUI(currentItem);
+    updateQuizStatus();
+  } else {
+    // Fallback: normales Laden wie bisher
+    if (totalShown >= quizLength) {
+      endQuiz();
+      return;
+    }
+
+    currentItem = nextImage();
+    if (!currentItem) {
+      endQuiz();
+      return;
+    }
+
+    shownCount++;
+    totalShown++;
+
+    resetUI();
+    renderImage(currentItem);
+    buildAnswerUI(currentItem);
+    updateQuizStatus();
   }
 
-  currentItem = nextImage();
-  if (!currentItem) {
-    endQuiz();
-    return;
+  // 👉 Direkt das nächste Bild im Hintergrund vorladen
+  if (totalShown < quizLength) {
+    const upcoming = nextImage();
+    if (upcoming) {
+      nextItem = upcoming;
+      nextImageObj = new Image();
+      nextImageObj.src = nextItem.url_vorschau;
+    } else {
+      nextItem = null;
+      nextImageObj = null;
+    }
+  } else {
+    nextItem = null;
+    nextImageObj = null;
   }
 
-  shownCount++;
-  totalShown++;
-
-  resetUI();
-  renderImage(currentItem);
-  buildAnswerUI(currentItem);
-
-  updateQuizStatus();
   if (selectedAnswerMode === "text" && window.innerWidth > MOBILE_MAX_WIDTH) {
-    setTimeout(focusAnswer, 0); // kleine Verzögerung, damit das Feld im DOM ist
+    setTimeout(focusAnswer, 0);
   }
-  updateImageHint();
 }
+
 
 
 // --- Quiz beenden ---
@@ -2567,29 +2945,41 @@ function hideQuizSummary() {
 }
 
 
-
 // ==========================
 // EVENT-LISTENER
 // ==========================
 
 
+// Übersicht anzeigen (nur Kategorien sichtbar)
+function showCategoryOverview() {
+  quizSummaryEl.style.display = "none";
+  quizEl.style.display = "none";
+  quizConfigEl.style.display = "none";
+  abortButtonEl.style.display = "none";
+
+  categorySectionEl.style.display = "flex"; // wichtig: flex
+  window.scrollTo(0, 0);
+}
+
 // --- Quiz abbrechen ---
-document.getElementById("abort-button").onclick = () => {
+abortButtonEl.onclick = () => {
   endQuiz();
 };
 
+// Summary -> Übersicht
 document.getElementById("back-to-overview-btn").onclick = () => {
-  document.getElementById("quiz-summary").style.display = "none";
-  quizEl.style.display = "none";
-  quizConfigEl.style.display = "none";
-
-  categorySectionEl.style.display = "flex";  // Flex für min-height
-  loadCategories();
+  const base = "/index.html";               // falls deine Seite so aufgerufen wird
+  const url  = base + "?refresh=" + Date.now();
+  window.location.href = url;
 };
 
+revealButtonEl.onclick = revealAnswer;
 
-revealButtonEl.onclick=revealAnswer;
-loadCategories();
+// Initial: beim ersten Laden Kategorienübersicht anzeigen + Kategorien laden
+document.addEventListener("DOMContentLoaded", () => {
+  showCategoryOverview();
+  loadCategories();
+});
 </script>
 </main>
 <footer>
