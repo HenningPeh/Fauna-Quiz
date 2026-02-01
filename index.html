@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <link rel="canonical" href="https://fauna-quiz.de/">
 <title>Fauna Quiz – Heimische Tiere bestimmen</title>
-<meta name="description" content="Wie gut kennst du die Deutsche Tierwelt? Finde es heraus im Tierquiz mit heimischen Arten">
+<meta name="description" content="Übe heimische Tierarten im kostenlosen Quiz sicher zu bestimmen.">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
  <!-- Favicon -->
@@ -647,8 +647,8 @@ h1 {
   padding: 20px 40px;
 }
 #back-to-categories {
-  position: absolute;
-  top: 20px;
+  position: fixed;
+  top: 75px;
   left: 20px;
   background: #c41425;
   color: white;
@@ -656,10 +656,11 @@ h1 {
   border-radius: 10px;
   font-size: 16px;
   cursor: pointer;
+  margin: 0;
 }
+
 #quiz-config {
   display: none;
-  margin-top: 20px;
   position: relative; /* nötig für absolute Positionierung des Back-Buttons */
   background: var(--bg-main);
   border-radius: 12px;
@@ -667,7 +668,7 @@ h1 {
   flex-direction: column;
   align-items: center;   /* Inhalte horizontal zentrieren */
   padding: 2rem;
-  margin: 0 auto;
+  margin: 0;
 }
 .config-category-title {
   font-size: 38px;      /* größer */
@@ -675,12 +676,13 @@ h1 {
   color: var(--green-dark);
 }
 .config-category-subtitle{
-  font-size: 26px;
+  font-size: 1.7rem;
+  font-weight: 400;
 }
 
 .slider-container {
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
 }
 
 #category-section {
@@ -707,6 +709,7 @@ h1 {
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  margin-top: 8vh;
 }
 
 .quiz-overlay {
@@ -1184,11 +1187,13 @@ footer a:hover {
 
 }
 #config-category-title{
-  margin-top: 8vh;
+  margin-top: 6vh;
   margin-bottom: 2vh;
 }
 .config-category-subtitle{
   margin-top: 0;
+  font-size: 1.5rem;
+  font-weight: 300;
 }
 .slider-container {
   display: flex;
@@ -1269,6 +1274,7 @@ footer a:hover {
   padding: 2vh 4vh;
   margin-top: 8vh;
   border-radius: 10px;
+  margin-bottom: 8vh;
 } 
   #quizfrage{
     font-size: 1rem;
@@ -1666,38 +1672,38 @@ footer{
 
 <!-- Konfigurationsbereich, zunächst versteckt -->
 <div id="quiz-config">
-  <h2 id="config-category-title" class="config-category-title"></h2><br><br>
-  <h3 class="config-category-subtitle">Quiz-Einstellungen</h3>
-<button id="back-to-categories">Zurück</button>
-<div class="slider-container">
-  <label class="config-category-select">max. Anzahl von Bildern:</label>
-  <div id="num-photos-buttons" class="slider-buttons">
-  <button data-value="10">10</button>
-  <button data-value="30">30</button>
-  <button data-value="60">60</button>
-  <button data-value="100">100</button>
-  <button data-value="all">Alle</button>
-</div>
+    <button id="back-to-categories">Zurück</button>
+    <h2 id="config-category-title" class="config-category-title"></h2><br><br>
+    <h3 class="config-category-subtitle">Wähle deine Parameter für diese Quiz-Runde</h3>
+  <div class="slider-container">
+    <label class="config-category-select">Anzahl von Fragen:</label>
+    <div id="num-photos-buttons" class="slider-buttons">
+      <button data-value="10">10</button>
+      <button data-value="30">30</button>
+      <button data-value="60">60</button>
+      <button data-value="100">100</button>
+      <!-- <button data-value="all">Alle</button>-->
+    </div>
 
-</div>
-
-<div class="slider-container">
-  <label class="config-category-select">Schwierigkeitslevel:</label>
-  <div id="difficulty-buttons" class="slider-buttons">
-    <button data-value="1">1</button>
-    <button data-value="2">2</button>
-    <button data-value="3">3</button>
-    <button data-value="all">Egal</button>
   </div>
-</div>
 
-<div class="slider-container">
-  <label class="config-category-select">Antwortmodus:</label>
-  <div id="answer-mode-buttons" class="slider-buttons">
-    <button data-value="mc">Multiple Choice</button>
-    <button data-value="text">Texteingabe</button>
+  <div class="slider-container">
+    <label class="config-category-select">Schwierigkeitsstufe:</label>
+    <div id="difficulty-buttons" class="slider-buttons">
+      <button data-value="1">1</button>
+      <button data-value="2">2</button>
+      <button data-value="3">3</button>
+      <button data-value="all">Mix (1-3)</button>
+    </div>
   </div>
-</div>
+
+  <div class="slider-container">
+    <label class="config-category-select">Antwortmodus:</label>
+    <div id="answer-mode-buttons" class="slider-buttons">
+      <button data-value="mc">Single Choice</button>
+      <button data-value="text">Texteingabe</button>
+    </div>
+  </div>
 
 
   <button id="start-quiz-btn">Quiz starten</button>
@@ -2086,7 +2092,7 @@ function buildAnswerUI(item) {
     return;
   }
 
-  // Multiple Choice
+  // Single Choice
   const correctItem = item;
   const distractors = getDistractors(item, imageQueue);
   const answerItems = shuffle([correctItem, ...distractors]);
