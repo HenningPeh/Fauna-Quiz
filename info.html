@@ -108,6 +108,9 @@ section h2 {
   margin-top: 0;
   font-size: 24px;
 }
+.Artenliste{
+    font-size: 1rem;
+}
 
 a {
   color: var(--green-dark);
@@ -144,7 +147,7 @@ footer a:hover {
     white-space: nowrap;
   }
   .nav-secondary{
-    font-size: clamp(7px, 0.8rem, 16px);
+    font-size: clamp(7px, 1rem, 16px);
   }
   .top-nav-inner{
       padding: 2vh 4vh;
@@ -177,6 +180,9 @@ footer a:hover {
     margin-top: 0;
     font-size: 3vh;
   }
+  .Artenliste{
+    font-size: 0.8rem;
+  }
 footer{
   background: none;
   text-align: center;
@@ -185,6 +191,11 @@ footer{
   color: var(--text-muted);
   font-size: 2.5vh;
   position: static;
+  }
+}
+@media (orientation: portrait) and (min-width: 600px) {
+    .Artenliste{
+    font-size: 1rem;
   }
 }
   </style>
@@ -210,7 +221,7 @@ footer{
         Durch den Klick auf eine der Kategorien öffnen sich die Einstellungen für das Quiz. 
         Hier können die Anzahl der Bilder für die Runde sowie das Schwierigkeitslevel und der Antwortmodus eingestellt werden. 
         Mit dem Klick auf "Quiz starten" beginnt das Quiz und Ziel ist es hier, die auf dem Foto abgebildeten Arten richtig zu bestimmen. 
-        Dazu kann bei "Multiple Choice" einfach der zur gezeigten Art passende Name angeklickt werden und bei "Texteingabe" muss der richtige Name eingetippt werden. 
+        Dazu kann bei "Single Choice" einfach der zur gezeigten Art passende Name angeklickt werden und bei "Texteingabe" muss der richtige Name eingetippt werden. 
         Bei der Texteingabe wird sowohl der wissenschaftliche Name, als auch der Trivialname als richtige Lösung akzeptiert. 
         Bei Trivialnamen gilt allerdings zu beachten, dass es für manche Arten sehr viele verschiedene Trivialnamen gibt. 
         Für jede Art sind hier aber nur 1-3 verbreitete Trivialnamen als richtige Lösung hinterlegt.<br><br>
@@ -237,8 +248,8 @@ footer{
         
         <strong>
           Fehlbestimmte Bilder im Quiz sind trotz sorgfältiger Auswahl und Bestimmung der Bilder nicht ausgeschlossen, auch weil ich für keine der Artengruppen ein Experte bin.
-          Unten links in jedem Bild wird die Bild-Nummer angezeigt, über die das Bild eindeutig identifizeirt werden kann. 
-          Sollte ein Bild fehlbestimmt worden sein, freue ich mich über eine Mitteilung der entsprechenden Bild-Nummer um das Bild umgehend überprüfen zu können.
+          Unten links in jedem Bild wird die Bild-Nummer angezeigt, über die das Bild eindeutig identifiziert werden kann. 
+          Sollte ein Bild fehlbestimmt worden sein, freue ich mich über eine Mitteilung der entsprechenden Bild-Nummer, um das Bild umgehend überprüfen zu können.
         </strong><br><br>
 
         Zur Zeit ist keine der Tiergruppen vollständig, da von vielen Tierarten noch keine geeigneten Fotos vorhanden sind.
@@ -252,7 +263,7 @@ footer{
         <details>
         <summary>Säugetiere</summary>
 
-        <p>
+        <p class="Artenliste">
           Aktuell sind Fotos von 27 der 107 heimischen und etablierten Säugetier-Arten enthalten.<br><br>
           
           Fotos folgender Arten fehlen noch:<br>
@@ -321,7 +332,7 @@ footer{
         <details>
         <summary>Amphibien</summary>
 
-        <p>
+        <p class="Artenliste">
           Aktuell sind Fotos von 13 der 21 heimischen Amphibien-Arten enthalten. <br><br>
           Artkomplexe:<br>
           Seefrosch, Teichfrosch und Kleiner Wasserfrosch werden zu dem Art-Komplex "Wasserfrosch (Pelophylax spec.)" zusammengefasst. <br><br>
@@ -337,7 +348,7 @@ footer{
         <details>
         <summary>Reptilien</summary>
 
-        <p>
+        <p class="Artenliste">
           Aktuell sind Fotos von 8 der 14 heimischen Reptilien-Arten enthalten.<br><br>
           Artkomplexe:<br>
           Östliche und Westliche Smaragdeidechse werden zu dem Art-Komplex "Smaragdeidechse (Lacerta bilineata/viridis)" zusammengefasst. <br><br>
@@ -353,7 +364,7 @@ footer{
         <details>
         <summary>Libellen</summary>
 
-        <p>
+        <p class="Artenliste">
           Aktuell sind Fotos von 59 der 81 heimischen Libellen-Arten enthalten. <br><br>
           
           Fotos folgender Arten fehlen noch:<br>
@@ -380,12 +391,12 @@ footer{
         <details>
         <summary>Heuschrecken</summary>
 
-        <p>
+        <p class="Artenliste">
           Aktuell sind Fotos von 32 der 83 heimischen Heuschrecken-Arten enthalten. <br><br>
           Artkomplexe:<br>
           Nachtigall-, Verkannter und Brauner Grashüpfer werden zu dem Art-Komplex "Chorthippus biguttulus Gruppe (Chorthippus biguttulus/mollis/brunneus)" zusammengefasst. <br><br>
           
-          Fotos folgende Arten fehlen noch:<br>
+          Fotos folgender Arten fehlen noch:<br>
           Alpen-Nachtigall-Grashüpfer	(Chorthippus eisentrauti)<br>
           Ameisengrille	(Myrmecophilus acervorum )<br>
           Braunfleckige Beißschrecke	(Tessellana tessellata )<br>
@@ -434,7 +445,7 @@ footer{
         <details>
         <summary>Tagfalter</summary>
 
-        <p>
+        <p class="Artenliste">
           Aktuell sind Fotos von 143 der 184 heimischen und etablierten Tagfalter-Arten enthalten. <br><br>
           
           Artkomplexe:<br>
