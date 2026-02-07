@@ -1750,7 +1750,7 @@ const questionAreaEl = document.getElementById('question-area');
 const revealButtonEl = document.getElementById('reveal-button');
 const nextButtonEl = document.getElementById('next-button');
 const statusEl = document.getElementById('status');
-const categoriesWithConfig = ["Tagfalter", "Libellen", "Amphibien", "Reptilien", "Säugetiere", "Nachtfalter", "Heuschrecken", "Käfer", "Artenmix"];
+const categoriesWithConfig = ["Tagfalter", "Libellen", "Amphibien", "Reptilien", "Säugetiere", "Nachtfalter", "Heuschrecken", "Käfer", "Zweiflügler", "Spinnentiere", "Sonstige Insekten", "Artenmix"];
 const quizConfigEl = document.getElementById("quiz-config");
 const startQuizBtn = document.getElementById("start-quiz-btn");
 const speciesImageEl = document.getElementById('species-image');
@@ -2572,6 +2572,9 @@ const CATEGORY_ORDER = [
   "Tagfalter",
   "Nachtfalter",
   "Käfer",
+  "Zweiflügler",
+  "Spinnentiere",
+  "Sonstige Insekten",
   "Artenmix"
 ];
 
@@ -2710,6 +2713,27 @@ const CATEGORY_CONFIG = {
     extraFilters: []
   },
     "Käfer": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+    "Zweiflügler": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+    "Spinnentiere": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+    "Sonstige Insekten": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultDifficulty: "all",
