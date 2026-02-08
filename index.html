@@ -507,6 +507,41 @@ input[type="text"] {
   border-radius: 8px;
 }
 
+/* Container linksbündig */
+#license-wrapper {
+  margin-top: 0.25rem;
+  padding-right: 2%;
+  text-align: right;
+}
+
+/* Button ohne Hintergrund, wie ein Link */
+#license-toggle {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;         /* Link-Farbe nach Geschmack */
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: #111;
+}
+
+/* Hover/Focus für bessere Usability */
+#license-toggle:hover,
+#license-toggle:focus {
+  text-decoration: none;
+}
+
+/* Lizenztext linksbündig, dezent hinterlegt (oder Hintergrund entfernen) */
+#license-text {
+  padding: 0;
+  font-size: 0.85rem;
+  background: none;     /* falls du gar keinen Hintergrund willst: background: none; */
+  border-radius: 4px;
+  margin-top: 0.25rem;
+  text-align: right;
+}
+
 
 
 .page {
@@ -721,6 +756,42 @@ h1 {
   justify-content: center;
   z-index: 3000;
 }
+/* Bildbereich: 3:2, Inhalt einpassen */
+#image-wrapper {
+  width: 100%;
+  max-width: 600px;            /* je nach Layout */
+  margin: 0 auto;
+  position: relative;
+}
+
+#species-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;         /* 3:2 Verhältnis */
+  object-fit: contain;         /* ganzes Bild sichtbar, wie bisher */
+  background: #fff;
+  z-index: 1;
+  position: relative;
+}
+#audio-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.3rem 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  display: none;             /* wird im JS ein-/ausgeblendet */
+  background-color: var(--green-dark);
+  padding-bottom: 5%;
+  padding-top: 3%;
+  z-index: 2;
+}
+
+#audio-wrapper audio {
+  width: 80%;
+  transform: scale(1.2);
+}
+
 #quiz-summary {
   position: fixed;
   inset: 0;
@@ -778,6 +849,10 @@ h1 {
   color: #fff;
   padding: 4px 8px;
   border-radius: 8px;
+}
+#photo-id,
+#photo-credit {
+  z-index: 3;
 }
 
 footer {
@@ -1276,6 +1351,45 @@ footer a:hover {
   border-radius: 10px;
   margin-bottom: 8vh;
 } 
+#audio-wrapper audio {
+  width: 100%;
+  transform: scale(1);
+  padding-bottom: 7%;
+}
+/* Container linksbündig */
+#license-wrapper {
+  margin-top: 0.25rem;
+  padding-right: 2%;
+  text-align: right;
+}
+
+/* Button ohne Hintergrund, wie ein Link */
+#license-toggle {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;         /* Link-Farbe nach Geschmack */
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: #111;
+}
+
+/* Hover/Focus für bessere Usability */
+#license-toggle:hover,
+#license-toggle:focus {
+  text-decoration: none;
+}
+
+/* Lizenztext linksbündig, dezent hinterlegt (oder Hintergrund entfernen) */
+#license-text {
+  padding: 0;
+  font-size: 0.65rem;
+  background: none;     /* falls du gar keinen Hintergrund willst: background: none; */
+  border-radius: 4px;
+  margin-top: 0.25rem;
+  text-align: right;
+}
   #quizfrage{
     font-size: 1rem;
     font-weight: 600;
@@ -1563,6 +1677,13 @@ footer{
   font-size: 1.2rem;
   display: none;
 }
+#license-toggle {
+  font-size: 0.85rem;
+}
+
+#license-text {
+  font-size: 0.85rem;
+}
 #quiz-summary {
   position: fixed;
   inset: 0;
@@ -1637,9 +1758,16 @@ footer{
       <div id="image-wrapper-container">
         <div id="image-toggle-hint">click to zoom ⤵</div>
         <div id="image-wrapper">
+
           <img id="species-image" src="" alt="" style="display:none;" />
+          <div id="audio-wrapper" style="display:none; text-align:center;">
+          </div>
           <span id="photo-id"></span>
           <span id="photo-credit"></span>
+        </div>
+        <div id="license-wrapper">
+          <button id="license-toggle" type="button" aria-expanded="false" aria-controls="license-text">Lizenzhinweis</button>
+          <div id="license-text" style="display:none;"></div>
         </div>
       </div>
     </div>
@@ -1685,6 +1813,15 @@ footer{
       <!-- <button data-value="all">Alle</button>-->
     </div>
 
+  </div>
+
+  <div class="slider-container" id="filetype-container">
+    <label class="config-category-select">Medientyp:</label>
+    <div id="filetype-buttons" class="slider-buttons">
+      <button data-value="image">Bilder</button>
+      <button data-value="audio">Rufe</button>
+      <button data-value="all">Beides</button>
+    </div>
   </div>
 
   <div class="slider-container">
@@ -1808,6 +1945,8 @@ let detailPreloadUrl = null;
 let currentDetailLoadToken = 0; // einfache „Versionierung“
 let isDetailLoading = false;
 let isDetailLoaded  = false;
+let selectedFiletype = "image"; // Default: Bilder
+let audioPlayCountInRound = 0;
 
 
 
@@ -2666,6 +2805,8 @@ const CATEGORY_CONFIG = {
   "Säugetiere": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
     defaultDifficulty: "all",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2673,6 +2814,8 @@ const CATEGORY_CONFIG = {
   "Reptilien": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
     defaultDifficulty: "all",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2680,6 +2823,8 @@ const CATEGORY_CONFIG = {
   "Amphibien": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",
+    allowedFiletypes: ["image", "audio", "all"],
     defaultDifficulty: "all",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2687,6 +2832,8 @@ const CATEGORY_CONFIG = {
   "Libellen": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "100", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
     defaultDifficulty: "1",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2694,6 +2841,8 @@ const CATEGORY_CONFIG = {
     "Heuschrecken": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
     defaultDifficulty: "all",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2701,6 +2850,8 @@ const CATEGORY_CONFIG = {
   "Tagfalter": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "100", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
     defaultDifficulty: "1",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2708,6 +2859,8 @@ const CATEGORY_CONFIG = {
   "Nachtfalter": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
     defaultDifficulty: "all",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2715,6 +2868,8 @@ const CATEGORY_CONFIG = {
     "Käfer": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
     defaultDifficulty: "all",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2722,6 +2877,8 @@ const CATEGORY_CONFIG = {
     "Zweiflügler": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
     defaultDifficulty: "all",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2729,6 +2886,8 @@ const CATEGORY_CONFIG = {
     "Spinnentiere": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
     defaultDifficulty: "all",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2736,6 +2895,8 @@ const CATEGORY_CONFIG = {
     "Sonstige Insekten": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
     defaultDifficulty: "all",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2743,6 +2904,8 @@ const CATEGORY_CONFIG = {
     "Artenmix": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "100", "all"],
+    defaultFiletype: "image",
+    allowedFiletypes: ["image", "audio", "all"],
     defaultDifficulty: "1",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2751,6 +2914,8 @@ const CATEGORY_CONFIG = {
   "_default": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
     defaultDifficulty: "1",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
@@ -2796,6 +2961,28 @@ function showQuizConfig(category) {
     b.classList.toggle("active", enabled && value === selectedNumPhotos);
   });
 
+  // NEU: Dateityp-Block ein-/ausblenden
+  const filetypeContainer = document.getElementById("filetype-container");
+  const filetypeButtons   = document.querySelectorAll("#filetype-buttons button");
+  const allowedFiletypes  = cfg.allowedFiletypes || ["image", "audio", "all"];
+
+  if (allowedFiletypes.length === 1 && allowedFiletypes[0] === "image") {
+    // Nur Bilder erlaubt -> Block komplett ausblenden
+    filetypeContainer.style.display = "none";
+    selectedFiletype = "image";
+  } else {
+    // Block anzeigen und Buttons passend konfigurieren
+    filetypeContainer.style.display = "block";
+    selectedFiletype = cfg.defaultFiletype || "image";
+
+    filetypeButtons.forEach(b => {
+      const value = b.dataset.value;  // "image" | "audio" | "all"
+      const enabled = allowedFiletypes.includes(value);
+      b.style.display = enabled ? "inline-flex" : "none";
+      b.classList.toggle("active", enabled && value === selectedFiletype);
+    });
+  }
+
   // Schwierigkeit: Buttons ein-/ausblenden + Default
   selectedDifficulty = cfg.defaultDifficulty;
   document.querySelectorAll("#difficulty-buttons button").forEach(b => {
@@ -2812,10 +2999,12 @@ function showQuizConfig(category) {
 
 
 
+
 function initConfigButtons() {
   selectedNumPhotos = "10";
   selectedDifficulty = "1";
   selectedAnswerMode = "mc";
+  selectedFiletype = "image";
 
   const backToCategoriesBtn = document.getElementById("back-to-categories");
   backToCategoriesBtn.onclick = () => {
@@ -2850,6 +3039,21 @@ function initConfigButtons() {
       btn.classList.add("active");
     });
   });
+
+  // Dateityp Buttons
+  document.querySelectorAll("#filetype-buttons button").forEach(btn => {
+    if (btn.dataset.value === selectedFiletype) {
+      btn.classList.add("active");
+    }
+    btn.addEventListener("click", () => {
+      if (btn.style.display === "none") return;
+      selectedFiletype = btn.dataset.value;
+      document.querySelectorAll("#filetype-buttons button")
+        .forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
 
   // Schwierigkeit Buttons
   document.querySelectorAll("#difficulty-buttons button").forEach(btn => {
@@ -2905,10 +3109,11 @@ async function fetchAllImages(baseQuery) {
 // =========================
 
 startQuizBtn.onclick = async () => {
+  audioPlayCountInRound = 0;
   currentCategory = selectedCategory;
   const numPhotos = selectedNumPhotos;
   quizLength = numPhotos === "all" ? Infinity : parseInt(numPhotos, 10);
-  const difficulty = selectedDifficulty; // kommt z.B. als "all", "1", "2", ...
+  const difficulty = selectedDifficulty; // "all", "1", "2", "3", ...
 
   quizConfigEl.style.display = "none";
   categorySectionEl.style.display = "none";
@@ -2917,20 +3122,30 @@ startQuizBtn.onclick = async () => {
   // Difficulty für integer-Spalte vorbereiten
   let difficultyParam = null;
   if (difficulty !== "all") {
-    difficultyParam = parseInt(difficulty, 10); // wichtig: Zahl, nicht String
+    difficultyParam = parseInt(difficulty, 10);
   }
+
+  // NEU: filetype-Parameter aus deiner Dateityp-Auswahl
+  let filetypeParam = null;
+  if (selectedFiletype === "image") {
+    filetypeParam = "image";
+  } else if (selectedFiletype === "audio") {
+    filetypeParam = "audio";
+  }
+  // bei "all" bleibt filetypeParam = null
 
   const desired = quizLength === Infinity ? 100 : quizLength;
 
   const { data, error } = await client.rpc('get_random_quiz_images', {
-    p_category: selectedCategory,
-    p_difficulty: difficultyParam, // null oder integer
-    p_limit: desired
+    p_category:   selectedCategory,
+    p_difficulty: difficultyParam,
+    p_limit:      desired,
+    p_filetype:   filetypeParam    // 👈 NEU
   });
 
   if (error || !data || data.length === 0) {
     console.error(error);
-    alert('Keine Bilder für diese Auswahl gefunden.');
+    alert('Keine Medien für diese Auswahl gefunden.');
     return;
   }
 
@@ -2961,7 +3176,7 @@ for (const art in speciesMap) {
 }
 
 // 🔴 NEU: Foto-Pool aufbauen, ggf. pro Art deckeln
-const MAX_PHOTOS_PER_SPECIES = 5; // nach Geschmack anpassen
+const MAX_PHOTOS_PER_SPECIES = 15; // nach Geschmack anpassen
 photoPool = [];
 
 for (const art in speciesMap) {
@@ -3083,6 +3298,73 @@ function loadDetailForCurrentItem() {
   img.src = currentItem.url_detail;
 }
 
+function setLicenseTextWithLink(licenseTextDiv, rawText) {
+  let text = rawText || 'Kein Lizenzhinweis vorhanden.';
+
+  // Alle ungewöhnlichen Bindestriche in normale Minuszeichen umwandeln
+  text = text.replace(/[\u2010-\u2015]/g, '-');
+
+  // Jetzt nach der normalisierten Schreibweise suchen
+  const re = /CC BY-NC-SA 4\.0/;
+
+  if (re.test(text)) {
+    const linked = text.replace(
+      re,
+      '<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>'
+    );
+    licenseTextDiv.innerHTML = linked;
+  } else {
+    licenseTextDiv.textContent = text;
+  }
+}
+
+
+
+function stopAllAudio() {
+  document.querySelectorAll('audio').forEach(function (audio) {
+    audio.pause();
+    audio.currentTime = 0;
+  });
+}
+
+// Audio-Element pro Frage neu bauen
+function createAudioElement(src) {
+  const audioWrapper = document.getElementById('audio-wrapper');
+  if (!audioWrapper) return;
+
+  audioWrapper.innerHTML = '';
+
+  const audioEl = document.createElement('audio');
+  audioEl.controls = true;
+  audioEl.preload = 'auto';
+  audioEl.src = src;
+
+  audioWrapper.appendChild(audioEl);
+
+  // Erste Audio: nur Controls anzeigen, nicht automatisch starten
+  if (audioPlayCountInRound === 0) {
+    audioPlayCountInRound++;
+    return;
+  }
+
+  // Ab der zweiten Audio versuchen wir autoplay
+  audioPlayCountInRound++;
+
+  const playPromise = audioEl.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(err => {
+      // Falls der Browser Autoplay blockt, tun wir einfach nichts,
+      // dann bleibt der Play-Button sichtbar.
+      console.warn('Autoplay blockiert:', err);
+    });
+  }
+}
+
+
+let nextAudioObj = new Audio();
+nextAudioObj.preload = 'auto';
+
+
 // --- Nächstes Bild ---
 function loadNextImage() {
   // 🔄 Immer zuerst zurück in den Vorschau-Modus
@@ -3091,25 +3373,69 @@ function loadNextImage() {
   cancelImageLoads();
   showingDetail = false;
 
+  // Elemente holen
+  const imageEl       = document.getElementById('species-image');
+  const audioWrapper  = document.getElementById('audio-wrapper');
+  const licenseTextDiv = document.getElementById('license-text');
+  const licenseToggleBtn = document.getElementById('license-toggle');
+
+  // Lizenzhinweis immer einklappen
+  licenseTextDiv.style.display = 'none';
+  if (licenseToggleBtn) {
+    licenseToggleBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  // Audio stoppen, bevor wir etwas Neues anzeigen
+  stopAllAudio();
+
+  // Bild-Styles zurücksetzen
   imageEl.className = "preview";
   imageEl.style.width = "";
   imageEl.style.height = "";
   imageEl.style.objectFit = "";
   imageEl.style.transform = "translate(0,0)";
 
-  // Wenn wir bereits ein vorab geladenes Bild haben, verwenden:
-  if (nextItem && nextImageObj && nextImageObj.src === nextItem.url_vorschau) {
+  // Wenn wir bereits ein vorab geladenes Item haben (Bild oder Audio)
+  if (nextItem && (
+        (nextImageObj && nextImageObj.src === nextItem.url_vorschau) ||
+        (nextItem.filetype === 'audio')
+      )
+  ) {
     currentItem = nextItem;
     nextItem = null;
+    console.log('PRELOAD currentItem', currentItem);
 
     shownCount++;
     totalShown++;
 
     resetUI();
-    // Bild direkt aus dem Preloader übernehmen
-    imageEl.src = nextImageObj.src;
-    imageEl.style.display = 'block';
+
+// Erst alles ausblenden
+imageEl.style.display = 'none';
+audioWrapper.style.display = 'none';
+
+// Je nach filetype
+if (currentItem.filetype === 'audio') {
+  // Platzhalter-Bild
+  imageEl.src = "https://djstoxqzmcgwqjliubst.supabase.co/storage/v1/object/public/Fotos/Icons/audio_platzhalter.jpg";
+  imageEl.style.display = 'block';
+
+  // Audio-Player neu erzeugen
+  createAudioElement(currentItem.url_vorschau);
+  audioWrapper.style.display = 'block';
+} else {
+  audioWrapper.style.display = 'none';
+  imageEl.src = nextImageObj.src;
+  imageEl.style.display = 'block';
+}
+
+
+
     questionAreaEl.style.display = 'block';
+
+document.getElementById('photo-credit').textContent =
+  currentItem.author ? `© ${currentItem.author}` : '';
+
 
     document.getElementById('photo-id').textContent =
       currentItem.id_nummer ? `# ${currentItem.id_nummer}` : '';
@@ -3117,8 +3443,11 @@ function loadNextImage() {
     document.getElementById('photo-credit').textContent =
       currentItem.author ? `© ${currentItem.author}` : '';
 
+    setLicenseTextWithLink(licenseTextDiv, currentItem.Lizenz);
+
     buildAnswerUI(currentItem);
     updateQuizStatus();
+
   } else {
     // Fallback: normales Laden wie bisher
     if (totalShown >= quizLength) {
@@ -3131,28 +3460,70 @@ function loadNextImage() {
       endQuiz();
       return;
     }
+    console.log('FALLBACK currentItem', currentItem);
+
+
 
     shownCount++;
     totalShown++;
 
     resetUI();
-    const photo = shuffledPhotos[photoIndex];
 
+    const photo = shuffledPhotos[photoIndex];
     const id = photo.id; // oder eine andere eindeutige Spalte
     if (!stats[id]) stats[id] = 0;
     stats[id]++;
-    renderImage(currentItem);
+
+imageEl.style.display = 'none';
+audioWrapper.style.display = 'none';
+
+if (currentItem.filetype === 'audio') {
+  imageEl.src = "https://djstoxqzmcgwqjliubst.supabase.co/storage/v1/object/public/Fotos/Icons/audio_platzhalter.jpg";
+  imageEl.style.display = 'block';
+
+  createAudioElement(currentItem.url_vorschau);
+  audioWrapper.style.display = 'block';
+} else {
+  audioWrapper.style.display = 'none';
+  renderImage(currentItem);
+}
+
+
     buildAnswerUI(currentItem);
     updateQuizStatus();
+
+    questionAreaEl.style.display = 'block';
+
+    document.getElementById('photo-id').textContent =
+      currentItem.id_nummer ? `# ${currentItem.id_nummer}` : '';
+
+    document.getElementById('photo-credit').textContent =
+      currentItem.author ? `© ${currentItem.author}` : '';
+
+    setLicenseTextWithLink(licenseTextDiv, currentItem.Lizenz);
+
   }
 
-  // 👉 Direkt das nächste Bild im Hintergrund vorladen
+  // 👉 Nächstes Item im Hintergrund vorbereiten:
+  //    Bild mit Image(), Audio mit nextAudioObj
   if (totalShown < quizLength) {
     const upcoming = nextImage();
     if (upcoming) {
       nextItem = upcoming;
-      nextImageObj = new Image();
-      nextImageObj.src = nextItem.url_vorschau;
+
+      // Preload zurücksetzen
+      nextImageObj = null;
+
+      if (upcoming.filetype === 'audio') {
+        // Audio vorladen
+        nextAudioObj = new Audio();
+        nextAudioObj.preload = 'auto';
+        nextAudioObj.src = upcoming.url_vorschau;
+      } else {
+        // Bild vorladen
+        nextImageObj = new Image();
+        nextImageObj.src = upcoming.url_vorschau;
+      }
     } else {
       nextItem = null;
       nextImageObj = null;
@@ -3168,9 +3539,34 @@ function loadNextImage() {
 }
 
 
+// Lizenz-Button-Logik einmalig initialisieren
+(function initLicenseToggle() {
+  console.log('initLicenseToggle wird ausgeführt');
+
+  const btn = document.getElementById('license-toggle');
+  const panel = document.getElementById('license-text');
+
+  console.log('btn:', btn);
+  console.log('panel:', panel);
+
+  if (!btn || !panel) {
+    console.warn('license-toggle oder license-text nicht gefunden');
+    return;
+  }
+
+    btn.addEventListener('click', () => {
+    console.log('Lizenz-Button geklickt');
+    const isHidden = panel.style.display === 'none' || panel.style.display === '';
+    panel.style.display = isHidden ? 'block' : 'none';
+    btn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+  });
+})();
+
+
 
 // --- Quiz beenden ---
 function endQuiz() {
+  stopAllAudio();
   console.log('Verteilung:', stats);
   clearInterval(quizTimerInterval);
   showQuizSummary();
@@ -3199,7 +3595,7 @@ function showQuizSummary() {
 
   // ✅ Satz mit Anzahl richtig
   document.getElementById("summary-count").textContent =
-    `Du hast ${correctCount} von ${totalShown} Bildern richtig bestimmt!`;
+    `Du hast ${correctCount} von ${totalShown} Tieren richtig bestimmt!`;
 
   // ✅ Dauer mit Leerzeichen
   document.getElementById("summary-time").textContent =
@@ -3219,6 +3615,12 @@ function hideQuizSummary() {
 // EVENT-LISTENER
 // ==========================
 
+document.getElementById('next-button').addEventListener('click', function () {
+  stopAllAudio();
+  resetAudioPlayer();
+  loadNextImage();
+});
+
 
 // Übersicht anzeigen (nur Kategorien sichtbar)
 function showCategoryOverview() {
@@ -3233,6 +3635,7 @@ function showCategoryOverview() {
 
 // --- Quiz abbrechen ---
 abortButtonEl.onclick = () => {
+  stopAllAudio();
   endQuiz();
 };
 
