@@ -1865,11 +1865,14 @@ footer{
         async src="//gc.zgo.at/count.js"></script>
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
-const DETAIL_FUNCTION_URL = "https://djstoxqzmcgwqjliubst.supabase.co/functions/v1/get-image-url";
 const SUPABASE_URL = "https://djstoxqzmcgwqjliubst.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqc3RveHF6bWNnd3FqbGl1YnN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxMDYxMDcsImV4cCI6MjA4MDY4MjEwN30.05Ud16jCrf1ib8IpoVwd84sv0NSvpes-T7Rz1khtzRE";
 const { createClient } = supabase;
 const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const R2_BASE_URL_VORSCHAU = "https://pub-3301a7682af84655808479d250e3f244.r2.dev";
+const R2_BASE_URL_AUDIO  = "https://pub-34d8c41785db4830b58cf447e3e72338.r2.dev";
+
+
 
 const categorySectionEl = document.getElementById('category-section');
 const categoryButtonsEl = document.getElementById('category-buttons');
@@ -1890,6 +1893,8 @@ const detailImg = document.getElementById("detail-image");
 const quizSummaryEl = document.getElementById("quiz-summary");
 const abortButtonEl = document.getElementById("abort-button");
 const stats = {}; // key: photo id, value: count
+const DETAILFUNCTIONURL = "https://detail-image-signer.yj79nr7hwk.workers.dev";
+
 
 
 let scale = 1;
@@ -1973,26 +1978,35 @@ function setImageAndWait(img, src) {
     }
   });
 }
+
 async function loadDetailImage(path) {
-  if (!path || typeof path !== "string") {
-    console.warn("Kein Detailpfad vorhanden");
-    return null;
-  }
+  if (!path || typeof path !== "string") return null;
 
-    const res = await fetch(`${DETAIL_FUNCTION_URL}?path=${encodeURIComponent(path)}`, {
-    headers: {
-      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+  // doppelte Encodierung verhindern
+  const rawPath = decodeURIComponent(path);
+
+  try {
+    const res = await fetch(
+      `${DETAILFUNCTIONURL}/sign?path=${encodeURIComponent(rawPath)}`
+    );
+
+    if (!res.ok) {
+      console.warn("Detailbild nicht gefunden", rawPath, res.status);
+      return null;
     }
-  });
 
-  if (!res.ok) {
-    console.warn("Detailbild nicht gefunden:", path);
+    const data = await res.json();
+    return data.url || null;
+  } catch (err) {
+    console.warn("loadDetailImage Fehler", err);
     return null;
   }
-
-  const data = await res.json();
-  return data.url || null;
 }
+
+
+
+
+
 
 
 // =========================
@@ -2684,80 +2698,80 @@ async function loadCategories() {
   categoryLoadingEl.textContent = "Lade Kategorien...";
 
   const { data, error } = await client
-    .from("species_media")
+    .from("fq_metadata")
     .select("category, url_vorschau, cat_untertitel")
     .eq("filetype", "image")
     .eq("titelbild", "ja");
+
+console.log("categories data", { error, count: data?.length, sample: data?.[0] });
 
   if (error || !data) {
     categoryLoadingEl.textContent = "Fehler beim Laden";
     return;
   }
 
-  // 🔧 Wunsch-Reihenfolge der Kategorien
-const CATEGORY_ORDER = [
-  "Säugetiere",
-  "Reptilien",
-  "Amphibien",
-  "Libellen",
-  "Heuschrecken",
-  "Tagfalter",
-  "Nachtfalter",
-  "Käfer",
-  "Zweiflügler",
-  "Spinnentiere",
-  "Sonstige Insekten",
-  "Artenmix"
-];
+  // R2-URLs bauen
+  const rows = data.map(row => ({
+    ...row,
+    url_vorschau: `${R2_BASE_URL_VORSCHAU}/${row.url_vorschau}`
+  }));
 
-// Kategorien extrahieren
-const uniqueCategories = [...new Set(data.map(d => d.category))];
+  const CATEGORY_ORDER = [
+    "Säugetiere",
+    "Reptilien",
+    "Amphibien",
+    "Libellen",
+    "Heuschrecken",
+    "Tagfalter",
+    "Nachtfalter",
+    "Käfer",
+    "Zweiflügler",
+    "Spinnentiere",
+    "Sonstige Insekten",
+    "Artenmix"
+  ];
 
-// „Artenmix“ als virtuelle Kategorie ergänzen, falls noch nicht vorhanden
-if (!uniqueCategories.includes("Artenmix")) {
-  uniqueCategories.unshift("Artenmix"); // ganz nach vorne, oder push() ans Ende
-}
+  // Kategorien extrahieren (→ rows statt data)
+  const uniqueCategories = [...new Set(rows.map(d => d.category))];
 
+  if (!uniqueCategories.includes("Artenmix")) {
+    uniqueCategories.unshift("Artenmix");
+  }
 
-// 🔥 Reihenfolge erzwingen
-uniqueCategories.sort((a, b) => {
-  const ia = CATEGORY_ORDER.indexOf(a);
-  const ib = CATEGORY_ORDER.indexOf(b);
-
-  // Kategorien, die NICHT in der Liste stehen, kommen ans Ende
-  if (ia === -1 && ib === -1) return a.localeCompare(b, "de");
-  if (ia === -1) return 1;
-  if (ib === -1) return -1;
-
-  return ia - ib;
-});
-
+  uniqueCategories.sort((a, b) => {
+    const ia = CATEGORY_ORDER.indexOf(a);
+    const ib = CATEGORY_ORDER.indexOf(b);
+    if (ia === -1 && ib === -1) return a.localeCompare(b, "de");
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
 
   uniqueCategories.forEach(cat => {
     if (cat === "Artenmix") {
-    // Für Artenmix kannst du z.B. ein fixes Bild oder eine neutrale Grafik nehmen
-    const btn = document.createElement("div");
-    btn.className = "category-button";
-    btn.onclick = () => onCategoryClick(cat);
+      const btn = document.createElement("div");
+      btn.className = "category-button";
+      btn.onclick = () => onCategoryClick(cat);
 
-    const img = document.createElement("img");
-    img.src = "https://djstoxqzmcgwqjliubst.supabase.co/storage/v1/object/public/Fotos/Icons/Alle_Arten.webp"; // irgendein neutrales Bild
-    img.alt = "Artenmix";
+      const img = document.createElement("img");
+      img.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/Alle_Arten.webp`;
+      img.alt = "Artenmix";
 
-    const label = document.createElement("div");
-    label.className = "category-label";
-    label.innerHTML = `
-      <div class="cat_title">Artenmix</div>
-      <div class="cat_untertitel">Bestimme Arten aus verschiedenen Tiergruppen</div>
-    `;
+      const label = document.createElement("div");
+      label.className = "category-label";
+      label.innerHTML = `
+        <div class="cat_title">Artenmix</div>
+        <div class="cat_untertitel">Bestimme Arten aus verschiedenen Tiergruppen</div>
+      `;
 
-    btn.appendChild(img);
-    btn.appendChild(label);
-    categoryButtonsEl.appendChild(btn);
-    return; // nächsten cat verarbeiten
-  }
+      btn.appendChild(img);
+      btn.appendChild(label);
+      categoryButtonsEl.appendChild(btn);
+      return;
+    }
 
-    const images = data.filter(d => d.category === cat);
+    // → rows statt data
+    const images = rows.filter(d => d.category === cat);
     const catImage =
       images[Math.floor(Math.random() * images.length)]?.url_vorschau || "";
 
@@ -2771,22 +2785,19 @@ uniqueCategories.sort((a, b) => {
 
     const label = document.createElement("div");
     label.className = "category-label";
-
     label.innerHTML = `
       <div class="cat_title">${cat}</div>
       <div class="cat_untertitel">${images[0]?.cat_untertitel || ""}</div>
     `;
 
-    // >>> richtig: zuerst Inhalt in den Button
     btn.appendChild(img);
     btn.appendChild(label);
-
-    // >>> dann Button in die Liste
     categoryButtonsEl.appendChild(btn);
   });
 
   categoryLoadingEl.textContent = "";
 }
+
 
 
 
@@ -3101,40 +3112,42 @@ async function fetchAllImages(baseQuery) {
 // Start-/Setup-Funktionen
 // =========================
 
-startQuizBtn.onclick = async () => {
-  audioPlayCountInRound = 0;
-  currentCategory = selectedCategory;
-  const numPhotos = selectedNumPhotos;
-  quizLength = numPhotos === "all" ? Infinity : parseInt(numPhotos, 10);
-  const difficulty = selectedDifficulty; // "all", "1", "2", "3", ...
+  startQuizBtn.onclick = async () => {
+    audioPlayCountInRound = 0;
+    currentCategory = selectedCategory;
+    const numPhotos = selectedNumPhotos;
+    quizLength = numPhotos === "all" ? Infinity : parseInt(numPhotos, 10);
+    const difficulty = selectedDifficulty; // "all", "1", "2", "3", ...
 
-  quizConfigEl.style.display = "none";
-  categorySectionEl.style.display = "none";
-  hideQuizSummary();
+    quizConfigEl.style.display = "none";
+    categorySectionEl.style.display = "none";
+    hideQuizSummary();
 
-  // Difficulty für integer-Spalte vorbereiten
-  let difficultyParam = null;
-  if (difficulty !== "all") {
-    difficultyParam = parseInt(difficulty, 10);
-  }
+    // Difficulty für integer-Spalte vorbereiten
+    let difficultyParam = null;
+    if (difficulty !== "all") {
+      difficultyParam = parseInt(difficulty, 10);
+    }
 
-  // NEU: filetype-Parameter aus deiner Dateityp-Auswahl
-  let filetypeParam = null;
-  if (selectedFiletype === "image") {
-    filetypeParam = "image";
-  } else if (selectedFiletype === "audio") {
-    filetypeParam = "audio";
-  }
-  // bei "all" bleibt filetypeParam = null
+    // NEU: filetype-Parameter aus deiner Dateityp-Auswahl
+    let filetypeParam = null;
+    if (selectedFiletype === "image") {
+      filetypeParam = "image";
+    } else if (selectedFiletype === "audio") {
+      filetypeParam = "audio";
+    }
+    // bei "all" bleibt filetypeParam = null
 
-  const desired = quizLength === Infinity ? 100 : quizLength;
+    const desired = quizLength === Infinity ? 100 : quizLength;
 
-  const { data, error } = await client.rpc('get_random_quiz_images', {
+    const { data, error } = await client.rpc('get_random_quiz_images_r2', {
     p_category:   selectedCategory,
     p_difficulty: difficultyParam,
     p_limit:      desired,
-    p_filetype:   filetypeParam    // 👈 NEU
+    p_filetype:   filetypeParam
   });
+
+  console.log("first item", data?.[0]);
 
   if (error || !data || data.length === 0) {
     console.error(error);
@@ -3142,71 +3155,82 @@ startQuizBtn.onclick = async () => {
     return;
   }
 
-// Alle Bilder mischen
-let filteredImages = shuffle(data);
+  // R2-URLs bauen
+  const items = data.map(row => {
+    const isAudio = row.filetype === "audio";
 
-// Quiz-Variablen initialisieren
-imageQueue = filteredImages;
-currentIndex = 0;
-correctCount = 0;
-shownCount = 0;
-totalShown = 0;
-shownPhotos = new Set();
-speciesMap = {};
-speciesOrder = [];
-speciesPointer = 0;
+    return {
+      ...row,
+      url_vorschau: `${isAudio ? R2_BASE_URL_AUDIO : R2_BASE_URL_VORSCHAU}/${row.url_vorschau}`,
+      url_detail: row.url_detail || null
+    };
+  });
 
-// Artenmap vorbereiten (für Distractors etc.)
-for (const item of imageQueue) {
-  const art = item.scientific_name;
-  if (!speciesMap[art]) speciesMap[art] = { photos: [], shownPointer: 0 };
-  speciesMap[art].photos.push(item);
-}
+  let filteredImages = shuffle(items);
 
-// Alle Fotos je Art mischen
-for (const art in speciesMap) {
-  speciesMap[art].photos = shuffle(speciesMap[art].photos);
-}
 
-// 🔴 NEU: Foto-Pool aufbauen, ggf. pro Art deckeln
-const MAX_PHOTOS_PER_SPECIES = 15; // nach Geschmack anpassen
-photoPool = [];
+  // Quiz-Variablen initialisieren
+  imageQueue = filteredImages;
+  currentIndex = 0;
+  correctCount = 0;
+  shownCount = 0;
+  totalShown = 0;
+  shownPhotos = new Set();
+  speciesMap = {};
+  speciesOrder = [];
+  speciesPointer = 0;
 
-for (const art in speciesMap) {
-  const photos = speciesMap[art].photos;
-  const limited = shuffle(photos).slice(0, MAX_PHOTOS_PER_SPECIES);
-  photoPool.push(...limited);
-}
+  // Artenmap vorbereiten (für Distractors etc.)
+  for (const item of imageQueue) {
+    const art = item.scientific_name;
+    if (!speciesMap[art]) speciesMap[art] = { photos: [], shownPointer: 0 };
+    speciesMap[art].photos.push(item);
+  }
 
-// Jetzt den gesamten Pool mischen
-shuffledPhotos = shuffle(photoPool);
-photoIndex = 0;
+  // Alle Fotos je Art mischen
+  for (const art in speciesMap) {
+    speciesMap[art].photos = shuffle(speciesMap[art].photos);
+  }
 
-// Pool ggf. auf quizLength begrenzen
-if (quizLength !== Infinity) {
-  shuffledPhotos = shuffledPhotos.slice(0, quizLength);
-}
+  // 🔴 NEU: Foto-Pool aufbauen, ggf. pro Art deckeln
+  const MAX_PHOTOS_PER_SPECIES = 15; // nach Geschmack anpassen
+  photoPool = [];
 
-updateQuizStatus();
-document.getElementById("quiz-status").style.display = "flex";
-document.getElementById("abort-button").style.display = "block";
-quizEl.style.display = "block";
+  for (const art in speciesMap) {
+    const photos = speciesMap[art].photos;
+    const limited = shuffle(photos).slice(0, MAX_PHOTOS_PER_SPECIES);
+    photoPool.push(...limited);
+  }
 
-startTimer();
-loadNextImage();
-};
+  // Jetzt den gesamten Pool mischen
+  shuffledPhotos = shuffle(photoPool);
+  photoIndex = 0;
 
-function startQuizDirect(category) {
-  selectedCategory = category;
-  selectedNumPhotos = "all";
-  selectedDifficulty = "all";
+  // Pool ggf. auf quizLength begrenzen
+  if (quizLength !== Infinity) {
+    shuffledPhotos = shuffledPhotos.slice(0, quizLength);
+  }
 
-  hideQuizSummary();
-  categorySectionEl.style.display = "none";
-  quizConfigEl.style.display = "none";
+  updateQuizStatus();
+  document.getElementById("quiz-status").style.display = "flex";
+  document.getElementById("abort-button").style.display = "block";
+  quizEl.style.display = "block";
 
-  startQuizBtn.click(); // bewusst
-}
+  startTimer();
+  loadNextImage();
+  };
+
+  function startQuizDirect(category) {
+    selectedCategory = category;
+    selectedNumPhotos = "all";
+    selectedDifficulty = "all";
+
+    hideQuizSummary();
+    categorySectionEl.style.display = "none";
+    quizConfigEl.style.display = "none";
+
+    startQuizBtn.click(); // bewusst
+  }
 
 
 
@@ -3371,6 +3395,11 @@ function loadNextImage() {
   const audioWrapper  = document.getElementById('audio-wrapper');
   const licenseTextDiv = document.getElementById('license-text');
   const licenseToggleBtn = document.getElementById('license-toggle');
+  const imageToggleHint = document.getElementById("image-toggle-hint");
+
+    if (imageToggleHint) {
+    imageToggleHint.style.display = "none";  // Default: aus
+  }
 
   // Lizenzhinweis immer einklappen
   licenseTextDiv.style.display = 'none';
@@ -3410,16 +3439,27 @@ audioWrapper.style.display = 'none';
 // Je nach filetype
 if (currentItem.filetype === 'audio') {
   // Platzhalter-Bild
-  imageEl.src = "https://djstoxqzmcgwqjliubst.supabase.co/storage/v1/object/public/Fotos/Icons/audio_platzhalter.jpg";
+  imageEl.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/audio_platzhalter.jpg`;
   imageEl.style.display = 'block';
 
   // Audio-Player neu erzeugen
   createAudioElement(currentItem.url_vorschau);
   audioWrapper.style.display = 'block';
+
+  // Hinweis ausblenden
+    if (imageToggleHint) {
+      imageToggleHint.style.display = "none";
+    }
+
 } else {
   audioWrapper.style.display = 'none';
   imageEl.src = nextImageObj.src;
   imageEl.style.display = 'block';
+
+  // Hinweis einblenden
+    if (imageToggleHint) {
+      imageToggleHint.style.display = "block";
+    }
 }
 
 
@@ -3471,7 +3511,7 @@ imageEl.style.display = 'none';
 audioWrapper.style.display = 'none';
 
 if (currentItem.filetype === 'audio') {
-  imageEl.src = "https://djstoxqzmcgwqjliubst.supabase.co/storage/v1/object/public/Fotos/Icons/audio_platzhalter.jpg";
+  imageEl.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/audio_platzhalter.jpg`;
   imageEl.style.display = 'block';
 
   createAudioElement(currentItem.url_vorschau);
@@ -3610,7 +3650,6 @@ function hideQuizSummary() {
 
 document.getElementById('next-button').addEventListener('click', function () {
   stopAllAudio();
-  resetAudioPlayer();
   loadNextImage();
 });
 
