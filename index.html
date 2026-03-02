@@ -1714,6 +1714,35 @@ footer{
   margin: 10px 0 20px;
   color: #5f8f73;
 }
+  #image-wrapper {
+    width: 100%;
+    aspect-ratio: 3 / 2;    /* feste Bildfläche */
+    max-height: 40svh;
+    min-height: 30svh;      /* nie kleiner als ~30% der Screenhöhe */
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  /* Bild immer den Wrapper füllen lassen */
+  #species-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;    /* oder cover, je nach Geschmack */
+  }
+
+  #species-image.preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;    /* explizit statt height:auto */
+    transform: none !important;
+  }
+
+  #species-image.detail {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }
 
 
@@ -1948,6 +1977,7 @@ let audioPlayCountInRound = 0;
 
 
 
+
 // =========================
 // Utility Funktionen
 // =========================
@@ -2022,13 +2052,43 @@ function nextImage() {
   return photo;
 }
 
+async function fetchDistractorsFromDB(correctItem) {
+  const difficultyParam =
+    selectedDifficulty === "all"
+      ? null
+      : parseInt(selectedDifficulty, 10);
+
+  const filetypeParam =
+    selectedFiletype === "all" ? null : selectedFiletype;
+
+  const { data, error } = await client.rpc('get_similar_species', {
+    p_scientific_name: correctItem.scientific_name,
+    p_category:        correctItem.category,
+    p_filetype:        filetypeParam,
+    p_difficulty:      difficultyParam
+  });
+
+  console.log("RPC get_similar_species result:", { error, count: data?.length });
+
+  if (error || !data) {
+    console.error("Distractor-RPC Fehler", error);
+    return [];
+  }
+
+  debugLevelStats(correctItem, data);
+
+  const distractors = getDistractors(correctItem, data);
+  console.log("getDistractors returned:", distractors.length, distractors.map(d => d.scientific_name));
+  return distractors;
+}
+
+
 
 
 function getDistractors(correctItem, allItems) {
   const phy = Array.isArray(correctItem.phylogeny) ? correctItem.phylogeny : [];
   const correctSpecies = correctItem.scientific_name;
 
-  // Map für eindeutige Kandidaten (max. eine Instanz pro Art)
   const candidates = new Map();
   const uniquePush = (item) => {
     if (!item) return;
@@ -2038,50 +2098,221 @@ function getDistractors(correctItem, allItems) {
     }
   };
 
-  // 1) von hinten nach vorne: Gattung, Familie, Ordnung, ...
-  // Wir gehen durch die phylogeny-Ebenen von spezifisch (hinten) nach allgemein (vorn)
-  for (let i = phy.length - 1; i >= 0 && candidates.size < 3; i--) {
-    const group = phy[i];
-    if (!group) continue;
-
+  // Items mit Tag holen und auf verschiedene Arten reduzieren
+  const distinctSpeciesWithTag = (tag) => {
+    if (!tag) return [];
+    const seen = new Set();
+    const result = [];
     for (const it of allItems) {
-      if (
-        it.scientific_name !== correctSpecies &&
-        Array.isArray(it.phylogeny) &&
-        it.phylogeny[i] === group
-      ) {
-        uniquePush(it);
-        if (candidates.size >= 3) break;
-      }
+      if (!Array.isArray(it.phylogeny)) continue;
+      if (!it.phylogeny.includes(tag)) continue;
+      if (it.scientific_name === correctSpecies) continue;
+      if (seen.has(it.scientific_name)) continue;
+      seen.add(it.scientific_name);
+      result.push(it);
+    }
+    return result;
+  };
+
+  const last = phy.length - 1;
+  const genusTag   = phy[last];       // Gattung (z.B. Vanessa)
+  const tribeTag   = phy[last - 1];   // Nymphalini
+  const familyTag  = phy[last - 2];   // Nymphalidae
+
+  const genus   = distinctSpeciesWithTag(genusTag);
+  const tribe   = distinctSpeciesWithTag(tribeTag);
+  const family  = distinctSpeciesWithTag(familyTag);
+
+  // 1) Nur Gattung, wenn es ≥ 3 verschiedene Arten gibt
+  if (genus.length >= 3) {
+    shuffle(genus).slice(0, 3).forEach(uniquePush);
+  } else if (genus.length > 0 || tribe.length > 0) {
+    // 2) Gattung + Tribus
+    shuffle(genus).forEach(uniquePush);
+    let remaining = 3 - candidates.size;
+    if (remaining > 0) {
+      shuffle(tribe.filter(it => !candidates.has(it.scientific_name)))
+        .slice(0, remaining)
+        .forEach(uniquePush);
+    }
+    // 3) Falls dann immer noch < 3: Familie ergänzen
+    remaining = 3 - candidates.size;
+    if (remaining > 0) {
+      shuffle(family.filter(it => !candidates.has(it.scientific_name)))
+        .slice(0, remaining)
+        .forEach(uniquePush);
+    }
+  } else {
+    // 4) Falls gar keine Gattungs/Tribus-Infos nutzbar: nur Familie
+    if (family.length >= 3) {
+      shuffle(family).slice(0, 3).forEach(uniquePush);
     }
   }
 
-  // 2) Falls nach Gattung/Familie/Ordnung immer noch nicht genug:
+  // 5) Fallback: gleiche Kategorie
   if (candidates.size < 3) {
-    for (const it of allItems) {
-      if (
-        it.scientific_name !== correctSpecies &&
-        it.category === correctItem.category &&
-        !candidates.has(it.scientific_name)
-      ) {
-        uniquePush(it);
-        if (candidates.size >= 3) break;
-      }
-    }
+    let remaining = 3 - candidates.size;
+    shuffle(
+      distinctSpeciesWithTag(null) // gleich ersetzen s.u. oder andere Logik
+    );
   }
 
-  // 3) Letzter Fallback: beliebige andere Arten
+  // Besser: Kategorie-Fallback auch distinct pro Art:
   if (candidates.size < 3) {
+    const remaining = 3 - candidates.size;
+    const seen = new Set(candidates.keys());
+    const sameCatDistinct = [];
     for (const it of allItems) {
-      if (it.scientific_name !== correctSpecies && !candidates.has(it.scientific_name)) {
-        uniquePush(it);
-        if (candidates.size >= 3) break;
-      }
+      if (it.scientific_name === correctSpecies) continue;
+      if (it.category !== correctItem.category) continue;
+      if (seen.has(it.scientific_name)) continue;
+      seen.add(it.scientific_name);
+      sameCatDistinct.push(it);
     }
+    shuffle(sameCatDistinct)
+      .slice(0, remaining)
+      .forEach(uniquePush);
+  }
+
+  // 6) letzter Fallback: völlig beliebige Arten, ebenfalls distinct
+  if (candidates.size < 3) {
+    const remaining = 3 - candidates.size;
+    const seen = new Set(candidates.keys());
+    const distinct = [];
+    for (const it of allItems) {
+      if (it.scientific_name === correctSpecies) continue;
+      if (seen.has(it.scientific_name)) continue;
+      seen.add(it.scientific_name);
+      distinct.push(it);
+    }
+    shuffle(distinct).slice(0, remaining).forEach(uniquePush);
   }
 
   return shuffle(Array.from(candidates.values())).slice(0, 3);
 }
+
+async function buildAnswerUIWithGivenDistractors(item, distractors) {
+  const container = document.getElementById('answer-container');
+  container.innerHTML = "";
+  resetAnswerButtons();
+
+  if (selectedAnswerMode === "text") {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.id = 'answer-input';
+    input.placeholder = 'Namen eingeben...';
+
+    input.autocomplete = 'off';
+    input.spellcheck = false;
+    input.autocorrect = 'off';
+    input.autocapitalize = 'none';
+    input.inputMode = 'text';
+
+    container.appendChild(input);
+    answerInputEl = input;
+    setTimeout(focusAnswer, 0);
+
+    input.addEventListener("input", checkAnswer);
+
+    revealButtonEl.style.display = 'inline-block';
+    return;
+  }
+
+  const correctItem = item;
+
+  const answerItems = shuffle([correctItem, ...distractors]).slice(0, 4);
+
+  const grid = document.createElement("div");
+  grid.className = "mc-grid";
+
+  answerItems.forEach(opt => {
+    const option = document.createElement("div");
+    option.className = "mc-option";
+    option.dataset.sciname = opt.scientific_name;
+
+    const trivialText =
+      Array.isArray(opt.trivialname) && opt.trivialname.length
+        ? opt.trivialname[0]
+        : opt.scientific_name;
+
+    const trivial = document.createElement("span");
+    trivial.className = "mc-trivial";
+    trivial.lang = "de";
+    trivial.textContent = addBreaksAtAllowedChars(trivialText);
+
+    const scientific = document.createElement("span");
+    scientific.className = "mc-scientific";
+    scientific.lang = "la";
+    scientific.textContent = `(${addBreaksAtAllowedChars(opt.scientific_name)})`;
+
+    option.append(trivial, scientific);
+
+    option.onclick = () =>
+      handleMCClick(
+        option,
+        opt.scientific_name === correctItem.scientific_name
+      );
+
+    grid.appendChild(option);
+  });
+
+  container.appendChild(grid);
+}
+
+
+let nextDistractors = null;
+
+async function preloadNextQuestion() {
+  if (totalShown >= quizLength) {
+    nextItem = null;
+    nextImageObj = null;
+    nextAudioObj = null;
+    nextDistractors = null;
+    return;
+  }
+
+  const upcoming = nextImage();
+  if (!upcoming) {
+    nextItem = null;
+    nextImageObj = null;
+    nextAudioObj = null;
+    nextDistractors = null;
+    return;
+  }
+
+  nextItem = upcoming;
+  nextImageObj = null;
+  nextAudioObj = null;
+  nextDistractors = null;
+
+  if (upcoming.filetype === 'audio') {
+    nextAudioObj = new Audio();
+    nextAudioObj.preload = 'auto';
+    nextAudioObj.src = upcoming.url_vorschau;
+  } else {
+    nextImageObj = new Image();
+    nextImageObj.src = upcoming.url_vorschau;
+  }
+
+  // NEU: Distraktoren vorladen
+  nextDistractors = await fetchDistractorsFromDB(upcoming);
+}
+
+
+function debugLevelStats(correctItem, allItems) {
+  const phy = correctItem.phylogeny || [];
+  const sci = correctItem.scientific_name;
+  phy.forEach((tag, idx) => {
+    const allMatches = allItems.filter(it =>
+      it.scientific_name !== sci &&
+      Array.isArray(it.phylogeny) &&
+      it.phylogeny.includes(tag)
+    );
+    console.log("Tag", tag, "Anzahl in allItems:", allMatches.length);
+  });
+}
+
+
 
 function uniqueBySpecies(items) {
   const seen = new Set();
@@ -2211,7 +2442,7 @@ function focusAnswer() {
 // Eingabelogik
 // =========================
 
-function buildAnswerUI(item) {
+async function buildAnswerUI(item) {
   const container = document.getElementById('answer-container');
   container.innerHTML = ""; // sauber machen
   resetAnswerButtons();
@@ -2241,8 +2472,17 @@ function buildAnswerUI(item) {
 
   // Single Choice
   const correctItem = item;
-  const distractors = getDistractors(item, imageQueue);
-  const answerItems = shuffle([correctItem, ...distractors]);
+  const distractors = await fetchDistractorsFromDB(correctItem);
+
+   // ⬇️ HIER debuggen
+  console.log("Correct", correctItem.scientific_name, correctItem.phylogeny);
+  console.log("Distractors detail:", distractors.map(d => ({
+    sci: d.scientific_name,
+    phy: d.phylogeny,
+    cat: d.category
+  })));
+
+  const answerItems = shuffle([correctItem, ...distractors]).slice(0, 4);
 
   const grid = document.createElement("div");
   grid.className = "mc-grid";
@@ -3112,35 +3352,35 @@ async function fetchAllImages(baseQuery) {
 // Start-/Setup-Funktionen
 // =========================
 
-  startQuizBtn.onclick = async () => {
-    audioPlayCountInRound = 0;
-    currentCategory = selectedCategory;
-    const numPhotos = selectedNumPhotos;
-    quizLength = numPhotos === "all" ? Infinity : parseInt(numPhotos, 10);
-    const difficulty = selectedDifficulty; // "all", "1", "2", "3", ...
+startQuizBtn.onclick = async () => {
+  audioPlayCountInRound = 0;
+  currentCategory = selectedCategory;
+  const numPhotos = selectedNumPhotos;
+  quizLength = numPhotos === "all" ? Infinity : parseInt(numPhotos, 10);
+  const difficulty = selectedDifficulty;
 
-    quizConfigEl.style.display = "none";
-    categorySectionEl.style.display = "none";
-    hideQuizSummary();
+  quizConfigEl.style.display = "none";
+  categorySectionEl.style.display = "none";
+  hideQuizSummary();
 
-    // Difficulty für integer-Spalte vorbereiten
-    let difficultyParam = null;
-    if (difficulty !== "all") {
-      difficultyParam = parseInt(difficulty, 10);
-    }
+  // Difficulty für integer-Spalte vorbereiten
+  let difficultyParam = null;
+  if (difficulty !== "all") {
+    difficultyParam = parseInt(difficulty, 10);
+  }
 
-    // NEU: filetype-Parameter aus deiner Dateityp-Auswahl
-    let filetypeParam = null;
-    if (selectedFiletype === "image") {
-      filetypeParam = "image";
-    } else if (selectedFiletype === "audio") {
-      filetypeParam = "audio";
-    }
-    // bei "all" bleibt filetypeParam = null
+  // filetype-Parameter
+  let filetypeParam = null;
+  if (selectedFiletype === "image") {
+    filetypeParam = "image";
+  } else if (selectedFiletype === "audio") {
+    filetypeParam = "audio";
+  }
 
-    const desired = quizLength === Infinity ? 100 : quizLength;
+  const desired = quizLength === Infinity ? 100 : quizLength;
 
-    const { data, error } = await client.rpc('get_random_quiz_images_r2', {
+  // 1) ZUERST die Medien fürs Quiz holen
+  const { data, error } = await client.rpc('get_random_quiz_images_r2', {
     p_category:   selectedCategory,
     p_difficulty: difficultyParam,
     p_limit:      desired,
@@ -3155,10 +3395,9 @@ async function fetchAllImages(baseQuery) {
     return;
   }
 
-  // R2-URLs bauen
+  // 2) Items vorbereiten
   const items = data.map(row => {
     const isAudio = row.filetype === "audio";
-
     return {
       ...row,
       url_vorschau: `${isAudio ? R2_BASE_URL_AUDIO : R2_BASE_URL_VORSCHAU}/${row.url_vorschau}`,
@@ -3168,19 +3407,18 @@ async function fetchAllImages(baseQuery) {
 
   let filteredImages = shuffle(items);
 
-
   // Quiz-Variablen initialisieren
-  imageQueue = filteredImages;
+  imageQueue   = filteredImages;
   currentIndex = 0;
   correctCount = 0;
-  shownCount = 0;
-  totalShown = 0;
-  shownPhotos = new Set();
-  speciesMap = {};
+  shownCount   = 0;
+  totalShown   = 0;
+  shownPhotos  = new Set();
+  speciesMap   = {};
   speciesOrder = [];
   speciesPointer = 0;
 
-  // Artenmap vorbereiten (für Distractors etc.)
+  // Artenmap vorbereiten
   for (const item of imageQueue) {
     const art = item.scientific_name;
     if (!speciesMap[art]) speciesMap[art] = { photos: [], shownPointer: 0 };
@@ -3192,21 +3430,18 @@ async function fetchAllImages(baseQuery) {
     speciesMap[art].photos = shuffle(speciesMap[art].photos);
   }
 
-  // 🔴 NEU: Foto-Pool aufbauen, ggf. pro Art deckeln
-  const MAX_PHOTOS_PER_SPECIES = 15; // nach Geschmack anpassen
+  const MAX_PHOTOS_PER_SPECIES = 15;
   photoPool = [];
 
   for (const art in speciesMap) {
-    const photos = speciesMap[art].photos;
+    const photos  = speciesMap[art].photos;
     const limited = shuffle(photos).slice(0, MAX_PHOTOS_PER_SPECIES);
     photoPool.push(...limited);
   }
 
-  // Jetzt den gesamten Pool mischen
   shuffledPhotos = shuffle(photoPool);
   photoIndex = 0;
 
-  // Pool ggf. auf quizLength begrenzen
   if (quizLength !== Infinity) {
     shuffledPhotos = shuffledPhotos.slice(0, quizLength);
   }
@@ -3217,20 +3452,24 @@ async function fetchAllImages(baseQuery) {
   quizEl.style.display = "block";
 
   startTimer();
-  loadNextImage();
-  };
 
-  function startQuizDirect(category) {
-    selectedCategory = category;
-    selectedNumPhotos = "all";
-    selectedDifficulty = "all";
+  // 3) JETZT: nächste Frage vorladen und dann anzeigen
+  await preloadNextQuestion();
+  await loadNextImage();
+};
 
-    hideQuizSummary();
-    categorySectionEl.style.display = "none";
-    quizConfigEl.style.display = "none";
 
-    startQuizBtn.click(); // bewusst
-  }
+function startQuizDirect(category) {
+  selectedCategory = category;
+  selectedNumPhotos = "all";
+  selectedDifficulty = "all";
+
+  hideQuizSummary();
+  categorySectionEl.style.display = "none";
+  quizConfigEl.style.display = "none";
+
+  startQuizBtn.click(); // bewusst
+}
 
 
 
@@ -3380,10 +3619,15 @@ function createAudioElement(src) {
 
 let nextAudioObj = new Audio();
 nextAudioObj.preload = 'auto';
-
+let isLoadingNext = false;
 
 // --- Nächstes Bild ---
-function loadNextImage() {
+async function loadNextImage() {
+  if (isLoadingNext) return;    // verhindert parallel laufende Aufrufe
+  isLoadingNext = true;
+
+  try {
+
   // 🔄 Immer zuerst zurück in den Vorschau-Modus
   isDetailLoading = false;
   isDetailLoaded  = false;
@@ -3432,12 +3676,12 @@ function loadNextImage() {
 
     resetUI();
 
-// Erst alles ausblenden
-imageEl.style.display = 'none';
-audioWrapper.style.display = 'none';
+  // Erst alles ausblenden
+  imageEl.style.display = 'none';
+  audioWrapper.style.display = 'none';
 
-// Je nach filetype
-if (currentItem.filetype === 'audio') {
+  // Je nach filetype
+  if (currentItem.filetype === 'audio') {
   // Platzhalter-Bild
   imageEl.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/audio_platzhalter.jpg`;
   imageEl.style.display = 'block';
@@ -3451,7 +3695,7 @@ if (currentItem.filetype === 'audio') {
       imageToggleHint.style.display = "none";
     }
 
-} else {
+  } else {
   audioWrapper.style.display = 'none';
   imageEl.src = nextImageObj.src;
   imageEl.style.display = 'block';
@@ -3460,13 +3704,13 @@ if (currentItem.filetype === 'audio') {
     if (imageToggleHint) {
       imageToggleHint.style.display = "block";
     }
-}
+  }
 
 
 
     questionAreaEl.style.display = 'block';
 
-document.getElementById('photo-credit').textContent =
+  document.getElementById('photo-credit').textContent =
   currentItem.author ? `© ${currentItem.author}` : '';
 
 
@@ -3476,12 +3720,15 @@ document.getElementById('photo-credit').textContent =
     document.getElementById('photo-credit').textContent =
       currentItem.author ? `© ${currentItem.author}` : '';
 
-    setLicenseTextWithLink(licenseTextDiv, currentItem.Lizenz);
+        setLicenseTextWithLink(licenseTextDiv, currentItem.Lizenz);
 
-    buildAnswerUI(currentItem);
+    // Distraktoren aus dem Preload nutzen (Fallback: live holen)
+    const distractors = nextDistractors || await fetchDistractorsFromDB(currentItem);
+    await buildAnswerUIWithGivenDistractors(currentItem, distractors);
     updateQuizStatus();
 
-  } else {
+
+    } else {
     // Fallback: normales Laden wie bisher
     if (totalShown >= quizLength) {
       endQuiz();
@@ -3495,34 +3742,32 @@ document.getElementById('photo-credit').textContent =
     }
     console.log('FALLBACK currentItem', currentItem);
 
-
-
     shownCount++;
     totalShown++;
 
     resetUI();
 
     const photo = shuffledPhotos[photoIndex];
-    const id = photo.id; // oder eine andere eindeutige Spalte
+    const id = photo.id;
     if (!stats[id]) stats[id] = 0;
     stats[id]++;
 
-imageEl.style.display = 'none';
-audioWrapper.style.display = 'none';
+    imageEl.style.display = 'none';
+    audioWrapper.style.display = 'none';
 
-if (currentItem.filetype === 'audio') {
-  imageEl.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/audio_platzhalter.jpg`;
-  imageEl.style.display = 'block';
+    if (currentItem.filetype === 'audio') {
+      imageEl.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/audio_platzhalter.jpg`;
+      imageEl.style.display = 'block';
 
-  createAudioElement(currentItem.url_vorschau);
-  audioWrapper.style.display = 'block';
-} else {
-  audioWrapper.style.display = 'none';
-  renderImage(currentItem);
-}
+      createAudioElement(currentItem.url_vorschau);
+      audioWrapper.style.display = 'block';
+    } else {
+      audioWrapper.style.display = 'none';
+      renderImage(currentItem);
+    }
 
-
-    buildAnswerUI(currentItem);
+    const distractors = await fetchDistractorsFromDB(currentItem);
+    await buildAnswerUIWithGivenDistractors(currentItem, distractors);
     updateQuizStatus();
 
     questionAreaEl.style.display = 'block';
@@ -3534,66 +3779,22 @@ if (currentItem.filetype === 'audio') {
       currentItem.author ? `© ${currentItem.author}` : '';
 
     setLicenseTextWithLink(licenseTextDiv, currentItem.Lizenz);
-
   }
 
-  // 👉 Nächstes Item im Hintergrund vorbereiten:
-  //    Bild mit Image(), Audio mit nextAudioObj
-  if (totalShown < quizLength) {
-    const upcoming = nextImage();
-    if (upcoming) {
-      nextItem = upcoming;
-
-      // Preload zurücksetzen
-      nextImageObj = null;
-
-      if (upcoming.filetype === 'audio') {
-        // Audio vorladen
-        nextAudioObj = new Audio();
-        nextAudioObj.preload = 'auto';
-        nextAudioObj.src = upcoming.url_vorschau;
-      } else {
-        // Bild vorladen
-        nextImageObj = new Image();
-        nextImageObj.src = upcoming.url_vorschau;
-      }
-    } else {
-      nextItem = null;
-      nextImageObj = null;
-    }
-  } else {
-    nextItem = null;
-    nextImageObj = null;
-  }
-
+  // ⬇️ gilt für beide Zweige
   if (selectedAnswerMode === "text" && window.innerWidth > MOBILE_MAX_WIDTH) {
     setTimeout(focusAnswer, 0);
   }
+
+  // Nächste Frage im Hintergrund vorladen
+  await preloadNextQuestion();
+
+} finally {
+  isLoadingNext = false;
+}
 }
 
 
-// Lizenz-Button-Logik einmalig initialisieren
-(function initLicenseToggle() {
-  console.log('initLicenseToggle wird ausgeführt');
-
-  const btn = document.getElementById('license-toggle');
-  const panel = document.getElementById('license-text');
-
-  console.log('btn:', btn);
-  console.log('panel:', panel);
-
-  if (!btn || !panel) {
-    console.warn('license-toggle oder license-text nicht gefunden');
-    return;
-  }
-
-    btn.addEventListener('click', () => {
-    console.log('Lizenz-Button geklickt');
-    const isHidden = panel.style.display === 'none' || panel.style.display === '';
-    panel.style.display = isHidden ? 'block' : 'none';
-    btn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
-  });
-})();
 
 
 
