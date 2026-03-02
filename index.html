@@ -1946,6 +1946,7 @@ let currentIndex = 0;
 let correctCount = 0;
 let shownCount = 0;
 let totalShown = 0;
+let answeredCount = 0;
 let quizStartTime = null;
 let quizTimerInterval = null;
 let showingDetail = false;
@@ -2032,10 +2033,6 @@ async function loadDetailImage(path) {
     return null;
   }
 }
-
-
-
-
 
 
 
@@ -2247,12 +2244,22 @@ async function buildAnswerUIWithGivenDistractors(item, distractors) {
 
     option.append(trivial, scientific);
 
-    option.onclick = () =>
-      handleMCClick(
-        option,
-        opt.scientific_name === correctItem.scientific_name
-      );
+    option.onclick = () => {
+  if (option.classList.contains("disabled")) return;
 
+  console.log("MC OPTION CLICK", {
+    sci: opt.scientific_name,
+    correctSci: correctItem.scientific_name,
+    isCorrect: opt.scientific_name === correctItem.scientific_name,
+    answeredCount,
+    quizLength
+  });
+
+  handleMCClick(
+    option,
+    opt.scientific_name === correctItem.scientific_name
+  );
+};
     grid.appendChild(option);
   });
 
@@ -2263,13 +2270,8 @@ async function buildAnswerUIWithGivenDistractors(item, distractors) {
 let nextDistractors = null;
 
 async function preloadNextQuestion() {
-  if (totalShown >= quizLength) {
-    nextItem = null;
-    nextImageObj = null;
-    nextAudioObj = null;
-    nextDistractors = null;
-    return;
-  }
+  // KEIN totalShown-Check hier
+  // Ende ergibt sich allein daraus, dass nextImage() null liefert
 
   const upcoming = nextImage();
   if (!upcoming) {
@@ -2294,9 +2296,9 @@ async function preloadNextQuestion() {
     nextImageObj.src = upcoming.url_vorschau;
   }
 
-  // NEU: Distraktoren vorladen
   nextDistractors = await fetchDistractorsFromDB(upcoming);
 }
+
 
 
 function debugLevelStats(correctItem, allItems) {
@@ -2428,8 +2430,11 @@ function resetAnswerButtons() {
   const buttons = document.querySelectorAll(".mc-option");
   buttons.forEach(btn => {
     btn.classList.remove("correct", "wrong", "disabled");
+    btn.onclick = null;
   });
+  nextButtonEl.style.display = "none";
 }
+
 
 function focusAnswer() {
   if (window.matchMedia("(orientation: portrait)").matches) return; // nur Desktop
@@ -2544,21 +2549,49 @@ function checkAnswer() {
   const okTriv = trivialNames.some(tn => tolerantMatch(normInput, tn));
 
   if (okSci || okTriv) {
-    answerInputEl.disabled = true;
-    correctCount++;
-    updateQuizStatus();
-    setTimeout(() => {
-      if (totalShown >= quizLength) {
-        endQuiz();
-      } else {
-        loadNextImage();
-      }
-    }, 300);
+  answerInputEl.disabled = true;
+  correctCount++;
+  answeredCount++;
+  updateQuizStatus();
+  console.log(">>> before deciding next", {
+  answeredCount,
+  correctCount,
+  totalShown,
+  shownCount,
+  photoIndex,
+  hasNextItem: !!nextItem
+});
+
+  setTimeout(() => {
+    console.log("END CHECK TEXT", {
+    answeredCount,
+    quizLength,
+    from: "checkAnswer"
+  });
+
+    if (answeredCount >= quizLength) {
+      console.log("CALL endQuiz FROM checkAnswer");
+
+  endQuiz();
+} else {
+  console.log("CALL loadNextImage FROM checkAnswer");
+
+  loadNextImage();
+}
+  }, 300);
   }
 }
 
 
 function handleMCClick(clickedOption, isCorrect) {
+  console.log("handleMCClick CALLED", {
+    hasCurrentItem: !!currentItem,
+    answeredCount,
+    quizLength
+  });
+
+  if (!currentItem) return;  // Schutz vor null
+
   const options = document.querySelectorAll(".mc-option");
   const correctSciName = currentItem.scientific_name;
 
@@ -2573,26 +2606,55 @@ function handleMCClick(clickedOption, isCorrect) {
 
   if (isCorrect) {
     correctCount++;
+    answeredCount++;
     updateQuizStatus();
+    console.log("END CHECK MC_CORRECT", { answeredCount, quizLength });
+
     setTimeout(() => {
-      if (totalShown >= quizLength) {
+      console.log("END CHECK MC_CORRECT", {
+    answeredCount,
+    quizLength,
+    from: "MC_CORRECT"
+  });
+
+      if (answeredCount >= quizLength) {
+        console.log("CALL endQuiz FROM MC_CORRECT");
+
         endQuiz();
       } else {
+        console.log("CALL loadNextImage FROM MC_CORRECT");
+
         loadNextImage();
       }
     }, 800);
   } else {
     clickedOption.classList.add("wrong");
+    answeredCount++;
+    updateQuizStatus();
+    console.log("END CHECK MC_WRONG", { answeredCount, quizLength });
+
     nextButtonEl.style.display = "inline-block";
     nextButtonEl.onclick = () => {
-      if (totalShown >= quizLength) {
+      console.log("END CHECK NEXT_BUTTON", {
+    answeredCount,
+    quizLength,
+    from: "NEXT_BUTTON"
+  });
+
+      // HIER ist der entscheidende Fix:
+      if (answeredCount >= quizLength) {
+        console.log("CALL endQuiz FROM NEXT_BUTTON");
+
         endQuiz();
       } else {
+        console.log("CALL loadNextImage FROM NEXT_BUTTON");
+
         loadNextImage();
       }
     };
   }
 }
+
 
 
 
@@ -3356,20 +3418,19 @@ startQuizBtn.onclick = async () => {
   audioPlayCountInRound = 0;
   currentCategory = selectedCategory;
   const numPhotos = selectedNumPhotos;
-  quizLength = numPhotos === "all" ? Infinity : parseInt(numPhotos, 10);
   const difficulty = selectedDifficulty;
 
   quizConfigEl.style.display = "none";
   categorySectionEl.style.display = "none";
   hideQuizSummary();
 
-  // Difficulty für integer-Spalte vorbereiten
+  // Difficulty
   let difficultyParam = null;
   if (difficulty !== "all") {
     difficultyParam = parseInt(difficulty, 10);
   }
 
-  // filetype-Parameter
+  // filetype
   let filetypeParam = null;
   if (selectedFiletype === "image") {
     filetypeParam = "image";
@@ -3377,9 +3438,11 @@ startQuizBtn.onclick = async () => {
     filetypeParam = "audio";
   }
 
-  const desired = quizLength === Infinity ? 100 : quizLength;
+  // gewünschte Anzahl Datensätze aus DB
+  const desired =
+    numPhotos === "all" ? 100 : parseInt(numPhotos, 10);
 
-  // 1) ZUERST die Medien fürs Quiz holen
+  // Medien holen
   const { data, error } = await client.rpc('get_random_quiz_images_r2', {
     p_category:   selectedCategory,
     p_difficulty: difficultyParam,
@@ -3395,7 +3458,7 @@ startQuizBtn.onclick = async () => {
     return;
   }
 
-  // 2) Items vorbereiten
+  // Items vorbereiten
   const items = data.map(row => {
     const isAudio = row.filetype === "audio";
     return {
@@ -3411,6 +3474,7 @@ startQuizBtn.onclick = async () => {
   imageQueue   = filteredImages;
   currentIndex = 0;
   correctCount = 0;
+  answeredCount = 0;     // <– wichtig
   shownCount   = 0;
   totalShown   = 0;
   shownPhotos  = new Set();
@@ -3425,7 +3489,6 @@ startQuizBtn.onclick = async () => {
     speciesMap[art].photos.push(item);
   }
 
-  // Alle Fotos je Art mischen
   for (const art in speciesMap) {
     speciesMap[art].photos = shuffle(speciesMap[art].photos);
   }
@@ -3442,9 +3505,15 @@ startQuizBtn.onclick = async () => {
   shuffledPhotos = shuffle(photoPool);
   photoIndex = 0;
 
-  if (quizLength !== Infinity) {
-    shuffledPhotos = shuffledPhotos.slice(0, quizLength);
-  }
+  // quizLength jetzt aus numPhotos bestimmen
+  quizLength = (numPhotos === "all")
+    ? shuffledPhotos.length
+    : Math.min(parseInt(numPhotos, 10), shuffledPhotos.length);
+
+  // passend begrenzen
+  shuffledPhotos = shuffledPhotos.slice(0, quizLength);
+
+  console.log("quizLength =", quizLength, "photos =", shuffledPhotos.length);
 
   updateQuizStatus();
   document.getElementById("quiz-status").style.display = "flex";
@@ -3453,10 +3522,11 @@ startQuizBtn.onclick = async () => {
 
   startTimer();
 
-  // 3) JETZT: nächste Frage vorladen und dann anzeigen
+  // erste Frage vorladen und anzeigen
   await preloadNextQuestion();
   await loadNextImage();
 };
+
 
 
 function startQuizDirect(category) {
@@ -3496,7 +3566,7 @@ function updateTimer() {
 
 // --- Counter aktualisieren ---
 function updateQuizStatus() {
-  document.getElementById('quiz-counter').textContent = `${correctCount} / ${shownCount} Richtig`;
+  document.getElementById('quiz-counter').textContent = `${correctCount} / ${totalShown} Richtig`;
 }
 
 function cancelImageLoads() {
@@ -3623,11 +3693,17 @@ let isLoadingNext = false;
 
 // --- Nächstes Bild ---
 async function loadNextImage() {
+  console.log(">>> loadNextImage START", {
+  shownCount,
+  totalShown,
+  quizLength,
+  photoIndex,
+  nextItem: !!nextItem
+  });
   if (isLoadingNext) return;    // verhindert parallel laufende Aufrufe
   isLoadingNext = true;
 
   try {
-
   // 🔄 Immer zuerst zurück in den Vorschau-Modus
   isDetailLoading = false;
   isDetailLoaded  = false;
@@ -3730,16 +3806,24 @@ async function loadNextImage() {
 
     } else {
     // Fallback: normales Laden wie bisher
-    if (totalShown >= quizLength) {
-      endQuiz();
-      return;
-    }
-
+    console.log("FALLBACK before nextImage", {
+    totalShown,
+    shownCount,
+    answeredCount,
+    photoIndex,
+    length: shuffledPhotos.length
+  });
     currentItem = nextImage();
-    if (!currentItem) {
-      endQuiz();
-      return;
-    }
+  if (!currentItem) {
+  console.error("FALLBACK: nextImage returned null", {
+    photoIndex,
+    length: shuffledPhotos.length,
+    answeredCount,
+    quizLength
+  });
+  return; // KEIN endQuiz hier
+}
+
     console.log('FALLBACK currentItem', currentItem);
 
     shownCount++;
@@ -3787,11 +3871,18 @@ async function loadNextImage() {
   }
 
   // Nächste Frage im Hintergrund vorladen
+  console.log(">>> loadNextImage END", {
+  shownCount,
+  totalShown,
+  quizLength,
+  photoIndex,
+  nextItem: !!nextItem
+  });
   await preloadNextQuestion();
 
-} finally {
+  } finally {
   isLoadingNext = false;
-}
+  }
 }
 
 
@@ -3801,7 +3892,6 @@ async function loadNextImage() {
 // --- Quiz beenden ---
 function endQuiz() {
   stopAllAudio();
-  console.log('Verteilung:', stats);
   clearInterval(quizTimerInterval);
   showQuizSummary();
   document.getElementById("abort-button").style.display = "none";
@@ -3829,7 +3919,7 @@ function showQuizSummary() {
 
   // ✅ Satz mit Anzahl richtig
   document.getElementById("summary-count").textContent =
-    `Du hast ${correctCount} von ${totalShown} Tieren richtig bestimmt!`;
+    `Du hast ${correctCount} von ${answeredCount} Tieren richtig bestimmt!`;
 
   // ✅ Dauer mit Leerzeichen
   document.getElementById("summary-time").textContent =
@@ -3849,11 +3939,16 @@ function hideQuizSummary() {
 // EVENT-LISTENER
 // ==========================
 
-document.getElementById('next-button').addEventListener('click', function () {
-  stopAllAudio();
-  loadNextImage();
-});
+const licenseToggleBtn = document.getElementById('license-toggle');
+const licenseTextDiv  = document.getElementById('license-text');
 
+if (licenseToggleBtn && licenseTextDiv) {
+  licenseToggleBtn.addEventListener('click', () => {
+    const isVisible = licenseTextDiv.style.display === 'block';
+    licenseTextDiv.style.display = isVisible ? 'none' : 'block';
+    licenseToggleBtn.setAttribute('aria-expanded', isVisible ? 'false' : 'true');
+  });
+}
 
 // Übersicht anzeigen (nur Kategorien sichtbar)
 function showCategoryOverview() {
