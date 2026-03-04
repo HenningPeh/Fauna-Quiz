@@ -3149,7 +3149,7 @@ const CATEGORY_CONFIG = {
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
-    defaultDifficulty: "all",
+    defaultDifficulty: "1",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
   },
@@ -3167,7 +3167,7 @@ const CATEGORY_CONFIG = {
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
-    defaultDifficulty: "all",
+    defaultDifficulty: "1",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
   },
@@ -3176,7 +3176,7 @@ const CATEGORY_CONFIG = {
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
-    defaultDifficulty: "all",
+    defaultDifficulty: "1",
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
   },
@@ -3691,168 +3691,167 @@ let nextAudioObj = new Audio();
 nextAudioObj.preload = 'auto';
 let isLoadingNext = false;
 
+let preloadInFlight = null;
+
+// Preload: nutzt NUR shuffledPhotos[photoIndex], kein nextImage()
+async function preloadNextQuestion() {
+  if (preloadInFlight) return preloadInFlight;   // laufenden Preload wiederverwenden
+
+  preloadInFlight = (async () => {
+    const upcoming = shuffledPhotos[photoIndex] || null;
+    if (!upcoming) {
+      nextItem = null;
+      nextImageObj = null;
+      nextAudioObj = null;
+      nextDistractors = null;
+      return;
+    }
+
+    nextItem = upcoming;
+    nextImageObj = null;
+    nextAudioObj = null;
+    nextDistractors = null;
+
+    if (upcoming.filetype === 'audio') {
+      nextAudioObj = new Audio();
+      nextAudioObj.preload = 'auto';
+      nextAudioObj.src = upcoming.url_vorschau;
+    } else {
+      nextImageObj = new Image();
+      nextImageObj.src = upcoming.url_vorschau;
+    }
+
+    nextDistractors = await fetchDistractorsFromDB(upcoming);
+  })();
+
+  try {
+    await preloadInFlight;
+  } finally {
+    preloadInFlight = null;
+  }
+}
+
+
 // --- Nächstes Bild ---
 async function loadNextImage() {
   console.log(">>> loadNextImage START", {
-  shownCount,
-  totalShown,
-  quizLength,
-  photoIndex,
-  nextItem: !!nextItem
+    shownCount,
+    totalShown,
+    quizLength,
+    photoIndex,
+    nextItem: !!nextItem
   });
   if (isLoadingNext) return;    // verhindert parallel laufende Aufrufe
   isLoadingNext = true;
 
   try {
-  // 🔄 Immer zuerst zurück in den Vorschau-Modus
-  isDetailLoading = false;
-  isDetailLoaded  = false;
-  cancelImageLoads();
-  showingDetail = false;
+    // Quiz ggf. schon fertig
+    if (answeredCount >= quizLength) {
+      console.log("loadNextImage called but quiz already finished");
+      endQuiz();
+      return;
+    }
 
-  // Elemente holen
-  const imageEl       = document.getElementById('species-image');
-  const audioWrapper  = document.getElementById('audio-wrapper');
-  const licenseTextDiv = document.getElementById('license-text');
-  const licenseToggleBtn = document.getElementById('license-toggle');
-  const imageToggleHint = document.getElementById("image-toggle-hint");
+    // 🔄 Immer zuerst zurück in den Vorschau-Modus
+    isDetailLoading = false;
+    isDetailLoaded  = false;
+    cancelImageLoads();
+    showingDetail = false;
+
+    // Elemente holen
+    const imageEl        = document.getElementById('species-image');
+    const audioWrapper   = document.getElementById('audio-wrapper');
+    const licenseTextDiv = document.getElementById('license-text');
+    const licenseToggleBtn = document.getElementById('license-toggle');
+    const imageToggleHint = document.getElementById("image-toggle-hint");
 
     if (imageToggleHint) {
-    imageToggleHint.style.display = "none";  // Default: aus
-  }
+      imageToggleHint.style.display = "none";  // Default: aus
+    }
 
-  // Lizenzhinweis immer einklappen
-  licenseTextDiv.style.display = 'none';
-  if (licenseToggleBtn) {
-    licenseToggleBtn.setAttribute('aria-expanded', 'false');
-  }
+    // Lizenzhinweis immer einklappen
+    licenseTextDiv.style.display = 'none';
+    if (licenseToggleBtn) {
+      licenseToggleBtn.setAttribute('aria-expanded', 'false');
+    }
 
-  // Audio stoppen, bevor wir etwas Neues anzeigen
-  stopAllAudio();
+    // Audio stoppen, bevor wir etwas Neues anzeigen
+    stopAllAudio();
 
-  // Bild-Styles zurücksetzen
-  imageEl.className = "preview";
-  imageEl.style.width = "";
-  imageEl.style.height = "";
-  imageEl.style.objectFit = "";
-  imageEl.style.transform = "translate(0,0)";
+    // Bild-Styles zurücksetzen
+    imageEl.className = "preview";
+    imageEl.style.width = "";
+    imageEl.style.height = "";
+    imageEl.style.objectFit = "";
+    imageEl.style.transform = "translate(0,0)";
 
-  // Wenn wir bereits ein vorab geladenes Item haben (Bild oder Audio)
-  if (nextItem && (
-        (nextImageObj && nextImageObj.src === nextItem.url_vorschau) ||
-        (nextItem.filetype === 'audio')
-      )
-  ) {
-    currentItem = nextItem;
+    // Falls noch nichts vorgeladen wurde: auf Preload warten
+    if (!nextItem) {
+      await preloadNextQuestion();
+    }
+
+    // Nächstes Item bestimmen
+    let itemToUse = nextItem || shuffledPhotos[photoIndex] || null;
+    if (!itemToUse) {
+      console.error("Kein weiteres Item mehr", {
+        photoIndex,
+        length: shuffledPhotos.length,
+        answeredCount,
+        quizLength
+      });
+      endQuiz();
+      return;
+    }
+
+    currentItem = itemToUse;
     nextItem = null;
-    console.log('PRELOAD currentItem', currentItem);
+    console.log('PRELOAD/FALLBACK currentItem', currentItem);
 
     shownCount++;
     totalShown++;
+    // Index jetzt wirklich verbrauchen
+    photoIndex++;
 
     resetUI();
 
-  // Erst alles ausblenden
-  imageEl.style.display = 'none';
-  audioWrapper.style.display = 'none';
-
-  // Je nach filetype
-  if (currentItem.filetype === 'audio') {
-  // Platzhalter-Bild
-  imageEl.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/audio_platzhalter.jpg`;
-  imageEl.style.display = 'block';
-
-  // Audio-Player neu erzeugen
-  createAudioElement(currentItem.url_vorschau);
-  audioWrapper.style.display = 'block';
-
-  // Hinweis ausblenden
-    if (imageToggleHint) {
-      imageToggleHint.style.display = "none";
-    }
-
-  } else {
-  audioWrapper.style.display = 'none';
-  imageEl.src = nextImageObj.src;
-  imageEl.style.display = 'block';
-
-  // Hinweis einblenden
-    if (imageToggleHint) {
-      imageToggleHint.style.display = "block";
-    }
-  }
-
-
-
-    questionAreaEl.style.display = 'block';
-
-  document.getElementById('photo-credit').textContent =
-  currentItem.author ? `© ${currentItem.author}` : '';
-
-
-    document.getElementById('photo-id').textContent =
-      currentItem.id_nummer ? `# ${currentItem.id_nummer}` : '';
-
-    document.getElementById('photo-credit').textContent =
-      currentItem.author ? `© ${currentItem.author}` : '';
-
-        setLicenseTextWithLink(licenseTextDiv, currentItem.Lizenz);
-
-    // Distraktoren aus dem Preload nutzen (Fallback: live holen)
-    const distractors = nextDistractors || await fetchDistractorsFromDB(currentItem);
-    await buildAnswerUIWithGivenDistractors(currentItem, distractors);
-    updateQuizStatus();
-
-
-    } else {
-    // Fallback: normales Laden wie bisher
-    console.log("FALLBACK before nextImage", {
-    totalShown,
-    shownCount,
-    answeredCount,
-    photoIndex,
-    length: shuffledPhotos.length
-  });
-    currentItem = nextImage();
-  if (!currentItem) {
-  console.error("FALLBACK: nextImage returned null", {
-    photoIndex,
-    length: shuffledPhotos.length,
-    answeredCount,
-    quizLength
-  });
-  return; // KEIN endQuiz hier
-}
-
-    console.log('FALLBACK currentItem', currentItem);
-
-    shownCount++;
-    totalShown++;
-
-    resetUI();
-
-    const photo = shuffledPhotos[photoIndex];
-    const id = photo.id;
+    // Statistik-Update
+    const id = currentItem.id;
     if (!stats[id]) stats[id] = 0;
     stats[id]++;
 
+    // Erst alles ausblenden
     imageEl.style.display = 'none';
     audioWrapper.style.display = 'none';
 
+    // Je nach filetype
     if (currentItem.filetype === 'audio') {
+      // Platzhalter-Bild
       imageEl.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/audio_platzhalter.jpg`;
       imageEl.style.display = 'block';
 
+      // Audio-Player neu erzeugen
       createAudioElement(currentItem.url_vorschau);
       audioWrapper.style.display = 'block';
+
+      if (imageToggleHint) {
+        imageToggleHint.style.display = "none";
+      }
     } else {
       audioWrapper.style.display = 'none';
-      renderImage(currentItem);
-    }
 
-    const distractors = await fetchDistractorsFromDB(currentItem);
-    await buildAnswerUIWithGivenDistractors(currentItem, distractors);
-    updateQuizStatus();
+      if (nextImageObj && nextImageObj.src === currentItem.url_vorschau) {
+        // vorgeladenes Bild verwenden
+        imageEl.src = nextImageObj.src;
+        imageEl.style.display = 'block';
+      } else {
+        // regulär rendern
+        renderImage(currentItem);
+      }
+
+      if (imageToggleHint) {
+        imageToggleHint.style.display = "block";
+      }
+    }
 
     questionAreaEl.style.display = 'block';
 
@@ -3863,27 +3862,33 @@ async function loadNextImage() {
       currentItem.author ? `© ${currentItem.author}` : '';
 
     setLicenseTextWithLink(licenseTextDiv, currentItem.Lizenz);
-  }
 
-  // ⬇️ gilt für beide Zweige
-  if (selectedAnswerMode === "text" && window.innerWidth > MOBILE_MAX_WIDTH) {
-    setTimeout(focusAnswer, 0);
-  }
+    // Distraktoren aus dem Preload nutzen (Fallback: live holen)
+    const distractors = nextDistractors || await fetchDistractorsFromDB(currentItem);
+    await buildAnswerUIWithGivenDistractors(currentItem, distractors);
+    updateQuizStatus();
 
-  // Nächste Frage im Hintergrund vorladen
-  console.log(">>> loadNextImage END", {
-  shownCount,
-  totalShown,
-  quizLength,
-  photoIndex,
-  nextItem: !!nextItem
-  });
-  await preloadNextQuestion();
+    // Fokus für Texteingabe
+    if (selectedAnswerMode === "text" && window.innerWidth > MOBILE_MAX_WIDTH) {
+      setTimeout(focusAnswer, 0);
+    }
+
+    console.log(">>> loadNextImage END", {
+      shownCount,
+      totalShown,
+      quizLength,
+      photoIndex,
+      nextItem: !!nextItem
+    });
+
+    // Nächste Frage im Hintergrund vorladen
+    await preloadNextQuestion();
 
   } finally {
-  isLoadingNext = false;
+    isLoadingNext = false;
   }
 }
+
 
 
 
