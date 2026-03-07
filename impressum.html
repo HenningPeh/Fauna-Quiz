@@ -39,6 +39,9 @@ body {
   margin: 0;
   width: 100%;
 }
+img { 
+  border-radius: 5px;
+}
 /* --- Obere Menüleiste --- */
 .top-nav {
   position: sticky;
@@ -56,6 +59,7 @@ body {
   display: flex;
   align-items: baseline;
   gap: 54px;
+  position: relative;
 }
 
 .nav-primary {
@@ -79,6 +83,11 @@ body {
 .nav-secondary:hover {
   color: var(--green-dark);
 }
+.language {
+  position: absolute;
+  top: 8%;
+  right: 5%;           /* passend zu deinem padding */
+}
 
 .btn:hover {
   background: #0056b3;
@@ -95,6 +104,7 @@ main{
   }
   .nav-secondary{
     font-size: clamp(7px, 0.8rem, 16px);
+    max-width: 10%;
   }
   .top-nav-inner{
       padding: 2vh 4vh;
@@ -115,6 +125,9 @@ main{
   <div class="top-nav-inner">
   <a href="index.html" class="nav-primary">Fauna Quiz</a>
   <a href="info.html" class="nav-secondary">Weitere Informationen</a>
+  <a href="en/index.html" class="language">
+    <img src="uk_flagge.webp" alt="English" width="24" height="16">
+  </a>
   </div>
 </nav>
 <main>
@@ -130,6 +143,8 @@ Auf dem Thie 1 <br>
 E-Mail: fauna-quiz@posteo.de <br>
 </p>
 
+<script data-goatcounter="https://fauna-quiz.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </main>
 </body>
 </html>

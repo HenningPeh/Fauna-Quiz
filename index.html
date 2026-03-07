@@ -570,6 +570,7 @@ input[type="text"] {
   display: flex;
   align-items: baseline;
   gap: 54px;
+  position: relative;
 }
 
 .nav-primary {
@@ -592,6 +593,11 @@ input[type="text"] {
 
 .nav-secondary:hover {
   color: var(--green-dark);
+}
+.language {
+  position: absolute;
+  top: 8%;
+  right: 5%;           /* passend zu deinem padding */
 }
 h1 {
   font-size: 36px;
@@ -1133,6 +1139,7 @@ footer a:hover {
   }
   .nav-secondary{
     font-size: clamp(7px, 0.8rem, 16px);
+    max-width: 10%;
   }
   .top-nav-inner{
       padding: 2vh 4vh;
@@ -1753,6 +1760,9 @@ footer{
   <div class="top-nav-inner">
     <a href="index.html" class="nav-primary">Fauna Quiz</a>
     <a href="info.html" class="nav-secondary">Weitere Informationen</a>
+    <a href="en/index.html" class="language">
+      <img src="uk_flagge.webp" alt="English" width="24" height="16">
+    </a>
   </div>
 </nav>
 <main class="page">
@@ -3298,8 +3308,19 @@ function showQuizConfig(category) {
     b.classList.toggle("active", enabled && value === selectedDifficulty);
   });
 
+  quizConfigEl.scrollIntoView({
+    block: "start",    // oberer Rand des Elements
+    behavior: "auto"   // kein Smooth-Scroll, damit nichts „nachrutscht“
+  });
+
   // Platz für spätere, gruppenspezifische Filter:
   // z.B. showExtraFilters(cfg.extraFilters);
+}
+
+function hideQuizConfig() {
+  // Config-Bereich ausblenden, Kategorien wieder zeigen
+  quizConfigEl.style.display = "none";
+  categorySectionEl.style.display = "block";
 }
 
 
@@ -3315,7 +3336,7 @@ function initConfigButtons() {
   const backToCategoriesBtn = document.getElementById("back-to-categories");
   backToCategoriesBtn.onclick = () => {
   // Konfig verstecken
-  quizConfigEl.style.display = "none";
+  hideQuizConfig();
   showCategoryOverview();
 
   // Quiz und Status zuverlässig verstecken
@@ -3420,7 +3441,7 @@ startQuizBtn.onclick = async () => {
   const numPhotos = selectedNumPhotos;
   const difficulty = selectedDifficulty;
 
-  quizConfigEl.style.display = "none";
+  hideQuizConfig();
   categorySectionEl.style.display = "none";
   hideQuizSummary();
 
@@ -3536,7 +3557,7 @@ function startQuizDirect(category) {
 
   hideQuizSummary();
   categorySectionEl.style.display = "none";
-  quizConfigEl.style.display = "none";
+  hideQuizConfig();
 
   startQuizBtn.click(); // bewusst
 }
@@ -3959,7 +3980,7 @@ if (licenseToggleBtn && licenseTextDiv) {
 function showCategoryOverview() {
   quizSummaryEl.style.display = "none";
   quizEl.style.display = "none";
-  quizConfigEl.style.display = "none";
+  hideQuizConfig();
   abortButtonEl.style.display = "none";
 
   categorySectionEl.style.display = "flex"; // wichtig: flex
