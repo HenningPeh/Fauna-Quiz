@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<link rel="canonical" href="https://fauna-quiz.de/">
+<title>Fauna-Quiz – Heimische Tiere online bestimmen</title>
+<meta name="description" content="Übe heimische Tierarten mit unserem interaktiven Quiz sicher zu bestimmen. Kostenlos für Anfänger und Fortgeschrittene.">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Dongle&family=Exo:ital,wght@0,100..900;1,100..900&family=SUSE:ital,wght@0,100..900;1,100..900&family=Tilt+Neon&display=swap" rel="stylesheet">
+<style>
+  :root {
+  --bg-main: #f4f5f2;
+  --bg-card: #ffffff;
+  --green-dark: #2f5d46;
+  --green-mid: #5f8f73;
+  --green-light: #e3ede6;
+  --accent: #c9b458;
+  --text-main: #1f2a24;
+  --text-muted: #6b7c72;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  width: 100%;
+  overflow-x: hidden; /* optional, um horizontales Scrollen zu verhindern */
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  margin: 0;
+  width: 100%;
+}
+img { 
+  border-radius: 5px;
+}
+/* --- Obere Menüleiste --- */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  background: var(--bg-card);
+  border-bottom: 1px solid #dde3dd;
+  flex-shrink: 0;
+}
+
+.top-nav-inner {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0.05% 10%;
+  display: flex;
+  align-items: baseline;
+  gap: 54px;
+  position: relative;
+}
+
+.nav-primary {
+  color: var(--green-dark);
+  text-decoration: none;
+  font-family: "Cairo", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0;
+  font-size: 28px;
+}
+
+.nav-secondary {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.nav-secondary:hover {
+  color: var(--green-dark);
+}
+.language {
+  position: absolute;
+  top: 8%;
+  right: 5%;           /* passend zu deinem padding */
+}
+main {
+  max-width: 80%;
+  margin: 40px auto;
+  padding: 0 20px 0px;
+  background-color: transparent;
+}
+
+details summary {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+details[open] summary {
+  color: #0066cc;
+}
+
+section {
+  background: var(--bg-card);
+  padding: 22px 22px 18px;
+  border-radius: 14px;
+  margin-bottom: 22px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  line-height: 1.6;
+}
+
+section h2 {
+  margin-top: 0;
+  font-size: 24px;
+}
+.Artenliste{
+    font-size: 1rem;
+}
+
+a {
+  color: var(--green-dark);
+}
+
+ul {
+  padding-left: 18px;
+}
+footer {
+  flex-shrink: 0;
+  width: 100%;
+  background: var(--bg-card);
+  border-top: 1px solid #dde3dd;
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 16px 0;
+  text-align: center;
+}
+
+footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: var(--green-dark);
+  text-decoration: underline;
+}
+
+
+@media (orientation: portrait) {
+  .nav-primary{
+    font-size: clamp(10px, 2rem, 100px);
+    white-space: nowrap;
+  }
+  .nav-secondary{
+    font-size: clamp(7px, 0.8rem, 16px);
+    max-width: 10%;
+  }
+  .top-nav-inner{
+      padding: 2vh 4vh;
+      gap: 15%;
+      align-items: last baseline;
+  }
+  .top-nav{
+    position: static;
+    background: none;
+  }
+  main{
+    max-width: 100%;
+    margin: 0 0;
+    padding: 5vh 20px 0;
+    background-color: var(--green-light);
+  }
+  main h1 {
+  margin-top: 0;
+  font-size: 4vh;
+  }
+  section {
+  background: none;
+  padding: 22px 2vh 18px;
+  border-radius: 0;
+  margin-bottom: 0;
+  box-shadow: none;
+  line-height: 1.6;
+  }
+  section h2 {
+    margin-top: 0;
+    font-size: 3vh;
+  }
+  .Artenliste{
+    font-size: 0.8rem;
+  }
+footer{
+  background: none;
+  text-align: center;
+  padding-top: 8vh 2vh;
+  padding-bottom: 8vh;
+  color: var(--text-muted);
+  font-size: 2.5vh;
+  position: static;
+  }
+}
+@media (orientation: portrait) and (min-width: 600px) {
+    .Artenliste{
+    font-size: 1rem;
+  }
+}
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+<nav class="top-nav">
+  <div class="top-nav-inner">
+    <a href="index.html" class="nav-primary">Fauna Quiz</a>
+    <a href="info.html" class="nav-secondary">Further information</a>
+    <a href="/index.html" class="language">
+      <img src="/deutsche_flagge.webp" alt="Deutsch" width="24" height="16">
+    </a>
+  </div>
+</nav>
+
+<main>
+
+    <h1>Further information</h1>
+    
+    <section>
+      <h2>How it works</h2>
+      <p>
+        By clicking on one of the categories, the quiz settings will open.
+        Here, you can adjust the number of questions per round, the difficulty level, and the answer mode.
+        Clicking on “Start Quiz” begins the quiz, where the goal is to correctly identify the species shown.
+        In “single choice” mode, simply select the name that matches the displayed species, while in “text input” mode, you must type in the correct name.
+        Both the scientific and common names are accepted as correct answers in text input mode.
+        Please note, however, that some species have many different common names.
+        For each species, only 1–3 of the most widely used common names are stored as correct answers.<br><br>
+
+        <strong>Species complexes</strong><br>
+        Not all native and established species can be reliably identified based on external characteristics alone.
+        In addition, some species are highly variable in their appearance, which can lead to overlapping traits with other species.
+        In such cases, only individuals showing typical characteristics can be assigned to a specific species with greater confidence.
+        However, in many cases, it is still possible to make well-founded assumptions about the species by considering the habitat, distribution range, season, and external features.
+        Since this quiz only presents external characteristics and provides no information about habitat, location, or season, species that are difficult to distinguish from one another have to be grouped into species complexes.
+        The species that have been grouped as complexes for the quiz are documented in the expandable information sections further below for each animal group.
+      </p>
+    </section>
+    
+    <section>
+      <h2>About the Quiz</h2>
+      <p>
+        This website is designed to help users practice and improve their species identification skills across different animal groups.
+        Many of the featured species are difficult to observe during the winter months and are only active for short periods even in summer,
+        which means that knowledge of their identifying features can gradually fade until they can be observed again.
+        This website can be used as a way to refresh and reinforce that knowledge in the meantime. <br><br>
+        
+        <strong>
+          Despite careful selection and identification of the images, misidentified photos in the quiz cannot be completely ruled out, as I am not an expert for any of the species groups.
+          The image number is displayed in the lower left corner of each picture and can be used to clearly identify it.
+          If you notice an incorrectly identified image, I would appreciate a message including the corresponding image number so that I can review it promptly.
+        </strong><br><br>
+
+        At the moment, many of the animal groups in this quiz are incomplete, as suitable photos are still missing for many species. 
+        There are also a lot of species with very few suitable images for which additional images can be added soon hopefully.
+        For Grasshoppers audio files of their calls and songs are also planned.
+        Anyone who would like to help fill these gaps is warmly invited to contribute their own photos or sound recordings of missing or underrepresented species.
+        The “artistic quality” of the photos does not matter; what’s important is that the species can be clearly identified from the photo or audio file.
+        
+        Only photos of animals in the wild are used, as captive or bred animals sometimes show differences in posture or coloration.
+        All photos used are genuine images, edited only minimally where necessary. AI-generated photos are not used.
+        For more details on the individual species groups, please open to the expandable information sections below. 
+        <details>
+        <summary>Mammals</summary>
+
+        <p class="Artenliste">
+          Currently there are photos of 31 of Germany's 107 native and established mammal species included.<br><br>
+          
+          Photos of the following species are still missing:<br>
+          Savi's pipistrelle (Hypsugo savii)<br>
+          Alpine shrew (Sorex alpinus)<br>
+          Alpine field mouse (Apodemus alpicola)<br>
+          Forest dormouse (Dryomys nitedula)<br>
+          Bechstein's bat (Myotis bechsteinii)<br>
+          Striped field mouse (Apodemus agrarius)<br>
+          Brown long-eared bat (Plecotus auritus)<br>
+          Serotine bat (Eptesicus serotinus)<br>
+          Field vole (Microtus agrestis)<br>
+          European hamster (Cricetus cricetus)<br>
+          Common vole (Microtus arvalis)<br>
+          Bi-coloured white-toothed shrew (Crocidura leucodon)<br>
+          Eurasian otter (Lutra lutra)<br>
+          Natterer's bat (Myotis nattereri)<br>
+          Garden dormouse (Eliomys quercinus)<br>
+          Lesser white-toothed shrew (Crocidura suaveolens)<br>
+          Yellow-necked mouse (Apodemus flavicollis)<br>
+          Brandt's bat (Myotis brandtii)<br>
+          Greater mouse-eared bat (Myotis myotis)<br>
+          Hazel dormouse (Muscardinus avellanarius)<br>
+          Black rat (Rattus rattus)<br>
+          Greater white-toothed shrew (Crocidura russula)<br>
+          Leisler's bat (Nyctalus leisleri)<br>
+          Whiskered bat (Myotis mystacinus)<br>
+          Lesser horseshoe bat (Rhinolophus hipposideros)<br>
+          Common pine vole (Microtus subterraneus)<br>
+          Eurasian lynx (Lynx lynx)<br>
+          Raccoon dog (Nyctereutes procyonoides)<br>
+          European mole (Talpa europaea)<br>
+          American mink (Neovison vison)<br>
+          Barbastelle (Barbastella barbastellus)<br>
+          Soprano pipistrelle (Pipistrellus pygmaeus)<br>
+          Northern bat (Eptesicus nilssonii)<br>
+          Alcathoe whiskered bat (Myotis alcathoe)<br>
+          European water vole (Arvicola amphibius)<br>
+          Nathusius' pipistrelle (Pipistrellus nathusii)<br>
+          Crowned shrew (Sorex coronatus)<br>
+          Mountain hare (Lepus timidus)<br>
+          Snow vole (Chionomys nivalis)<br>
+          Harbour porpoise (Phocoena phocoena)<br>
+          Sika deer (Cervus nippon)<br>
+          Stone marten (Martes foina)<br>
+          Tundra vole (Alexandromys oeconomus)<br>
+          Mediterranean water shrew (Neomys anomalus)<br>
+          Pond bat (Myotis dasycneme)<br>
+          Northern birch mouse (Sicista betulina)<br>
+          Common shrew (Sorex araneus)<br>
+          Brown rat (Rattus norvegicus)<br>
+          Eurasian water shrew (Neomys fodiens)<br>
+          Kuhl's pipistrelle (Pipistrellus kuhlii)<br>
+          White-beaked dolphin (Lagenorhynchus albirostris)<br>
+          Western house mouse (Mus domesticus)<br>
+          Geoffroy's bat (Myotis emarginatus)<br>
+          Wolf (Canis lupus)<br>
+          Parti-coloured bat (Vespertilio murinus)<br>
+          Common pipistrelle (Pipistrellus pipistrellus)<br>
+          Harvest mouse (Micromys minutus)<br>
+          Pygmy shrew (Sorex minutus)<br>
+          Common minke whale (Balaenoptera acutorostrata)<br>
+          House mouse (Mus musculus)<br>
+        </p>
+        </details>
+        <details>
+        <summary>Amphibians</summary>
+
+        <p class="Artenliste">
+          Species complexes:<br>
+          Marsh Frog, Edible Frog and Pool Frog are combined to the species complex "Water Frog (Pelophylax spec.)". <br><br>
+        </p>
+        </details>
+        <details>
+        <summary>Reptiles</summary>
+
+        <p class="Artenliste">
+          Currently there are photos of 12 of Germany's 14 native reptile species included.<br><br>
+          Species complexes:<br>
+          Eastern and Western Green Lizard are combined to the species complex "Green Lizard (Lacerta bilineata/viridis)". <br><br>
+          
+          Photos of the following species are still missing:<br>
+          Barred Grass Snake (Natrix helvetica) <br>
+        </p>
+        </details>
+        <details>
+        <summary>Dragon- and Damselflies</summary>
+
+        <p class="Artenliste">
+          There are photos of all 79 native dragon- and damselfly species included. However, especially for rare or only locally distributed species, there are only very few photos in the quiz.<br><br>
+        </p>
+        </details>
+        <details>
+        <summary>Grasshoppers and Crickets</summary>
+
+        <p class="Artenliste">
+          Currently there are photos of 32 of Germany's 83 native and established grasshopper and cricket species included. <br><br>
+          Species complexes:<br>
+          Bow-winged, Lesser Field and Common Field Grasshopper are combined to the species complex "Chorthippus biguttulus Group (Chorthippus biguttulus/mollis/brunneus)". <br><br>
+          
+          Photos of the following species are still missing:<br>
+          Eisentraut's Bow-winged Grasshopper (Chorthippus eisentrauti)<br>
+          Ants-nest cricket (Myrmecophilus acervorum)<br>
+          Common slender bush-cricket (Tessellana tessellata)<br>
+          Woodland grasshopper (Omocestus rufipes)<br>
+          Large mountain grasshopper (Stauroderus scalaris)<br>
+          Speckled buzzing grasshopper (Bryodemella tuberculata)<br>
+          Common ground-hopper (Tetrix undulata)<br>
+          Striped bush-cricket (Leptophyes albovittata)<br>
+          Large banded grasshopper (Arcyptera fusca)<br>
+          Large conehead (Ruspolia nitidula)<br>
+          Large marsh grasshopper (Stethophyma grossum)<br>
+          Tatarian grasshopper (Gampsocleis glabra)<br>
+          House cricket (Acheta domesticus)<br>
+          Italian locust (Calliptamus italicus)<br>
+          Pulver's grasshopper (Chorthippus pullus)<br>
+          Small gold grasshopper (Euthystira brachyptera)<br>
+          Lesser mottled grasshopper (Stenobothrus stigmaticus)<br>
+          Krauss' cave cricket (Troglophilus neglectus)<br>
+          Short-winged conehead (Conocephalus dorsalis)<br>
+          Long-winged conehead (Conocephalus fuscus)<br>
+          Long-horned ground-hopper (Tetrix tenuicornis)<br>
+          Sickle-bearing bush-cricket (Barbitistes serricauda)<br>
+          Green-striped grasshopper (Chorthippus albomarginatus)<br>
+          European mole cricket (Gryllotalpa gryllotalpa)<br>
+          Constricted bush-cricket (Barbitistes constrictus)<br>
+          Eastern cricket (Modicogryllus frontalis)<br>
+          Blue-winged bush-cricket (Tettigonia caudata)<br>
+          Rufous grasshopper (Gomphocerippus rufus)<br>
+          German grasshopper (Oedipoda germanica)<br>
+          Red-bellied grasshopper (Omocestus haemorrhoidalis)<br>
+          Slender ground-hopper (Tetrix subulata)<br>
+          Steppe grasshopper (Chorthippus vagans)<br>
+          Southern cricket (Eumodicogryllus bordigalensis)<br>
+          Lesser marsh grasshopper (Pseudochorthippus montanus)<br>
+          Marsh cricket (Pteronemobius heydenii)<br>
+          Türk's ground-hopper (Tetrix tuerki)<br>
+          Small sickle bush-cricket (Phaneroptera nana)<br>
+          Dentate bush-cricket (Polysarcus denticauda)<br>
+          Cepero's ground-hopper (Tetrix ceperoi)<br>
+          Western saddle bush-cricket (Ephippiger diurnus)<br>
+          Brown-spotted grasshopper (Chorthippus dorsatus)<br>
+          Two-spotted ground-hopper (Tetrix bipunctata)<br>
+          Club-legged grasshopper (Stenobothrus crassipes)<br>
+        </p>
+        </details>
+        <details>
+        <summary>Butterflies</summary>
+
+        <p class="Artenliste">
+          Currently there are photos of 143 of Germany's 184 native and established butterfly species included. <br><br>
+          
+          Species complexes:<br>
+          Berger's Clouded and Pale Clouded Yellow are combined to the species complex "Pale Clouded Yellow (Colias hyale/alfaceriensis)".<br>
+          Wood and Cryptic Wood White are combined to the species complex "Wood White (Leptidea juvernica/sinapis)". <br>
+          Brown and Northern Brown Argus are combined to the species complex "Brown Argus (Aricia agestis/artaxerxes)". <br>
+          Argus, Idas and Reverdin's Blue are combined to the species complex "Silver-studded Blue (Plebejus argus/idas/argyrognomon)".<br>
+          Woodland and Rock Grayling are combined to the species complex "Grayling (Hipparchia fagi/alcyone)".<br><br>
+          
+          Photos of the following species are still missing:<br>
+          Pyrgus serratulae<br>
+          Pyrgus cirsii<br>
+          Pyrgus alveus<br>
+          Pyrgus andromedae<br>
+          Pyrgus warrenensis<br>
+          Cacyreus marshalli<br>
+          Agriades orbitulus<br>
+          Boloria napaea<br>
+          Melitaea britomartis<br>
+          Melitaea aurinia complex<br>
+          Erebia manto<br>
+          Erebia epiphron<br>
+          Erebia eriphyle<br>
+          Erebia melampus<br>
+          Erebia pharte<br>
+          Erebia gorge<br>
+          Erebia meolans<br>
+          Erebia tyndarus<br>
+          Erebia oeme<br>
+          Erebia pandrose<br>
+          Erebia pluto<br>
+          Erebia pronoe<br>
+          Erebia styx<br>
+        </p>
+        </details>
+        <details>
+        <summary>Moths</summary>
+
+        <p>
+          Of the ca. 3700 native moth species in Germany only some of the common and remarkable species will be included in the quiz.
+        </details>
+        <details>
+        <summary>Beetles</summary>
+
+        <p>
+          Of the ca. 7000 native beetle species in Germany only some of the common and remarkable species will be included in the quiz.
+        </details>
+      </p>
+      <br>
+      Since there already are great learning tools für birds, e.g. <a href="https://www.computerbirding.com/what/cbirding_2018_e.php?teilliste=0" target="_blank">Computerbirding.com</a>, the catergory "Birds" is missing here. 
+    </section>
+
+    <section>
+      <h2>Recommendations and links</h2>
+      <p>
+      For learning the identification characteristics relevant to various animal groups, there are good digital resources available.
+      Identification guides are usually a good starting point, but they aren't always readily available.
+      Therefore, here are some very useful links and recommendations that can help with identification and improving your knowledge of species.  
+      </p>
+
+      <strong>General</strong>
+      <ul>
+        <li><a href="https://observation.org" target="_blank">Observation.org - Citizen science platform for all species groups</a></li>
+        <li><a href="https://www.inaturalist.org" target="_blank">iNaturalist.org - Citizen science platform for all species groups</a></li><br>
+      </ul>
+
+
+      <strong>Dragon- and Damselflies</strong>
+      <ul>
+        <li><a target="_blank">Libellen ID Europa - App with all native dragon- and damselfly species and their key characteristics</a></li>
+      </ul>
+
+      <strong>Grasshoppers and Crickets</strong>
+      <ul>
+        <li><a target="_blank">Orthoptera - App with all native grasshopper and cricket species and their key characteristics</a></li>
+      </ul>
+
+
+      <strong>Butterflies</strong>
+
+      <ul>
+        <li><a href="https://assets.vlinderstichting.nl/docs/0b095bc2-0387-4785-9f7e-5f7a987b3468.pdf" target="_blank">A Photographic Guide - BUTTERFLIES of Central Europe & Britain (PDF)</a></li>
+      </ul>
+
+
+      <strong>Beetles</strong>
+
+      <ul>
+        <li><a href="https://www.kerbtier.de" target="_blank">Kerbtier - Fotosammlung heimischer Käfer</a></li>
+      </ul>
+
+      <strong>Birds</strong>
+
+      <ul>
+        <li><a href="https://www.computerbirding.com/what/cbirding_2018_e.php?teilliste=0" target="_blank">computerbirding - Bird identification quiz</a></li>
+        <li><a target="_blank">Der Kosmos Vogelführer - App with all native bird species and their key characteristics</a></li>
+        <li><a href="https://www.ornitho.de/index.php?m_id=1&langu=en" target="_blank">Ornitho.de - Citizen science platform for birds</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Acknowledgements</h2>
+      <p>
+        Many thanks go to Daniel Schmidt, Johanna Seefeld, Janna Ouedraogo, Johannes Stoltenberg and Joe Trapana for contributing photos!
+        A website like this would not be possible without a large number of photos of as many different species as possible.
+      </p>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>
+        If you have any questions, feedback or problems, you can reach me here:
+        <br><br>
+        Henning Pehlemann<br>
+        <a href="mailto:fauna-quiz@posteo.de">fauna-quiz@posteo.de</a>
+      </p>
+    </section>
+
+    <script data-goatcounter="https://fauna-quiz.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+</main>
+<footer>
+  <div class="page">
+    <a href="impressum.html">Impressum (Legal notice)</a>
+  </div>
+</footer>
+</body>
+</html>
