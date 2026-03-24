@@ -2,9 +2,9 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8" />
-<link rel="canonical" href="https://fauna-quiz.de/">
-<title>Fauna Quiz – Heimische Tiere bestimmen</title>
-<meta name="description" content="Wie gut kennst du Deutschlands Tierwelt? Lerne im Quiz unterschiedliche Tiergruppen kennen und verbessere deine Artenkenntnisse.">
+<link rel="canonical" href="https://fauna-quiz.de/en/">
+<title>Fauna Quiz - Identify Germany's wildlife</title>
+<meta name="description" content="How well do you know Germany’s wildlife? Explore different animal groups and improve your species identification skills.">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
  <!-- Favicon -->
@@ -44,7 +44,9 @@ body {
   margin: 0;
   width: 100%;
 }
-
+body.no-scroll {
+  overflow: hidden;
+}
 main.page {
   flex: 1 0 auto;
   display: flex;
@@ -1259,7 +1261,6 @@ footer a:hover {
   padding: 2rem;
   border-radius: 12px;
   box-sizing: border-box;
-
 }
 #config-category-title{
   margin-top: 6vh;
@@ -1760,9 +1761,9 @@ footer{
   <nav class="top-nav">
   <div class="top-nav-inner">
     <a href="index.html" class="nav-primary">Fauna Quiz</a>
-    <a href="info.html" class="nav-secondary">Weitere Informationen</a>
-    <a href="en/index.html" class="language">
-      <img src="uk_flagge.webp" alt="English" width="24" height="16">
+    <a href="info.html" class="nav-secondary">Further information</a>
+    <a href="/index.html" class="language">
+      <img src="/deutsche_flagge.webp" alt="Deutsch" width="24" height="16">
     </a>
   </div>
 </nav>
@@ -1771,13 +1772,13 @@ footer{
 
 <div id="category-section">
   <div id="quiz-erklaerung">
-  <div id="quiz-erklaerung-prim">Wie gut kennst du Deutschlands Tierwelt?</div>
-  <div id="quiz-erklaerung-sek">Wähle eine Kategorie und teste dein Wissen im Quiz!</div>
+  <div id="quiz-erklaerung-prim">How well do you know Germany's wildlife?</div>
+  <div id="quiz-erklaerung-sek">Choose a category and test your knowledge!</div>
   </div>  
 <div id="category-buttons" data-nosnippet></div>
-<p id="category-loading" data-nosnippet>Lade Kategorien...</p>
+<p id="category-loading" data-nosnippet>Load categorys...</p>
 </div>
-<button id="abort-button" style="background:#c41425; color:white;" data-nosnippet>Quiz abbrechen</button>
+<button id="abort-button" style="background:#c41425; color:white;" data-nosnippet>Abort Quiz</button>
 
 <div id="quiz" class="top-offset" style="display:none;" data-nosnippet>
 
@@ -1785,7 +1786,7 @@ footer{
     <div id="quiz-left">
       <div id="quiz-status">
         <div id="quiz-timer" style="display: none;">00:00</div>
-        <div id="quiz-counter">0 / 0 Richtig</div>
+        <div id="quiz-counter">0 / 0 Correct</div>
       </div>
 
       <div id="image-wrapper-container">
@@ -1799,7 +1800,7 @@ footer{
           <span id="photo-credit"></span>
         </div>
         <div id="license-wrapper">
-          <button id="license-toggle" type="button" aria-expanded="false" aria-controls="license-text">Lizenzhinweis</button>
+          <button id="license-toggle" type="button" aria-expanded="false" aria-controls="license-text">License notice</button>
           <div id="license-text" style="display:none;"></div>
         </div>
       </div>
@@ -1807,11 +1808,11 @@ footer{
 
     <div id="quiz-right">
       <div id="question-area" style="display:none;">
-        <div id="quizfrage">Wie heißt diese Art?</div>
+        <div id="quizfrage">How is this species called?</div>
         <div id="answer-container"></div>
         <div id="button-container">
-          <button id="reveal-button" style="background:#1e9d20; color:white;">Auflösen</button>
-          <button id="next-button" style="display:none;">Weiter</button>
+          <button id="reveal-button" style="background:#1e9d20; color:white;">reveal</button>
+          <button id="next-button" style="display:none;">Next</button>
         </div>
         <div class="status" id="status" style="display: none;"></div>
       </div>
@@ -1833,11 +1834,11 @@ footer{
 
 <!-- Konfigurationsbereich, zunächst versteckt -->
 <div id="quiz-config" data-nosnippet>
-    <button id="back-to-categories">Zurück</button>
+    <button id="back-to-categories">Back</button>
     <h2 id="config-category-title" class="config-category-title"></h2><br><br>
-    <h3 class="config-category-subtitle">Wähle deine Parameter für diese Quiz-Runde</h3>
+    <h3 class="config-category-subtitle">Choose your parameters for this quiz round</h3>
   <div class="slider-container">
-    <label class="config-category-select">Anzahl von Fragen:</label>
+    <label class="config-category-select">Number of questions:</label>
     <div id="num-photos-buttons" class="slider-buttons">
       <button data-value="10">10</button>
       <button data-value="30">30</button>
@@ -1849,34 +1850,34 @@ footer{
   </div>
 
   <div class="slider-container" id="filetype-container">
-    <label class="config-category-select">Medientyp:</label>
+    <label class="config-category-select">Media type:</label>
     <div id="filetype-buttons" class="slider-buttons">
-      <button data-value="image">Bilder</button>
-      <button data-value="audio">Rufe & Gesänge</button>
-      <button data-value="all">Beides</button>
+      <button data-value="image">Images</button>
+      <button data-value="audio">Calls & Sounds</button>
+      <button data-value="all">Both</button>
     </div>
   </div>
 
   <div class="slider-container">
-    <label class="config-category-select">Schwierigkeitsstufe:</label>
+    <label class="config-category-select">Difficulty:</label>
     <div id="difficulty-buttons" class="slider-buttons">
       <button data-value="1">1</button>
       <button data-value="2">2</button>
       <button data-value="3">3</button>
-      <button data-value="all">Mix (1-3)</button>
+      <button data-value="all">Mixed (1-3)</button>
     </div>
   </div>
 
   <div class="slider-container">
-    <label class="config-category-select">Antwortmodus:</label>
+    <label class="config-category-select">Answer mode:</label>
     <div id="answer-mode-buttons" class="slider-buttons">
-      <button data-value="mc">Single Choice</button>
-      <button data-value="text">Texteingabe</button>
+      <button data-value="mc">Single choice</button>
+      <button data-value="text">Text input</button>
     </div>
   </div>
 
 
-  <button id="start-quiz-btn">Quiz starten</button>
+  <button id="start-quiz-btn">Start the Quiz</button>
 </div>
 
 
@@ -1894,7 +1895,7 @@ footer{
       <span id="summary-time"></span>
     </div>
 
-    <button id="back-to-overview-btn">Weiter zur Übersicht</button>
+    <button id="back-to-overview-btn">Back to Overview</button>
   </div>
 </div>
 
@@ -1923,7 +1924,7 @@ const questionAreaEl = document.getElementById('question-area');
 const revealButtonEl = document.getElementById('reveal-button');
 const nextButtonEl = document.getElementById('next-button');
 const statusEl = document.getElementById('status');
-const categoriesWithConfig = ["Tagfalter", "Libellen", "Amphibien", "Reptilien", "Säugetiere", "Nachtfalter", "Heuschrecken", "Käfer", "Zweiflügler", "Spinnentiere", "Sonstige Insekten", "Artenmix"];
+const categoriesWithConfig = ["Butterflies", "Dragonflies and Damselflies", "Amphibians", "Reptiles", "Mammals", "Moths", "Grasshoppers and Crickets", "Beetles", "Zweiflügler", "Spinnentiere", "Sonstige Insekten", "Mixed"];
 const quizConfigEl = document.getElementById("quiz-config");
 const startQuizBtn = document.getElementById("start-quiz-btn");
 const speciesImageEl = document.getElementById('species-image');
@@ -2069,14 +2070,14 @@ async function fetchDistractorsFromDB(correctItem) {
   const filetypeParam =
     selectedFiletype === "all" ? null : selectedFiletype;
 
-  const { data, error } = await client.rpc('get_similar_species', {
+  const { data, error } = await client.rpc('get_similar_species_en', {
     p_scientific_name: correctItem.scientific_name,
-    p_category:        correctItem.category,
+    p_category_en:        correctItem.category_en,
     p_filetype:        filetypeParam,
     p_difficulty:      difficultyParam
   });
 
-  console.log("RPC get_similar_species result:", { error, count: data?.length });
+  console.log("RPC get_similar_species_en result:", { error, count: data?.length });
 
   if (error || !data) {
     console.error("Distractor-RPC Fehler", error);
@@ -2172,7 +2173,7 @@ function getDistractors(correctItem, allItems) {
     const sameCatDistinct = [];
     for (const it of allItems) {
       if (it.scientific_name === correctSpecies) continue;
-      if (it.category !== correctItem.category) continue;
+      if (it.category_en !== correctItem.category_en) continue;
       if (seen.has(it.scientific_name)) continue;
       seen.add(it.scientific_name);
       sameCatDistinct.push(it);
@@ -2239,8 +2240,8 @@ async function buildAnswerUIWithGivenDistractors(item, distractors) {
     option.dataset.sciname = opt.scientific_name;
 
     const trivialText =
-      Array.isArray(opt.trivialname) && opt.trivialname.length
-        ? opt.trivialname[0]
+      Array.isArray(opt.common_name) && opt.common_name.length
+        ? opt.common_name[0]
         : opt.scientific_name;
 
     const trivial = document.createElement("span");
@@ -2339,8 +2340,8 @@ function uniqueBySpecies(items) {
 function formatSpeciesLabel(item) {
   const sci = item.scientific_name;
   const triv =
-    Array.isArray(item.trivialname) && item.trivialname.length
-      ? item.trivialname[0]
+    Array.isArray(item.common_name) && item.common_name.length
+      ? item.common_name[0]
       : null;
 
   if (triv) {
@@ -2495,7 +2496,7 @@ async function buildAnswerUI(item) {
   console.log("Distractors detail:", distractors.map(d => ({
     sci: d.scientific_name,
     phy: d.phylogeny,
-    cat: d.category
+    cat: d.category_en
   })));
 
   const answerItems = shuffle([correctItem, ...distractors]).slice(0, 4);
@@ -2509,8 +2510,8 @@ async function buildAnswerUI(item) {
     option.dataset.sciname = opt.scientific_name;
 
     const trivialText =
-      Array.isArray(opt.trivialname) && opt.trivialname.length
-        ? opt.trivialname[0]
+      Array.isArray(opt.common_name) && opt.common_name.length
+        ? opt.common_name[0]
         : opt.scientific_name;
 
     const trivial = document.createElement("span");
@@ -2546,8 +2547,8 @@ function checkAnswer() {
 
   const normInput = normalize(val);
   const normSci = normalize(currentItem.scientific_name);
-  const trivialNames = Array.isArray(currentItem.trivialname)
-    ? currentItem.trivialname.map(n => normalize(n))
+  const trivialNames = Array.isArray(currentItem.common_name)
+    ? currentItem.common_name.map(n => normalize(n))
     : [];
 
   // Early return, wenn Eingabe noch zu kurz
@@ -2673,8 +2674,8 @@ function handleMCClick(clickedOption, isCorrect) {
 function revealAnswer() {
   if (!currentItem) return;
 
-  const tn = Array.isArray(currentItem.trivialname) && currentItem.trivialname.length
-    ? currentItem.trivialname[0]
+  const tn = Array.isArray(currentItem.common_name) && currentItem.common_name.length
+    ? currentItem.common_name[0]
     : currentItem.scientific_name;
 
   const scientific = currentItem.scientific_name;
@@ -3008,18 +3009,18 @@ overlay.addEventListener('pointercancel', handlePointerUp, { passive: false });
 // --- Kategorien laden ---
 async function loadCategories() {
   categoryButtonsEl.innerHTML = "";
-  categoryLoadingEl.textContent = "Lade Kategorien...";
+  categoryLoadingEl.textContent = "loading categories...";
 
   const { data, error } = await client
     .from("fq_metadata")
-    .select("category, url_vorschau, cat_untertitel")
+    .select("category_en, url_vorschau, cat_untertitel_en")
     .eq("filetype", "image")
     .eq("titelbild", "ja");
 
 console.log("categories data", { error, count: data?.length, sample: data?.[0] });
 
   if (error || !data) {
-    categoryLoadingEl.textContent = "Fehler beim Laden";
+    categoryLoadingEl.textContent = "loading error";
     return;
   }
 
@@ -3030,25 +3031,25 @@ console.log("categories data", { error, count: data?.length, sample: data?.[0] }
   }));
 
   const CATEGORY_ORDER = [
-    "Säugetiere",
-    "Reptilien",
-    "Amphibien",
-    "Libellen",
-    "Heuschrecken",
-    "Tagfalter",
-    "Nachtfalter",
-    "Käfer",
+    "Mammals",
+    "Reptiles",
+    "Amphibians",
+    "Dragonflies and Damselflies",
+    "Grasshoppers and Crickets",
+    "Butterflies",
+    "Moths",
+    "Beetles",
     "Zweiflügler",
     "Spinnentiere",
     "Sonstige Insekten",
-    "Artenmix"
+    "Mixed"
   ];
 
   // Kategorien extrahieren (→ rows statt data)
-  const uniqueCategories = [...new Set(rows.map(d => d.category))];
+  const uniqueCategories = [...new Set(rows.map(d => d.category_en))];
 
-  if (!uniqueCategories.includes("Artenmix")) {
-    uniqueCategories.unshift("Artenmix");
+  if (!uniqueCategories.includes("Mixed")) {
+    uniqueCategories.unshift("Mixed");
   }
 
   uniqueCategories.sort((a, b) => {
@@ -3061,20 +3062,20 @@ console.log("categories data", { error, count: data?.length, sample: data?.[0] }
   });
 
   uniqueCategories.forEach(cat => {
-    if (cat === "Artenmix") {
+    if (cat === "Mixed") {
       const btn = document.createElement("div");
       btn.className = "category-button";
       btn.onclick = () => onCategoryClick(cat);
 
       const img = document.createElement("img");
       img.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/Alle_Arten.webp`;
-      img.alt = "Artenmix";
+      img.alt = "Mixed";
 
       const label = document.createElement("div");
       label.className = "category-label";
       label.innerHTML = `
-        <div class="cat_title">Artenmix</div>
-        <div class="cat_untertitel">Bestimme Arten aus verschiedenen Tiergruppen</div>
+        <div class="cat_title">Mixed</div>
+        <div class="cat_untertitel">Determine species from different groups</div>
       `;
 
       btn.appendChild(img);
@@ -3084,7 +3085,7 @@ console.log("categories data", { error, count: data?.length, sample: data?.[0] }
     }
 
     // → rows statt data
-    const images = rows.filter(d => d.category === cat);
+    const images = rows.filter(d => d.category_en === cat);
     const catImage =
       images[Math.floor(Math.random() * images.length)]?.url_vorschau || "";
 
@@ -3100,7 +3101,7 @@ console.log("categories data", { error, count: data?.length, sample: data?.[0] }
     label.className = "category-label";
     label.innerHTML = `
       <div class="cat_title">${cat}</div>
-      <div class="cat_untertitel">${images[0]?.cat_untertitel || ""}</div>
+      <div class="cat_untertitel">${images[0]?.cat_untertitel_en || ""}</div>
     `;
 
     btn.appendChild(img);
@@ -3119,7 +3120,7 @@ console.log("categories data", { error, count: data?.length, sample: data?.[0] }
 // =========================
 
 const CATEGORY_CONFIG = {
-  "Säugetiere": {
+  "Mammals": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
@@ -3128,7 +3129,7 @@ const CATEGORY_CONFIG = {
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
   },
-  "Reptilien": {
+  "Reptiles": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
@@ -3137,7 +3138,7 @@ const CATEGORY_CONFIG = {
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
   },
-  "Amphibien": {
+  "Amphibians": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",
@@ -3146,7 +3147,7 @@ const CATEGORY_CONFIG = {
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
   },
-  "Libellen": {
+  "Dragonflies and Damselflies": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "100", "all"],
     defaultFiletype: "image",                  
@@ -3155,7 +3156,7 @@ const CATEGORY_CONFIG = {
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
   },
-    "Heuschrecken": {
+    "Grasshoppers and Crickets": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
@@ -3164,7 +3165,7 @@ const CATEGORY_CONFIG = {
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
   },
-  "Tagfalter": {
+  "Butterflies": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "100", "all"],
     defaultFiletype: "image",                  
@@ -3173,7 +3174,7 @@ const CATEGORY_CONFIG = {
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
   },
-  "Nachtfalter": {
+  "Moths": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
@@ -3182,7 +3183,7 @@ const CATEGORY_CONFIG = {
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
   },
-    "Käfer": {
+    "Beetles": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
@@ -3218,7 +3219,7 @@ const CATEGORY_CONFIG = {
     allowedDifficulties: ["1", "2", "3", "all"],
     extraFilters: []
   },
-    "Artenmix": {
+    "Mixed": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "100", "all"],
     defaultFiletype: "image",
@@ -3240,28 +3241,28 @@ const CATEGORY_CONFIG = {
 };
 
 // Anpassung der Kategorie-Auswahl
-function onCategoryClick(category) {
+function onCategoryClick(category_en) {
   hideQuizSummary(); // wichtig
 
-  selectedCategory = category;
+  selectedCategory = category_en;
 
-  if (categoriesWithConfig.includes(category)) {
+  if (categoriesWithConfig.includes(category_en)) {
     // 👉 Konfigurationsfläche anzeigen
-    showQuizConfig(category);
+    showQuizConfig(category_en);
   } else {
     // 👉 direkt Quiz starten (altes Verhalten)
-    startQuizDirect(category);
+    startQuizDirect(_en);
   }
 }
 
-function showQuizConfig(category) {
-  selectedCategory = category;
-  document.getElementById("config-category-title").textContent = `${category}`;
+function showQuizConfig(category_en) {
+  selectedCategory = category_en;
+  document.getElementById("config-category-title").textContent = `${category_en}`;
 
   categorySectionEl.style.display = "none";
   quizConfigEl.style.display = "block";
 
-  const cfg = CATEGORY_CONFIG[category] || CATEGORY_CONFIG._default;
+  const cfg = CATEGORY_CONFIG[category_en] || CATEGORY_CONFIG._default;
 
   // Antwortmodus: immer gleich, nur Default setzen
   selectedAnswerMode = "mc";
@@ -3318,13 +3319,12 @@ function showQuizConfig(category) {
   // z.B. showExtraFilters(cfg.extraFilters);
 }
 
+
 function hideQuizConfig() {
   // Config-Bereich ausblenden, Kategorien wieder zeigen
   quizConfigEl.style.display = "none";
   categorySectionEl.style.display = "block";
 }
-
-
 
 
 
@@ -3465,8 +3465,8 @@ startQuizBtn.onclick = async () => {
     numPhotos === "all" ? 100 : parseInt(numPhotos, 10);
 
   // Medien holen
-  const { data, error } = await client.rpc('get_random_quiz_images_r2', {
-    p_category:   selectedCategory,
+  const { data, error } = await client.rpc('get_random_quiz_images_r2_en', {
+    p_category_en:   selectedCategory,
     p_difficulty: difficultyParam,
     p_limit:      desired,
     p_filetype:   filetypeParam
@@ -3476,7 +3476,7 @@ startQuizBtn.onclick = async () => {
 
   if (error || !data || data.length === 0) {
     console.error(error);
-    alert('Keine Medien für diese Auswahl gefunden.');
+    alert('No media for this selection was found.');
     return;
   }
 
@@ -3551,8 +3551,8 @@ startQuizBtn.onclick = async () => {
 
 
 
-function startQuizDirect(category) {
-  selectedCategory = category;
+function startQuizDirect(_en) {
+  selectedCategory = category_en;
   selectedNumPhotos = "all";
   selectedDifficulty = "all";
 
@@ -3588,7 +3588,7 @@ function updateTimer() {
 
 // --- Counter aktualisieren ---
 function updateQuizStatus() {
-  document.getElementById('quiz-counter').textContent = `${correctCount} / ${totalShown} Richtig`;
+  document.getElementById('quiz-counter').textContent = `${correctCount} / ${totalShown} correct`;
 }
 
 function cancelImageLoads() {
@@ -3936,21 +3936,21 @@ function showQuizSummary() {
   const rate = (correctCount / totalShown) * 100;
   let quote = "";
 
-  if (rate === 100) quote = "Glanzleistung!";
-  else if (rate >= 80) quote = "Großartig, da hat nicht viel gefehlt!";
-  else if (rate >= 50) quote = "Du scheinst dich schon ganz gut auszukennen, probier's doch gleich nochmal!";
-  else if (rate >= 25) quote = "Ein solides Ergebnis, aber kannst du das noch toppen?";
-  else quote = "Aller Anfang ist schwer, aber Übung macht den Meister!";
+  if (rate === 100) quote = "Nailed it!";
+  else if (rate >= 80) quote = "Great job, you were really close!";
+  else if (rate >= 50) quote = "You already know quite a bit! Why not give it another try?";
+  else if (rate >= 25) quote = "Not to bad, but can you top this";
+  else quote = "Getting started is always hard, but practice makes perfect!";
 
   document.getElementById("summary-quote").textContent = quote;
 
   // ✅ Satz mit Anzahl richtig
   document.getElementById("summary-count").textContent =
-    `Du hast ${correctCount} von ${answeredCount} Tieren richtig bestimmt!`;
+    `You have correctly identified ${correctCount} out of ${answeredCount} animals!`;
 
   // ✅ Dauer mit Leerzeichen
   document.getElementById("summary-time").textContent =
-    `Dauer: ${minutes}:${String(seconds).padStart(2,"0")} Minuten`;
+    `Duration: ${minutes}:${String(seconds).padStart(2,"0")} minutes`;
 
   // Summary anzeigen
   document.getElementById("quiz-summary").style.display = "flex";
@@ -3996,7 +3996,7 @@ abortButtonEl.onclick = () => {
 
 // Summary -> Übersicht
 document.getElementById("back-to-overview-btn").onclick = () => {
-  const base = "/index.html";               // falls deine Seite so aufgerufen wird
+  const base = "index.html";               // falls deine Seite so aufgerufen wird
   const url  = base + "?refresh=" + Date.now();
   window.location.href = url;
 };
@@ -4012,7 +4012,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </main>
 <footer>
   <div class="page">
-    <a href="impressum.html">Impressum</a>
+    <a href="impressum.html">Impressum (Legal notice)</a>
   </div>
 </footer>
 </body>
