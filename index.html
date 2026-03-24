@@ -1343,6 +1343,7 @@ footer a:hover {
   font-weight: 600;
   font-size: 1rem;
   transition: background 0.2s, color 0.2s;
+  align-items: center;
 }
 #start-quiz-btn {
   font-size: 1.5rem;
@@ -1851,7 +1852,7 @@ footer{
     <label class="config-category-select">Medientyp:</label>
     <div id="filetype-buttons" class="slider-buttons">
       <button data-value="image">Bilder</button>
-      <button data-value="audio">Rufe</button>
+      <button data-value="audio">Rufe & Gesänge</button>
       <button data-value="all">Beides</button>
     </div>
   </div>
@@ -3847,7 +3848,7 @@ async function loadNextImage() {
     // Je nach filetype
     if (currentItem.filetype === 'audio') {
       // Platzhalter-Bild
-      imageEl.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/audio_platzhalter.jpg`;
+      imageEl.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/audio_platzhalter.webp`;
       imageEl.style.display = 'block';
 
       // Audio-Player neu erzeugen
