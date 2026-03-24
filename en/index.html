@@ -1344,6 +1344,3961 @@ footer a:hover {
   font-weight: 600;
   font-size: 1rem;
   transition: background 0.2s, color 0.2s;
+  align-items: center;
+}
+#start-quiz-btn {
+  font-size: 1.5rem;
+  padding: 2vh 4vh;
+  margin-top: 8vh;
+  border-radius: 10px;
+  margin-bottom: 8vh;
+} 
+#audio-wrapper audio {
+  width: 100%;
+  transform: scale(1);
+  padding-bottom: 7%;
+}
+/* Container linksbündig */
+#license-wrapper {
+  margin-top: 0.25rem;
+  padding-right: 2%;
+  text-align: right;
+}
+
+/* Button ohne Hintergrund, wie ein Link */
+#license-toggle {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;         /* Link-Farbe nach Geschmack */
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: #111;
+}
+
+/* Hover/Focus für bessere Usability */
+#license-toggle:hover,
+#license-toggle:focus {
+  text-decoration: none;
+}
+
+/* Lizenztext linksbündig, dezent hinterlegt (oder Hintergrund entfernen) */
+#license-text {
+  padding: 0;
+  font-size: 0.65rem;
+  background: none;     /* falls du gar keinen Hintergrund willst: background: none; */
+  border-radius: 4px;
+  margin-top: 0.25rem;
+  text-align: right;
+}
+  #quizfrage{
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 3%;
+    margin-top: 5%;
+  }
+
+input[type="text"] {
+  font-size: clamp(16px, 2.1vh, 1.85rem); /* Minimum 16px */
+}
+
+.mc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  gap: 0.5rem;
+  max-width: var(--quiz-content-width);
+  margin: 0 auto;
+}
+
+
+.mc-option {
+  width: 100%;
+  min-width: 0;                /* 🔥 ENTSCHEIDEND */
+  box-sizing: border-box;
+  padding: 1.5rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.3rem;
+}
+
+.mc-option:not(.disabled):hover {
+  border-color:   #dde3dd;
+  background-color: #fff;
+}
+
+.mc-option.correct {
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+  color: white;
+}
+.mc-option.correct .mc-trivial,
+.mc-option.correct .mc-scientific {
+  color: #ffffff;
+}
+
+.mc-option.wrong {
+  background: #c41425;
+  border-color: #c41425;
+  color: white;
+}
+.mc-option.wrong .mc-trivial,
+.mc-option.wrong .mc-scientific {
+  color: #ffffff;
+}
+
+.mc-trivial,
+.mc-scientific {
+  max-width: 100%;
+  white-space: normal;
+  word-break: normal;
+  margin: 0;
+  line-height: 1.15;
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+}
+
+.mc-scientific {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+
+.mc-option.disabled { 
+  pointer-events: none;
+  opacity: 1; 
+}
+
+
+#button-container {
+  margin-bottom: 0;
+}
+
+#button-container button {
+  margin-bottom: 0;
+}
+
+#reveal-button {
+  background: var(--accent);
+  color: #2b2b2b;
+  margin-bottom: 0;
+}
+
+#next-button {
+  background: var(--accent);
+  color: #2b2b2b;
+  margin-bottom: 0;
+}
+
+
+#quiz-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  margin-top: 3vh;
+  width: 90%;    
+
+}
+
+#quiz {
+  --quiz-content-width: clamp(280px, 80vw, 800px);
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+  width: 90%;
+  margin: 1rem auto;
+  padding:
+    clamp(0.75rem, 2vh, 1.25rem)
+    clamp(1rem, 3vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  max-height: 95svh;
+  width: 100%;
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: clamp(0.6rem, 1.5vh, 1.25rem);
+  background-color: #fff;
+  max-height: 95vh; 
+}
+#status{
+  display: none;
+  position: absolute;
+}
+
+  #detail-overlay {
+    display: none;            
+    position: fixed;            
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    margin: 0;
+    background-color: #2b2b2b87;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    touch-action: none;
+  }
+
+  #detail-overlay img {
+    position: absolute;
+    max-width: 98%;
+    max-height: 98%;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+    cursor: grab;
+    border-radius: 0;
+    will-change: transform;
+  
+    /* Standardmäßig: keine Pointer-Events (Tap-to-close über Overlay) */
+    pointer-events: auto;
+
+    z-index: 9999;
+    touch-action: none;
+    backface-visibility: hidden;
+    contain: layout style paint;
+    -webkit-backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-user-select: none;
+    transform-origin: 50% 50% !important;
+  }
+  #overlay img {
+  touch-action: none; /* Browser-eigenes Scroll/Zoom deaktivieren */
+  }
+
+  /* Während Drag/Pinch: Pointer-Events aktivieren */
+  #detail-overlay.dragging img,
+  #detail-overlay.pinching img {
+    pointer-events: auto;
+    transition: none; 
+  }
+
+#quiz-summary {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: none;               /* wichtig */
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+.quiz-summary-card {
+  background: var(--bg-main);
+  padding: 7vw 10vw;
+  border-radius: 16px;
+  max-width: 520px;
+  width: 90%;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+
+  display: flex;
+  flex-direction: column;
+  gap: 28px;              /* 🔹 Hauptabstand */
+}
+.quiz-summary-card h2 {
+  margin: 0;
+  font-size: 6vw;
+  font-weight: 700;
+}
+.summary-item {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 3.4vw;
+}
+.summary-quote {
+  text-align: center;
+  font-style: italic;
+  margin: 10px 0 20px;
+  color: #5f8f73;
+}
+
+footer{
+  background: none;
+  text-align: center;
+  padding-top: 8vh 2vh;
+  padding-bottom: 8vh;
+  color: var(--text-muted);
+  font-size: 2.5vh;
+  position: static;
+  }
+}
+@media (orientation: portrait) and (min-width: 600px) {
+#quiz-erklaerung {
+  top: 5.6%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;      /* nicht baseline */
+  justify-content: flex-end;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  color: #fff;
+  background-color: #5c725c;
+  padding-left: 5%; 
+  padding-right: 5%;            /* linker Abstand */
+  padding-top: 4%;              /* oberer Abstand */
+  padding-bottom: 5%;  
+  height: 8rem;          /* unterer Abstand */
+  gap: 2%;
+}
+
+#quiz-erklaerung-prim {
+  font-size: 1.6rem;
+  font-weight: 600;
+  width: 70%;
+  text-align: left;
+}
+
+#quiz-erklaerung-sek {
+  font-size: 1.1rem;
+  font-weight: 400;
+  width: 100%;
+  text-align: left;
+}
+#category-buttons { 
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: auto; 
+  min-height: 0;
+}
+.category-label {
+  background: none;
+}
+.category-label .cat_title {
+  font-size: 1.5rem;
+}
+.category-label .cat_untertitel {
+  font-size: 1.2rem;
+  display: none;
+}
+#license-toggle {
+  font-size: 0.85rem;
+}
+
+#license-text {
+  font-size: 0.85rem;
+}
+#quiz-summary {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: none;               /* wichtig */
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+.quiz-summary-card {
+  background: var(--bg-main);
+  padding: 7vw 10vw;
+  border-radius: 16px;
+  max-width: 520px;
+  width: 90%;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+
+  display: flex;
+  flex-direction: column;
+  gap: 28px;              /* 🔹 Hauptabstand */
+}
+.quiz-summary-card h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+.summary-item {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 1.3rem;
+}
+.summary-quote {
+  text-align: center;
+  font-style: italic;
+  margin: 10px 0 20px;
+  color: #5f8f73;
+}
+  #image-wrapper {
+    width: 100%;
+    aspect-ratio: 3 / 2;    /* feste Bildfläche */
+    max-height: 40svh;
+    min-height: 30svh;      /* nie kleiner als ~30% der Screenhöhe */
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  /* Bild immer den Wrapper füllen lassen */
+  #species-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;    /* oder cover, je nach Geschmack */
+  }
+
+  #species-image.preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;    /* explizit statt height:auto */
+    transform: none !important;
+  }
+
+  #species-image.detail {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+
+</style>
+</head>
+<body>
+  <nav class="top-nav">
+  <div class="top-nav-inner">
+    <a href="index.html" class="nav-primary">Fauna Quiz</a>
+    <a href="info.html" class="nav-secondary">Further information</a>
+    <a href="/index.html" class="language">
+      <img src="/deutsche_flagge.webp" alt="Deutsch" width="24" height="16">
+    </a>
+  </div>
+</nav>
+<main class="page">
+
+
+<div id="category-section">
+  <div id="quiz-erklaerung">
+  <div id="quiz-erklaerung-prim">How well do you know Germany's wildlife?</div>
+  <div id="quiz-erklaerung-sek">Choose a category and test your knowledge!</div>
+  </div>  
+<div id="category-buttons" data-nosnippet></div>
+<p id="category-loading" data-nosnippet>Load categorys...</p>
+</div>
+<button id="abort-button" style="background:#c41425; color:white;" data-nosnippet>Abort Quiz</button>
+
+<div id="quiz" class="top-offset" style="display:none;" data-nosnippet>
+
+  <div id="quiz-layout">
+    <div id="quiz-left">
+      <div id="quiz-status">
+        <div id="quiz-timer" style="display: none;">00:00</div>
+        <div id="quiz-counter">0 / 0 Correct</div>
+      </div>
+
+      <div id="image-wrapper-container">
+        <div id="image-toggle-hint">click to zoom ⤵</div>
+        <div id="image-wrapper">
+
+          <img id="species-image" src="" alt="" style="display:none;" />
+          <div id="audio-wrapper" style="display:none; text-align:center;">
+          </div>
+          <span id="photo-id"></span>
+          <span id="photo-credit"></span>
+        </div>
+        <div id="license-wrapper">
+          <button id="license-toggle" type="button" aria-expanded="false" aria-controls="license-text">License notice</button>
+          <div id="license-text" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="quiz-right">
+      <div id="question-area" style="display:none;">
+        <div id="quizfrage">How is this species called?</div>
+        <div id="answer-container"></div>
+        <div id="button-container">
+          <button id="reveal-button" style="background:#1e9d20; color:white;">reveal</button>
+          <button id="next-button" style="display:none;">Next</button>
+        </div>
+        <div class="status" id="status" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay für Detailbild auf kleinen Bildschirmen -->
+  <div id="detail-overlay">
+    <img id="detail-image" src="" alt="">
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- Konfigurationsbereich, zunächst versteckt -->
+<div id="quiz-config" data-nosnippet>
+    <button id="back-to-categories">Back</button>
+    <h2 id="config-category-title" class="config-category-title"></h2><br><br>
+    <h3 class="config-category-subtitle">Choose your parameters for this quiz round</h3>
+  <div class="slider-container">
+    <label class="config-category-select">Number of questions:</label>
+    <div id="num-photos-buttons" class="slider-buttons">
+      <button data-value="10">10</button>
+      <button data-value="30">30</button>
+      <button data-value="60">60</button>
+      <button data-value="100">100</button>
+      <!-- <button data-value="all">Alle</button>-->
+    </div>
+
+  </div>
+
+  <div class="slider-container" id="filetype-container">
+    <label class="config-category-select">Media type:</label>
+    <div id="filetype-buttons" class="slider-buttons">
+      <button data-value="image">Images</button>
+      <button data-value="audio">Calls & Sounds</button>
+      <button data-value="all">Both</button>
+    </div>
+  </div>
+
+  <div class="slider-container">
+    <label class="config-category-select">Difficulty:</label>
+    <div id="difficulty-buttons" class="slider-buttons">
+      <button data-value="1">1</button>
+      <button data-value="2">2</button>
+      <button data-value="3">3</button>
+      <button data-value="all">Mixed (1-3)</button>
+    </div>
+  </div>
+
+  <div class="slider-container">
+    <label class="config-category-select">Answer mode:</label>
+    <div id="answer-mode-buttons" class="slider-buttons">
+      <button data-value="mc">Single choice</button>
+      <button data-value="text">Text input</button>
+    </div>
+  </div>
+
+
+  <button id="start-quiz-btn">Start the Quiz</button>
+</div>
+
+
+<div id="quiz-summary" class="quiz-overlay" style="display:none;" data-nosnippet>
+  <div class="quiz-summary-card">
+
+    <!-- Spruch oben -->
+    <br><h2 id="summary-quote" class="summary-quote"></h2><br>
+
+    <div class="summary-item">
+      <span id="summary-count"></span>
+    </div>
+    
+    <div class="summary-item">
+      <span id="summary-time"></span>
+    </div>
+
+    <button id="back-to-overview-btn">Back to Overview</button>
+  </div>
+</div>
+
+
+
+
+<script data-goatcounter="https://fauna-quiz.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://djstoxqzmcgwqjliubst.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqc3RveHF6bWNnd3FqbGl1YnN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxMDYxMDcsImV4cCI6MjA4MDY4MjEwN30.05Ud16jCrf1ib8IpoVwd84sv0NSvpes-T7Rz1khtzRE";
+const { createClient } = supabase;
+const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const R2_BASE_URL_VORSCHAU = "https://pub-3301a7682af84655808479d250e3f244.r2.dev";
+const R2_BASE_URL_AUDIO  = "https://pub-34d8c41785db4830b58cf447e3e72338.r2.dev";
+
+
+
+const categorySectionEl = document.getElementById('category-section');
+const categoryButtonsEl = document.getElementById('category-buttons');
+const categoryLoadingEl = document.getElementById('category-loading');
+const quizEl = document.getElementById('quiz');
+const imageEl = document.getElementById('species-image');
+const questionAreaEl = document.getElementById('question-area');
+const revealButtonEl = document.getElementById('reveal-button');
+const nextButtonEl = document.getElementById('next-button');
+const statusEl = document.getElementById('status');
+const categoriesWithConfig = ["Butterflies", "Dragonflies and Damselflies", "Amphibians", "Reptiles", "Mammals", "Moths", "Grasshoppers and Crickets", "Beetles", "Zweiflügler", "Spinnentiere", "Sonstige Insekten", "Mixed"];
+const quizConfigEl = document.getElementById("quiz-config");
+const startQuizBtn = document.getElementById("start-quiz-btn");
+const speciesImageEl = document.getElementById('species-image');
+const speciesImage = document.getElementById('species-image');
+const overlay = document.getElementById("detail-overlay");
+const detailImg = document.getElementById("detail-image");
+const quizSummaryEl = document.getElementById("quiz-summary");
+const abortButtonEl = document.getElementById("abort-button");
+const stats = {}; // key: photo id, value: count
+const DETAILFUNCTIONURL = "https://detail-image-signer.yj79nr7hwk.workers.dev";
+
+
+
+let scale = 1;
+let posX = 0;
+let posY = 0;
+let startDist = 0;
+let dragging = false;
+let startX = 0;
+let startY = 0;
+
+
+imageEl.style.cursor = "pointer";
+const SCALE = 1.3; // Detailbild auf 80% der Originalgröße
+
+let answerInputEl = null;
+let currentItem = null;
+let currentCategory = null;
+let imageQueue = [];
+let currentIndex = 0;
+let correctCount = 0;
+let shownCount = 0;
+let totalShown = 0;
+let answeredCount = 0;
+let quizStartTime = null;
+let quizTimerInterval = null;
+let showingDetail = false;
+let startMouseX = 0;
+let startMouseY = 0;
+let startTranslateX = 0;
+let startTranslateY = 0;
+let dragActive = false;
+let speciesMap = {};
+let speciesOrder = [];
+let speciesPointer = 0;
+let quizLength = null;
+let selectedCategory = null;
+let selectedAnswerMode = "mc"; // Standard  
+let photoPool = [];
+let shuffledPhotos = [];
+let photoIndex = 0;
+
+let nextItem = null;
+let nextImageObj = null; // für Preload
+
+let detailPreloadImg = null;
+let detailPreloadUrl = null;
+let currentDetailLoadToken = 0; // einfache „Versionierung“
+let isDetailLoading = false;
+let isDetailLoaded  = false;
+let selectedFiletype = "image"; // Default: Bilder
+let audioPlayCountInRound = 0;
+
+
+
+
+// =========================
+// Utility Funktionen
+// =========================
+
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function normalize(str) { return String(str||'').trim().toLowerCase().replace(/[-\s]/g,''); }
+
+function levenshtein(a,b){ const m=[]; for(let i=0;i<=b.length;i++) m[i]=[i]; for(let j=0;j<=a.length;j++) m[0][j]=j; for(let i=1;i<=b.length;i++) for(let j=1;j<=a.length;j++) m[i][j]=b[i-1]===a[j-1]?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,m[i][j-1]+1,m[i-1][j]+1); return m[b.length][a.length]; }
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;}
+initConfigButtons();
+
+function setImageAndWait(img, src) {
+  return new Promise(resolve => {
+    if (img.src === src && img.complete) {
+      resolve();
+    } else {
+      img.onload = () => resolve();
+      img.src = src;
+    }
+  });
+}
+
+async function loadDetailImage(path) {
+  if (!path || typeof path !== "string") return null;
+
+  // doppelte Encodierung verhindern
+  const rawPath = decodeURIComponent(path);
+
+  try {
+    const res = await fetch(
+      `${DETAILFUNCTIONURL}/sign?path=${encodeURIComponent(rawPath)}`
+    );
+
+    if (!res.ok) {
+      console.warn("Detailbild nicht gefunden", rawPath, res.status);
+      return null;
+    }
+
+    const data = await res.json();
+    return data.url || null;
+  } catch (err) {
+    console.warn("loadDetailImage Fehler", err);
+    return null;
+  }
+}
+
+
+
+// =========================
+// QUIZ KERNLOGIK
+// =========================
+
+function nextImage() {
+  if (photoIndex >= shuffledPhotos.length) return null;
+
+  const photo = shuffledPhotos[photoIndex];
+  photoIndex++;
+
+  return photo;
+}
+
+async function fetchDistractorsFromDB(correctItem) {
+  const difficultyParam =
+    selectedDifficulty === "all"
+      ? null
+      : parseInt(selectedDifficulty, 10);
+
+  const filetypeParam =
+    selectedFiletype === "all" ? null : selectedFiletype;
+
+  const { data, error } = await client.rpc('get_similar_species_en', {
+    p_scientific_name: correctItem.scientific_name,
+    p_category_en:        correctItem.category_en,
+    p_filetype:        filetypeParam,
+    p_difficulty:      difficultyParam
+  });
+
+  console.log("RPC get_similar_species_en result:", { error, count: data?.length });
+
+  if (error || !data) {
+    console.error("Distractor-RPC Fehler", error);
+    return [];
+  }
+
+  debugLevelStats(correctItem, data);
+
+  const distractors = getDistractors(correctItem, data);
+  console.log("getDistractors returned:", distractors.length, distractors.map(d => d.scientific_name));
+  return distractors;
+}
+
+
+
+
+function getDistractors(correctItem, allItems) {
+  const phy = Array.isArray(correctItem.phylogeny) ? correctItem.phylogeny : [];
+  const correctSpecies = correctItem.scientific_name;
+
+  const candidates = new Map();
+  const uniquePush = (item) => {
+    if (!item) return;
+    if (item.scientific_name === correctSpecies) return;
+    if (!candidates.has(item.scientific_name)) {
+      candidates.set(item.scientific_name, item);
+    }
+  };
+
+  // Items mit Tag holen und auf verschiedene Arten reduzieren
+  const distinctSpeciesWithTag = (tag) => {
+    if (!tag) return [];
+    const seen = new Set();
+    const result = [];
+    for (const it of allItems) {
+      if (!Array.isArray(it.phylogeny)) continue;
+      if (!it.phylogeny.includes(tag)) continue;
+      if (it.scientific_name === correctSpecies) continue;
+      if (seen.has(it.scientific_name)) continue;
+      seen.add(it.scientific_name);
+      result.push(it);
+    }
+    return result;
+  };
+
+  const last = phy.length - 1;
+  const genusTag   = phy[last];       // Gattung (z.B. Vanessa)
+  const tribeTag   = phy[last - 1];   // Nymphalini
+  const familyTag  = phy[last - 2];   // Nymphalidae
+
+  const genus   = distinctSpeciesWithTag(genusTag);
+  const tribe   = distinctSpeciesWithTag(tribeTag);
+  const family  = distinctSpeciesWithTag(familyTag);
+
+  // 1) Nur Gattung, wenn es ≥ 3 verschiedene Arten gibt
+  if (genus.length >= 3) {
+    shuffle(genus).slice(0, 3).forEach(uniquePush);
+  } else if (genus.length > 0 || tribe.length > 0) {
+    // 2) Gattung + Tribus
+    shuffle(genus).forEach(uniquePush);
+    let remaining = 3 - candidates.size;
+    if (remaining > 0) {
+      shuffle(tribe.filter(it => !candidates.has(it.scientific_name)))
+        .slice(0, remaining)
+        .forEach(uniquePush);
+    }
+    // 3) Falls dann immer noch < 3: Familie ergänzen
+    remaining = 3 - candidates.size;
+    if (remaining > 0) {
+      shuffle(family.filter(it => !candidates.has(it.scientific_name)))
+        .slice(0, remaining)
+        .forEach(uniquePush);
+    }
+  } else {
+    // 4) Falls gar keine Gattungs/Tribus-Infos nutzbar: nur Familie
+    if (family.length >= 3) {
+      shuffle(family).slice(0, 3).forEach(uniquePush);
+    }
+  }
+
+  // 5) Fallback: gleiche Kategorie
+  if (candidates.size < 3) {
+    let remaining = 3 - candidates.size;
+    shuffle(
+      distinctSpeciesWithTag(null) // gleich ersetzen s.u. oder andere Logik
+    );
+  }
+
+  // Besser: Kategorie-Fallback auch distinct pro Art:
+  if (candidates.size < 3) {
+    const remaining = 3 - candidates.size;
+    const seen = new Set(candidates.keys());
+    const sameCatDistinct = [];
+    for (const it of allItems) {
+      if (it.scientific_name === correctSpecies) continue;
+      if (it.category_en !== correctItem.category_en) continue;
+      if (seen.has(it.scientific_name)) continue;
+      seen.add(it.scientific_name);
+      sameCatDistinct.push(it);
+    }
+    shuffle(sameCatDistinct)
+      .slice(0, remaining)
+      .forEach(uniquePush);
+  }
+
+  // 6) letzter Fallback: völlig beliebige Arten, ebenfalls distinct
+  if (candidates.size < 3) {
+    const remaining = 3 - candidates.size;
+    const seen = new Set(candidates.keys());
+    const distinct = [];
+    for (const it of allItems) {
+      if (it.scientific_name === correctSpecies) continue;
+      if (seen.has(it.scientific_name)) continue;
+      seen.add(it.scientific_name);
+      distinct.push(it);
+    }
+    shuffle(distinct).slice(0, remaining).forEach(uniquePush);
+  }
+
+  return shuffle(Array.from(candidates.values())).slice(0, 3);
+}
+
+async function buildAnswerUIWithGivenDistractors(item, distractors) {
+  const container = document.getElementById('answer-container');
+  container.innerHTML = "";
+  resetAnswerButtons();
+
+  if (selectedAnswerMode === "text") {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.id = 'answer-input';
+    input.placeholder = 'Namen eingeben...';
+
+    input.autocomplete = 'off';
+    input.spellcheck = false;
+    input.autocorrect = 'off';
+    input.autocapitalize = 'none';
+    input.inputMode = 'text';
+
+    container.appendChild(input);
+    answerInputEl = input;
+    setTimeout(focusAnswer, 0);
+
+    input.addEventListener("input", checkAnswer);
+
+    revealButtonEl.style.display = 'inline-block';
+    return;
+  }
+
+  const correctItem = item;
+
+  const answerItems = shuffle([correctItem, ...distractors]).slice(0, 4);
+
+  const grid = document.createElement("div");
+  grid.className = "mc-grid";
+
+  answerItems.forEach(opt => {
+    const option = document.createElement("div");
+    option.className = "mc-option";
+    option.dataset.sciname = opt.scientific_name;
+
+    const trivialText =
+      Array.isArray(opt.common_name) && opt.common_name.length
+        ? opt.common_name[0]
+        : opt.scientific_name;
+
+    const trivial = document.createElement("span");
+    trivial.className = "mc-trivial";
+    trivial.lang = "de";
+    trivial.textContent = addBreaksAtAllowedChars(trivialText);
+
+    const scientific = document.createElement("span");
+    scientific.className = "mc-scientific";
+    scientific.lang = "la";
+    scientific.textContent = `(${addBreaksAtAllowedChars(opt.scientific_name)})`;
+
+    option.append(trivial, scientific);
+
+    option.onclick = () => {
+  if (option.classList.contains("disabled")) return;
+
+  console.log("MC OPTION CLICK", {
+    sci: opt.scientific_name,
+    correctSci: correctItem.scientific_name,
+    isCorrect: opt.scientific_name === correctItem.scientific_name,
+    answeredCount,
+    quizLength
+  });
+
+  handleMCClick(
+    option,
+    opt.scientific_name === correctItem.scientific_name
+  );
+};
+    grid.appendChild(option);
+  });
+
+  container.appendChild(grid);
+}
+
+
+let nextDistractors = null;
+
+async function preloadNextQuestion() {
+  // KEIN totalShown-Check hier
+  // Ende ergibt sich allein daraus, dass nextImage() null liefert
+
+  const upcoming = nextImage();
+  if (!upcoming) {
+    nextItem = null;
+    nextImageObj = null;
+    nextAudioObj = null;
+    nextDistractors = null;
+    return;
+  }
+
+  nextItem = upcoming;
+  nextImageObj = null;
+  nextAudioObj = null;
+  nextDistractors = null;
+
+  if (upcoming.filetype === 'audio') {
+    nextAudioObj = new Audio();
+    nextAudioObj.preload = 'auto';
+    nextAudioObj.src = upcoming.url_vorschau;
+  } else {
+    nextImageObj = new Image();
+    nextImageObj.src = upcoming.url_vorschau;
+  }
+
+  nextDistractors = await fetchDistractorsFromDB(upcoming);
+}
+
+
+
+function debugLevelStats(correctItem, allItems) {
+  const phy = correctItem.phylogeny || [];
+  const sci = correctItem.scientific_name;
+  phy.forEach((tag, idx) => {
+    const allMatches = allItems.filter(it =>
+      it.scientific_name !== sci &&
+      Array.isArray(it.phylogeny) &&
+      it.phylogeny.includes(tag)
+    );
+    console.log("Tag", tag, "Anzahl in allItems:", allMatches.length);
+  });
+}
+
+
+
+function uniqueBySpecies(items) {
+  const seen = new Set();
+  return items.filter(it => {
+    if (seen.has(it.scientific_name)) return false;
+    seen.add(it.scientific_name);
+    return true;
+  });
+}
+
+function formatSpeciesLabel(item) {
+  const sci = item.scientific_name;
+  const triv =
+    Array.isArray(item.common_name) && item.common_name.length
+      ? item.common_name[0]
+      : null;
+
+  if (triv) {
+    return `${triv} <em>(${sci})</em>`;
+  }
+  return `<em>${sci}</em>`;
+}
+
+
+// =========================
+// UI-Hilfsfunktionen
+// =========================
+
+function addBreaksAtAllowedChars(str) {
+  // Erlaubte Trennstellen: Leerzeichen, Bindestrich, Slash
+  // Nach jedem dieser Zeichen fügen wir einen Zero-Width Space ein
+  return str.replace(/([ \-\/])/g, "$1\u200B");
+}
+
+function resetUI() {
+  const container = document.getElementById('answer-container');
+  container.innerHTML = '';
+
+  statusEl.textContent = '';
+  revealButtonEl.style.display = 'none';
+  nextButtonEl.style.display = 'none';
+}
+
+function renderImage(item) {
+  // neue „Version“ für diesen Renderdurchlauf
+  const loadToken = ++currentDetailLoadToken;
+
+  imageEl.classList.remove("detail");
+  imageEl.classList.add("preview");
+  imageEl.style.transform = "translate(0,0)";
+  imageEl.src = item.url_vorschau;
+
+  // 👉 alten Detail-Preload verwerfen
+  if (detailPreloadImg) {
+    detailPreloadImg.onload = null;
+    detailPreloadImg.onerror = null;
+    detailPreloadImg.src = ""; // laufenden Download bestmöglich abbrechen[web:31]
+    detailPreloadImg = null;
+    detailPreloadUrl = null;
+  }
+
+  // 👉 neues Detailbild im Hintergrund vorbereiten
+  if (item.url_detail) {
+    loadDetailImage(item.url_detail, loadToken).then((detailUrl) => {
+      // wenn in der Zwischenzeit weiter geklickt wurde, ignorieren
+      if (!detailUrl || loadToken !== currentDetailLoadToken) return;
+
+      detailPreloadUrl = detailUrl;
+      detailPreloadImg = new Image();
+
+      detailPreloadImg.onload = function () {
+        // falls inzwischen weitergeklickt: nichts tun
+        if (loadToken !== currentDetailLoadToken) return;
+        // hier könntest du ggf. automatisch ins Detail wechseln,
+        // oder nur fürs spätere Anzeigen gecacht lassen
+      };
+
+      detailPreloadImg.src = detailPreloadUrl;
+    });
+  }
+
+  imageEl.onload = () => {
+    // auch hier: nur noch reagieren, wenn dieses Bild noch aktuell ist
+    if (loadToken !== currentDetailLoadToken) return;
+
+    imageEl.style.display = 'block';
+    questionAreaEl.style.display = 'block';
+
+    document.getElementById('photo-id').textContent =
+      currentItem.id_nummer ? `# ${currentItem.id_nummer}` : '';
+
+    document.getElementById('photo-credit').textContent =
+      item.author ? `© ${item.author}` : '';
+  };
+}
+
+
+
+function resetImageState() {
+  showingDetail = false;
+
+  imageEl.className = "preview";
+
+  imageEl.style.width = "";
+  imageEl.style.height = "";
+  imageEl.style.transform = "";
+  imageEl.style.objectFit = "";
+  imageEl.style.visibility = "visible";
+}
+
+
+function resetAnswerButtons() {
+  const buttons = document.querySelectorAll(".mc-option");
+  buttons.forEach(btn => {
+    btn.classList.remove("correct", "wrong", "disabled");
+    btn.onclick = null;
+  });
+  nextButtonEl.style.display = "none";
+}
+
+
+function focusAnswer() {
+  if (window.matchMedia("(orientation: portrait)").matches) return; // nur Desktop
+  const input = document.getElementById("answer-input");
+  if (input) input.focus();
+}
+
+
+// =========================
+// Eingabelogik
+// =========================
+
+async function buildAnswerUI(item) {
+  const container = document.getElementById('answer-container');
+  container.innerHTML = ""; // sauber machen
+  resetAnswerButtons();
+
+  if (selectedAnswerMode === "text") {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.id = 'answer-input';
+    input.placeholder = 'Namen eingeben...';
+
+    // ---- Mobile-Tastatur optimieren ----
+    input.autocomplete = 'off';       // keine Browser-Vorschläge
+    input.spellcheck = false;         // keine Rechtschreibprüfung
+    input.autocorrect = 'off';        // keine Autokorrektur auf iOS/Android
+    input.autocapitalize = 'none';    // keine automatische Großschreibung
+    input.inputMode = 'text';         // generische Text-Tastatur
+
+    container.appendChild(input);
+    answerInputEl = input;
+    setTimeout(focusAnswer, 0);
+
+    input.addEventListener("input", checkAnswer);
+
+    revealButtonEl.style.display = 'inline-block';
+    return;
+  }
+
+  // Single Choice
+  const correctItem = item;
+  const distractors = await fetchDistractorsFromDB(correctItem);
+
+   // ⬇️ HIER debuggen
+  console.log("Correct", correctItem.scientific_name, correctItem.phylogeny);
+  console.log("Distractors detail:", distractors.map(d => ({
+    sci: d.scientific_name,
+    phy: d.phylogeny,
+    cat: d.category_en
+  })));
+
+  const answerItems = shuffle([correctItem, ...distractors]).slice(0, 4);
+
+  const grid = document.createElement("div");
+  grid.className = "mc-grid";
+
+  answerItems.forEach(opt => {
+    const option = document.createElement("div");
+    option.className = "mc-option";
+    option.dataset.sciname = opt.scientific_name;
+
+    const trivialText =
+      Array.isArray(opt.common_name) && opt.common_name.length
+        ? opt.common_name[0]
+        : opt.scientific_name;
+
+    const trivial = document.createElement("span");
+    trivial.className = "mc-trivial";
+    trivial.lang = "de";
+    trivial.textContent = addBreaksAtAllowedChars(trivialText);
+
+    const scientific = document.createElement("span");
+    scientific.className = "mc-scientific";
+    scientific.lang = "la";
+    scientific.textContent = `(${addBreaksAtAllowedChars(opt.scientific_name)})`;
+
+    option.append(trivial, scientific);
+
+    option.onclick = () =>
+      handleMCClick(
+        option,
+        opt.scientific_name === correctItem.scientific_name
+      );
+
+    grid.appendChild(option);
+  });
+
+  container.appendChild(grid);
+}
+
+// --- Antwort prüfen ---
+function checkAnswer() {
+  if (!currentItem || !answerInputEl) return;
+
+  const val = answerInputEl.value.trim();
+  if (!val) return;
+
+  const normInput = normalize(val);
+  const normSci = normalize(currentItem.scientific_name);
+  const trivialNames = Array.isArray(currentItem.common_name)
+    ? currentItem.common_name.map(n => normalize(n))
+    : [];
+
+  // Early return, wenn Eingabe noch zu kurz
+  if (normInput.length < normSci.length && !trivialNames.some(tn => normInput.length >= tn.length)) return;
+
+  const tolerantMatch = (input, target) =>
+    input.length >= target.length && (input === target || levenshtein(input, target) <= 1);
+
+  const okSci = tolerantMatch(normInput, normSci);
+  const okTriv = trivialNames.some(tn => tolerantMatch(normInput, tn));
+
+  if (okSci || okTriv) {
+  answerInputEl.disabled = true;
+  correctCount++;
+  answeredCount++;
+  updateQuizStatus();
+  console.log(">>> before deciding next", {
+  answeredCount,
+  correctCount,
+  totalShown,
+  shownCount,
+  photoIndex,
+  hasNextItem: !!nextItem
+});
+
+  setTimeout(() => {
+    console.log("END CHECK TEXT", {
+    answeredCount,
+    quizLength,
+    from: "checkAnswer"
+  });
+
+    if (answeredCount >= quizLength) {
+      console.log("CALL endQuiz FROM checkAnswer");
+
+  endQuiz();
+} else {
+  console.log("CALL loadNextImage FROM checkAnswer");
+
+  loadNextImage();
+}
+  }, 300);
+  }
+}
+
+
+function handleMCClick(clickedOption, isCorrect) {
+  console.log("handleMCClick CALLED", {
+    hasCurrentItem: !!currentItem,
+    answeredCount,
+    quizLength
+  });
+
+  if (!currentItem) return;  // Schutz vor null
+
+  const options = document.querySelectorAll(".mc-option");
+  const correctSciName = currentItem.scientific_name;
+
+  options.forEach(opt => {
+    opt.classList.add("disabled");
+    if (opt.dataset.sciname === correctSciName) {
+      opt.classList.add("correct");
+    }
+  });
+
+  resetImageState();
+
+  if (isCorrect) {
+    correctCount++;
+    answeredCount++;
+    updateQuizStatus();
+    console.log("END CHECK MC_CORRECT", { answeredCount, quizLength });
+
+    setTimeout(() => {
+      console.log("END CHECK MC_CORRECT", {
+    answeredCount,
+    quizLength,
+    from: "MC_CORRECT"
+  });
+
+      if (answeredCount >= quizLength) {
+        console.log("CALL endQuiz FROM MC_CORRECT");
+
+        endQuiz();
+      } else {
+        console.log("CALL loadNextImage FROM MC_CORRECT");
+
+        loadNextImage();
+      }
+    }, 800);
+  } else {
+    clickedOption.classList.add("wrong");
+    answeredCount++;
+    updateQuizStatus();
+    console.log("END CHECK MC_WRONG", { answeredCount, quizLength });
+
+    nextButtonEl.style.display = "inline-block";
+    nextButtonEl.onclick = () => {
+      console.log("END CHECK NEXT_BUTTON", {
+    answeredCount,
+    quizLength,
+    from: "NEXT_BUTTON"
+  });
+
+      // HIER ist der entscheidende Fix:
+      if (answeredCount >= quizLength) {
+        console.log("CALL endQuiz FROM NEXT_BUTTON");
+
+        endQuiz();
+      } else {
+        console.log("CALL loadNextImage FROM NEXT_BUTTON");
+
+        loadNextImage();
+      }
+    };
+  }
+}
+
+
+
+
+// --- Auflösen ---
+function revealAnswer() {
+  if (!currentItem) return;
+
+  const tn = Array.isArray(currentItem.common_name) && currentItem.common_name.length
+    ? currentItem.common_name[0]
+    : currentItem.scientific_name;
+
+  const scientific = currentItem.scientific_name;
+
+  document.getElementById('answer-container').innerHTML = `
+    <span class="revealed-answer">${tn} <em>(${scientific})</em></span>
+  `;
+
+  revealButtonEl.style.display = 'none';
+  nextButtonEl.style.display = 'inline-block';
+  nextButtonEl.onclick = loadNextImage;
+}
+
+function resetLayoutOnResize() {
+  // Desktop-Bild zurück in den CSS-Zustand
+  imageEl.style.width = "";
+  imageEl.style.height = "";
+  imageEl.style.transform = "";
+  imageEl.style.objectFit = "";
+  imageEl.className = showingDetail ? "detail" : "preview";
+
+  // Mobile-Overlay wieder „neutral“
+  overlayPosX = 0;
+  overlayPosY = 0;
+  overlayScale = 1;
+  overlayStartDist = 0;
+  overlayStartScale = 1;
+  activePointers.clear();
+  updateOverlayTransform(); // nutzt die neue overlay-Größe
+}
+
+window.addEventListener("resize", () => {
+  resetLayoutOnResize();
+});
+
+
+
+// =========================
+// Detailbild-Logik
+// =========================
+
+const MOBILE_MAX_WIDTH = 900;
+
+// ---------- DESKTOP: Inline-Detailbild ----------
+imageEl.addEventListener("click", async (e) => {
+  if (window.innerWidth <= MOBILE_MAX_WIDTH) return;
+
+  e.stopPropagation();
+  if (!currentItem) return;
+
+  const wrapper = document.getElementById("image-wrapper");
+  const rect = wrapper.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  // 🔙 Zurück zur Vorschau
+  if (showingDetail) {
+    showingDetail = false;
+    imageEl.className = "preview";
+    imageEl.style.width = "";
+    imageEl.style.height = "";
+    imageEl.style.transform = "translate(0,0)";
+    imageEl.style.objectFit = "";
+    await setImageAndWait(imageEl, currentItem.url_vorschau);
+    imageEl.style.visibility = "visible";
+    setTimeout(focusAnswer, 0);
+    return;
+  }
+
+  // 🔍 Detail anzeigen
+  const detailUrl = await loadDetailImage(currentItem.url_detail);
+  if (!detailUrl) return;
+
+  showingDetail = true;
+  imageEl.className = "detail";
+  imageEl.style.visibility = "hidden";
+  await setImageAndWait(imageEl, detailUrl);
+
+  const imgW = imageEl.naturalWidth * SCALE;
+  const imgH = imageEl.naturalHeight * SCALE;
+
+  imageEl.style.width = imgW + "px";
+  imageEl.style.height = imgH + "px";
+  imageEl.style.objectFit = "unset";
+
+  const relX = mouseX / rect.width;
+  const relY = mouseY / rect.height;
+
+  const tx = Math.min(0, Math.max(rect.width - imgW, -relX * (imgW - rect.width)));
+  const ty = Math.min(0, Math.max(rect.height - imgH, -relY * (imgH - rect.height)));
+
+  imageEl.style.transform = `translate(${tx}px, ${ty}px)`;
+  imageEl.style.visibility = "visible";
+  setTimeout(focusAnswer, 0);
+});
+
+// Mousemove nur auf Desktop
+document.getElementById("image-wrapper").addEventListener("mousemove", (e) => {
+  if (!showingDetail || window.innerWidth <= MOBILE_MAX_WIDTH) return;
+
+  const rect = e.currentTarget.getBoundingClientRect();
+  const imgW = imageEl.offsetWidth;
+  const imgH = imageEl.offsetHeight;
+
+  const relX = (e.clientX - rect.left) / rect.width;
+  const relY = (e.clientY - rect.top) / rect.height;
+
+  const x = Math.min(0, Math.max(rect.width - imgW, -relX * (imgW - rect.width)));
+  const y = Math.min(0, Math.max(rect.height - imgH, -relY * (imgH - rect.height)));
+
+  imageEl.style.transform = `translate(${x}px, ${y}px)`;
+});
+
+
+// ---------- MOBILE: Overlay mit Pointer Events ----------
+
+// Zustände
+let overlayJustClosed = false;
+let overlayScale = 1;
+let overlayPosX = 0;
+let overlayPosY = 0;
+
+// Pan / Pinch Startzustände
+let panStartPosX = 0;
+let panStartPosY = 0;
+let panStartPointerX = 0;
+let panStartPointerY = 0;
+
+let pinchStartDist = 0;
+let pinchStartScale = 1;
+let pinchStartMidX = 0;
+let pinchStartMidY = 0;
+let pinchStartPosX = 0;
+let pinchStartPosY = 0;
+
+
+const activePointers = new Map(); // pointerId -> { x, y }
+
+function closeOverlay() {
+  overlay.style.display = 'none';
+  detailImg.src = '';
+  overlayOpening = false;
+  overlayJustClosed = true;
+  setTimeout(() => overlayJustClosed = false, 300);
+}
+
+
+function updateOverlayTransform() {
+  const imgW = detailImg.naturalWidth * overlayScale;
+  const imgH = detailImg.naturalHeight * overlayScale;
+  const vw = overlay.clientWidth;
+  const vh = overlay.clientHeight;
+
+  // Wenn noch nichts geladen/gerendert ist: nichts machen
+  if (!imgW || !imgH || !vw || !vh || !isFinite(imgW) || !isFinite(imgH)) {
+    return;
+  }
+
+  // erlaubte Offsets, damit der Rand komplett sichtbar sein kann
+  const maxOffsetX = Math.max(0, (imgW - vw) / 2);
+  const maxOffsetY = Math.max(0, (imgH - vh) / 2);
+
+  if (maxOffsetX === 0) overlayPosX = 0;
+  else overlayPosX = Math.max(-maxOffsetX, Math.min(maxOffsetX, overlayPosX));
+
+  if (maxOffsetY === 0) overlayPosY = 0;
+  else overlayPosY = Math.max(-maxOffsetY, Math.min(maxOffsetY, overlayPosY));
+
+  detailImg.style.transform =
+    `translate(${overlayPosX}px, ${overlayPosY}px) scale(${overlayScale})`;
+}
+
+let overlayOpening = false;
+
+// Thumbnail-Klick mit Schutz (wie vorher)
+speciesImage.addEventListener('click', async (e) => {
+  // Mehrfachklicks blocken, solange wir gerade öffnen
+  if (overlayOpening) {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
+
+  if (overlayJustClosed || overlay.style.display === 'flex') {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
+
+  if (window.innerWidth > MOBILE_MAX_WIDTH || !currentItem) return;
+
+  overlayOpening = true;
+
+  // 👉 Wenn bereits vorgeladen, direkt verwenden
+  let detailUrl = detailPreloadUrl;
+  if (!detailUrl) {
+    // Fallback: on demand laden
+    detailUrl = await loadDetailImage(currentItem.url_detail);
+  }
+  if (!detailUrl) {
+    overlayOpening = false;
+    return;
+  }
+
+  detailImg.src = detailUrl;
+  overlay.style.display = 'flex';
+
+  overlayScale = 1;
+  overlayPosX = 0;
+  overlayPosY = 0;
+  pinchStartDist = 0;   // falls du hier so heißt
+  activePointers.clear();
+
+  detailImg.onload = () => {
+    updateOverlayTransform();
+    overlayOpening = false;
+  };
+}, true);
+
+
+// Overlay-Klick zum Schließen (nur Hintergrund)
+overlay.addEventListener('click', (e) => {
+
+  if (e.target !== overlay) return;
+  if (overlay.style.display !== 'flex') return;
+  closeOverlay();
+});
+
+// ---------- Pointer Events auf dem Detailbild ----------
+
+// Pointer down
+overlay.addEventListener('pointerdown', (e) => {
+  if (e.pointerType !== 'touch') return;
+
+  overlay.setPointerCapture(e.pointerId);
+  activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+  const pointers = Array.from(activePointers.values());
+
+  if (pointers.length === 2) {
+    const [p1, p2] = pointers;
+    pinchStartMidX = (p1.x + p2.x) / 2;
+    pinchStartMidY = (p1.y + p2.y) / 2;
+
+    pinchStartDist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+    pinchStartScale = overlayScale;
+    pinchStartPosX = overlayPosX;
+    pinchStartPosY = overlayPosY;
+  } else if (pointers.length === 1) {
+    const p = pointers[0];
+    panStartPosX = overlayPosX;
+    panStartPosY = overlayPosY;
+    panStartPointerX = p.x;
+    panStartPointerY = p.y;
+  }
+}, { passive: false });
+
+overlay.addEventListener('pointermove', (e) => {
+  if (e.pointerType !== 'touch') return;
+  if (!activePointers.has(e.pointerId)) return;
+
+  e.preventDefault();
+  activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+  const pointers = Array.from(activePointers.values());
+
+  if (pointers.length === 2 && pinchStartDist > 0) {
+    const [p1, p2] = pointers;
+
+    const currentDist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+    let newScale = pinchStartScale * (currentDist / pinchStartDist);
+    newScale = Math.max(1, Math.min(newScale, 4));
+
+    const midX = (p1.x + p2.x) / 2;
+    const midY = (p1.y + p2.y) / 2;
+    const scaleFactor = newScale / pinchStartScale;
+
+    overlayPosX = pinchStartPosX + (pinchStartMidX - midX) * (1 - scaleFactor);
+    overlayPosY = pinchStartPosY + (pinchStartMidY - midY) * (1 - scaleFactor);
+
+    overlayScale = newScale;
+  } else if (pointers.length === 1) {
+    const p = pointers[0];
+    const dx = p.x - panStartPointerX;
+    const dy = p.y - panStartPointerY;
+    overlayPosX = panStartPosX + dx;
+    overlayPosY = panStartPosY + dy;
+  }
+
+  updateOverlayTransform();
+}, { passive: false });
+
+function handlePointerUp(e) {
+  if (e.pointerType !== 'touch') return;
+
+  activePointers.delete(e.pointerId);
+  const pointers = Array.from(activePointers.values());
+
+  if (pointers.length === 1) {
+    const p = pointers[0];
+    panStartPosX = overlayPosX;
+    panStartPosY = overlayPosY;
+    panStartPointerX = p.x;
+    panStartPointerY = p.y;
+    pinchStartDist = 0;
+    return;
+  }
+
+  if (pointers.length === 0) {
+    detailImg.style.transition = 'transform 0.3s ease-out';
+    setTimeout(() => {
+      overlayPosX = 0;
+      overlayPosY = 0;
+      overlayScale = 1;
+      updateOverlayTransform();
+      setTimeout(() => { detailImg.style.transition = ''; }, 300);
+    }, 50);
+  }
+}
+
+overlay.addEventListener('pointerup', handlePointerUp, { passive: false });
+overlay.addEventListener('pointercancel', handlePointerUp, { passive: false });
+
+
+
+
+// =========================
+// Kategorien & Laden der Daten
+// =========================
+
+// --- Kategorien laden ---
+async function loadCategories() {
+  categoryButtonsEl.innerHTML = "";
+  categoryLoadingEl.textContent = "loading categories...";
+
+  const { data, error } = await client
+    .from("fq_metadata")
+    .select("category_en, url_vorschau, cat_untertitel_en")
+    .eq("filetype", "image")
+    .eq("titelbild", "ja");
+
+console.log("categories data", { error, count: data?.length, sample: data?.[0] });
+
+  if (error || !data) {
+    categoryLoadingEl.textContent = "loading error";
+    return;
+  }
+
+  // R2-URLs bauen
+  const rows = data.map(row => ({
+    ...row,
+    url_vorschau: `${R2_BASE_URL_VORSCHAU}/${row.url_vorschau}`
+  }));
+
+  const CATEGORY_ORDER = [
+    "Mammals",
+    "Reptiles",
+    "Amphibians",
+    "Dragonflies and Damselflies",
+    "Grasshoppers and Crickets",
+    "Butterflies",
+    "Moths",
+    "Beetles",
+    "Zweiflügler",
+    "Spinnentiere",
+    "Sonstige Insekten",
+    "Mixed"
+  ];
+
+  // Kategorien extrahieren (→ rows statt data)
+  const uniqueCategories = [...new Set(rows.map(d => d.category_en))];
+
+  if (!uniqueCategories.includes("Mixed")) {
+    uniqueCategories.unshift("Mixed");
+  }
+
+  uniqueCategories.sort((a, b) => {
+    const ia = CATEGORY_ORDER.indexOf(a);
+    const ib = CATEGORY_ORDER.indexOf(b);
+    if (ia === -1 && ib === -1) return a.localeCompare(b, "de");
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
+
+  uniqueCategories.forEach(cat => {
+    if (cat === "Mixed") {
+      const btn = document.createElement("div");
+      btn.className = "category-button";
+      btn.onclick = () => onCategoryClick(cat);
+
+      const img = document.createElement("img");
+      img.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/Alle_Arten.webp`;
+      img.alt = "Mixed";
+
+      const label = document.createElement("div");
+      label.className = "category-label";
+      label.innerHTML = `
+        <div class="cat_title">Mixed</div>
+        <div class="cat_untertitel">Determine species from different groups</div>
+      `;
+
+      btn.appendChild(img);
+      btn.appendChild(label);
+      categoryButtonsEl.appendChild(btn);
+      return;
+    }
+
+    // → rows statt data
+    const images = rows.filter(d => d.category_en === cat);
+    const catImage =
+      images[Math.floor(Math.random() * images.length)]?.url_vorschau || "";
+
+    const btn = document.createElement("div");
+    btn.className = "category-button";
+    btn.onclick = () => onCategoryClick(cat);
+
+    const img = document.createElement("img");
+    img.src = catImage;
+    img.alt = cat;
+
+    const label = document.createElement("div");
+    label.className = "category-label";
+    label.innerHTML = `
+      <div class="cat_title">${cat}</div>
+      <div class="cat_untertitel">${images[0]?.cat_untertitel_en || ""}</div>
+    `;
+
+    btn.appendChild(img);
+    btn.appendChild(label);
+    categoryButtonsEl.appendChild(btn);
+  });
+
+  categoryLoadingEl.textContent = "";
+}
+
+
+
+
+// =========================
+// Quiz-Konfig
+// =========================
+
+const CATEGORY_CONFIG = {
+  "Mammals": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+  "Reptiles": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+  "Amphibians": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",
+    allowedFiletypes: ["image", "audio", "all"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+  "Dragonflies and Damselflies": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "100", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+    "Grasshoppers and Crickets": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image", "audio", "all"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+  "Butterflies": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "100", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+  "Moths": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+    "Beetles": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+    "Zweiflügler": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+    "Spinnentiere": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+    "Sonstige Insekten": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
+    defaultDifficulty: "all",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+    "Mixed": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "100", "all"],
+    defaultFiletype: "image",
+    allowedFiletypes: ["image", "audio", "all"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  },
+  // fallback für Kategorien ohne speziellen Eintrag
+  "_default": {
+    defaultNumPhotos: "10",
+    allowedNumPhotos: ["10", "30", "60", "all"],
+    defaultFiletype: "image",                  
+    allowedFiletypes: ["image"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3", "all"],
+    extraFilters: []
+  }
+};
+
+// Anpassung der Kategorie-Auswahl
+function onCategoryClick(category_en) {
+  hideQuizSummary(); // wichtig
+
+  selectedCategory = category_en;
+
+  if (categoriesWithConfig.includes(category_en)) {
+    // 👉 Konfigurationsfläche anzeigen
+    showQuizConfig(category_en);
+  } else {
+    // 👉 direkt Quiz starten (altes Verhalten)
+    startQuizDirect(_en);
+  }
+}
+
+function showQuizConfig(category_en) {
+  selectedCategory = category_en;
+  document.getElementById("config-category-title").textContent = `${category_en}`;
+
+  categorySectionEl.style.display = "none";
+  quizConfigEl.style.display = "block";
+
+  const cfg = CATEGORY_CONFIG[category_en] || CATEGORY_CONFIG._default;
+
+  // Antwortmodus: immer gleich, nur Default setzen
+  selectedAnswerMode = "mc";
+  document.querySelectorAll("#answer-mode-buttons button").forEach(b =>
+    b.classList.toggle("active", b.dataset.value === selectedAnswerMode)
+  );
+
+  // Anzahl-Fotos: Buttons je nach Kategorie ein-/ausblenden + Default
+  selectedNumPhotos = cfg.defaultNumPhotos;
+  document.querySelectorAll("#num-photos-buttons button").forEach(b => {
+    const value = b.dataset.value;
+    const enabled = cfg.allowedNumPhotos.includes(value);
+    b.style.display = enabled ? "inline-flex" : "none";
+    b.classList.toggle("active", enabled && value === selectedNumPhotos);
+  });
+
+  // NEU: Dateityp-Block ein-/ausblenden
+  const filetypeContainer = document.getElementById("filetype-container");
+  const filetypeButtons   = document.querySelectorAll("#filetype-buttons button");
+  const allowedFiletypes  = cfg.allowedFiletypes || ["image", "audio", "all"];
+
+  if (allowedFiletypes.length === 1 && allowedFiletypes[0] === "image") {
+    // Nur Bilder erlaubt -> Block komplett ausblenden
+    filetypeContainer.style.display = "none";
+    selectedFiletype = "image";
+  } else {
+    // Block anzeigen und Buttons passend konfigurieren
+    filetypeContainer.style.display = "block";
+    selectedFiletype = cfg.defaultFiletype || "image";
+
+    filetypeButtons.forEach(b => {
+      const value = b.dataset.value;  // "image" | "audio" | "all"
+      const enabled = allowedFiletypes.includes(value);
+      b.style.display = enabled ? "inline-flex" : "none";
+      b.classList.toggle("active", enabled && value === selectedFiletype);
+    });
+  }
+
+  // Schwierigkeit: Buttons ein-/ausblenden + Default
+  selectedDifficulty = cfg.defaultDifficulty;
+  document.querySelectorAll("#difficulty-buttons button").forEach(b => {
+    const value = b.dataset.value;
+    const enabled = cfg.allowedDifficulties.includes(value);
+    b.style.display = enabled ? "inline-flex" : "none";
+    b.classList.toggle("active", enabled && value === selectedDifficulty);
+  });
+
+  quizConfigEl.scrollIntoView({
+    block: "start",    // oberer Rand des Elements
+    behavior: "auto"   // kein Smooth-Scroll, damit nichts „nachrutscht“
+  });
+
+  // Platz für spätere, gruppenspezifische Filter:
+  // z.B. showExtraFilters(cfg.extraFilters);
+}
+
+
+function hideQuizConfig() {
+  // Config-Bereich ausblenden, Kategorien wieder zeigen
+  quizConfigEl.style.display = "none";
+  categorySectionEl.style.display = "block";
+}
+
+
+
+function initConfigButtons() {
+  selectedNumPhotos = "10";
+  selectedDifficulty = "1";
+  selectedAnswerMode = "mc";
+  selectedFiletype = "image";
+
+  const backToCategoriesBtn = document.getElementById("back-to-categories");
+  backToCategoriesBtn.onclick = () => {
+  // Konfig verstecken
+  hideQuizConfig();
+  showCategoryOverview();
+
+  // Quiz und Status zuverlässig verstecken
+  quizEl.style.display = "none";
+  const status = document.getElementById("quiz-status");
+  if (status) status.style.display = "none";
+
+  const abortBtn = document.getElementById("abort-button");
+  if (abortBtn) abortBtn.style.display = "none";
+
+  // Kategorien zeigen
+  categorySectionEl.style.display = "block";
+
+  // optional: zur Oberkante scrollen
+  window.scrollTo(0, 0);
+  loadCategories;
+};
+
+
+  // Anzahl-Fotos Buttons
+  document.querySelectorAll("#num-photos-buttons button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (btn.style.display === "none") return; // vorsichtshalber
+      selectedNumPhotos = btn.dataset.value;
+      document.querySelectorAll("#num-photos-buttons button")
+        .forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
+  // Dateityp Buttons
+  document.querySelectorAll("#filetype-buttons button").forEach(btn => {
+    if (btn.dataset.value === selectedFiletype) {
+      btn.classList.add("active");
+    }
+    btn.addEventListener("click", () => {
+      if (btn.style.display === "none") return;
+      selectedFiletype = btn.dataset.value;
+      document.querySelectorAll("#filetype-buttons button")
+        .forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
+
+  // Schwierigkeit Buttons
+  document.querySelectorAll("#difficulty-buttons button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (btn.style.display === "none") return;
+      selectedDifficulty = btn.dataset.value;
+      document.querySelectorAll("#difficulty-buttons button")
+        .forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
+  // Antwortmodus Buttons (unverändert)
+  document.querySelectorAll("#answer-mode-buttons button").forEach(btn => {
+    if (btn.dataset.value === selectedAnswerMode) btn.classList.add("active");
+    btn.addEventListener("click", () => {
+      selectedAnswerMode = btn.dataset.value;
+      document.querySelectorAll("#answer-mode-buttons button")
+        .forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+}
+
+
+async function fetchAllImages(baseQuery) {
+  const PAGE_SIZE = 1000; // nach Bedarf 500, 1000, 2000 ...
+  let all = [];
+  let from = 0;
+  let to = PAGE_SIZE - 1;
+
+  while (true) {
+    const { data, error } = await baseQuery.range(from, to);
+    if (error) {
+      console.error('Fehler bei Supabase-Range:', error);
+      throw error;
+    }
+    if (!data || data.length === 0) break;
+
+    all = all.concat(data);
+
+    if (data.length < PAGE_SIZE) break; // letzte Seite erreicht
+    from += PAGE_SIZE;
+    to += PAGE_SIZE;
+  }
+
+  return all;
+}
+
+
+// =========================
+// Start-/Setup-Funktionen
+// =========================
+
+startQuizBtn.onclick = async () => {
+  audioPlayCountInRound = 0;
+  currentCategory = selectedCategory;
+  const numPhotos = selectedNumPhotos;
+  const difficulty = selectedDifficulty;
+
+  hideQuizConfig();
+  categorySectionEl.style.display = "none";
+  hideQuizSummary();
+
+  // Difficulty
+  let difficultyParam = null;
+  if (difficulty !== "all") {
+    difficultyParam = parseInt(difficulty, 10);
+  }
+
+  // filetype
+  let filetypeParam = null;
+  if (selectedFiletype === "image") {
+    filetypeParam = "image";
+  } else if (selectedFiletype === "audio") {
+    filetypeParam = "audio";
+  }
+
+  // gewünschte Anzahl Datensätze aus DB
+  const desired =
+    numPhotos === "all" ? 100 : parseInt(numPhotos, 10);
+
+  // Medien holen
+  const { data, error } = await client.rpc('get_random_quiz_images_r2_en', {
+    p_category_en:   selectedCategory,
+    p_difficulty: difficultyParam,
+    p_limit:      desired,
+    p_filetype:   filetypeParam
+  });
+
+  console.log("first item", data?.[0]);
+
+  if (error || !data || data.length === 0) {
+    console.error(error);
+    alert('No media for this selection was found.');
+    return;
+  }
+
+  // Items vorbereiten
+  const items = data.map(row => {
+    const isAudio = row.filetype === "audio";
+    return {
+      ...row,
+      url_vorschau: `${isAudio ? R2_BASE_URL_AUDIO : R2_BASE_URL_VORSCHAU}/${row.url_vorschau}`,
+      url_detail: row.url_detail || null
+    };
+  });
+
+  let filteredImages = shuffle(items);
+
+  // Quiz-Variablen initialisieren
+  imageQueue   = filteredImages;
+  currentIndex = 0;
+  correctCount = 0;
+  answeredCount = 0;     // <– wichtig
+  shownCount   = 0;
+  totalShown   = 0;
+  shownPhotos  = new Set();
+  speciesMap   = {};
+  speciesOrder = [];
+  speciesPointer = 0;
+
+  // Artenmap vorbereiten
+  for (const item of imageQueue) {
+    const art = item.scientific_name;
+    if (!speciesMap[art]) speciesMap[art] = { photos: [], shownPointer: 0 };
+    speciesMap[art].photos.push(item);
+  }
+
+  for (const art in speciesMap) {
+    speciesMap[art].photos = shuffle(speciesMap[art].photos);
+  }
+
+  const MAX_PHOTOS_PER_SPECIES = 15;
+  photoPool = [];
+
+  for (const art in speciesMap) {
+    const photos  = speciesMap[art].photos;
+    const limited = shuffle(photos).slice(0, MAX_PHOTOS_PER_SPECIES);
+    photoPool.push(...limited);
+  }
+
+  shuffledPhotos = shuffle(photoPool);
+  photoIndex = 0;
+
+  // quizLength jetzt aus numPhotos bestimmen
+  quizLength = (numPhotos === "all")
+    ? shuffledPhotos.length
+    : Math.min(parseInt(numPhotos, 10), shuffledPhotos.length);
+
+  // passend begrenzen
+  shuffledPhotos = shuffledPhotos.slice(0, quizLength);
+
+  console.log("quizLength =", quizLength, "photos =", shuffledPhotos.length);
+
+  updateQuizStatus();
+  document.getElementById("quiz-status").style.display = "flex";
+  document.getElementById("abort-button").style.display = "block";
+  quizEl.style.display = "block";
+
+  startTimer();
+
+  // erste Frage vorladen und anzeigen
+  await preloadNextQuestion();
+  await loadNextImage();
+};
+
+
+
+function startQuizDirect(_en) {
+  selectedCategory = category_en;
+  selectedNumPhotos = "all";
+  selectedDifficulty = "all";
+
+  hideQuizSummary();
+  categorySectionEl.style.display = "none";
+  hideQuizConfig();
+
+  startQuizBtn.click(); // bewusst
+}
+
+
+
+
+// =========================
+// Quiz-Flow
+// =========================
+
+// --- Timer Funktionen ---
+function startTimer() {
+  quizStartTime = Date.now();
+}
+
+function stopTimer() {
+  clearInterval(quizTimerInterval);
+}
+
+function updateTimer() {
+  const diffSec = Math.floor((Date.now() - quizStartTime) / 1000); // Sekunden ganzzahlig
+  const minutes = String(Math.floor(diffSec / 60)).padStart(2, '0');
+  const seconds = String(diffSec % 60).padStart(2, '0');
+  document.getElementById('quiz-timer').textContent = `${minutes}:${seconds}`;
+}
+
+// --- Counter aktualisieren ---
+function updateQuizStatus() {
+  document.getElementById('quiz-counter').textContent = `${correctCount} / ${totalShown} correct`;
+}
+
+function cancelImageLoads() {
+  // Version hochzählen → alle alten Loads werden invalid
+  currentDetailLoadToken++;
+
+  if (detailPreloadImg) {
+    detailPreloadImg.onload = null;
+    detailPreloadImg.onerror = null;
+    detailPreloadImg.src = ""; // Download abbrechen[web:31]
+    detailPreloadImg = null;
+    detailPreloadUrl = null;
+  }
+}
+
+function onPreviewClick() {
+  // Fall A: Detailbild ist schon sichtbar → zurück zur Vorschau
+  if (showingDetail && isDetailLoaded) {
+    showingDetail = false;
+    imageEl.classList.remove("detail");
+    imageEl.classList.add("preview");
+    imageEl.src = currentItem.url_vorschau;
+    return;
+  }
+
+  // Fall B: Detailbild wird gerade geladen → IGNORIEREN
+  if (isDetailLoading && !isDetailLoaded) {
+    return; // nochmaliges Klicken macht nichts
+  }
+
+  // Fall C: Detail wurde noch nicht geladen → Ladevorgang starten
+  if (!isDetailLoaded) {
+    isDetailLoading = true;
+    loadDetailForCurrentItem();
+  }
+}
+
+function loadDetailForCurrentItem() {
+  if (!currentItem || !currentItem.url_detail) return;
+
+  const img = new Image();
+  img.onload = function () {
+    isDetailLoading = false;
+    isDetailLoaded  = true;
+
+    showingDetail = true;
+    imageEl.classList.remove("preview");
+    imageEl.classList.add("detail");
+    imageEl.src = img.src;
+  };
+  img.onerror = function () {
+    isDetailLoading = false;
+    // Fehlerbehandlung
+  };
+  img.src = currentItem.url_detail;
+}
+
+function setLicenseTextWithLink(licenseTextDiv, rawText) {
+  let text = rawText || 'Kein Lizenzhinweis vorhanden.';
+
+  // Alle ungewöhnlichen Bindestriche in normale Minuszeichen umwandeln
+  text = text.replace(/[\u2010-\u2015]/g, '-');
+
+  // Jetzt nach der normalisierten Schreibweise suchen
+  const re = /CC BY-NC-SA 4\.0/;
+
+  if (re.test(text)) {
+    const linked = text.replace(
+      re,
+      '<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>'
+    );
+    licenseTextDiv.innerHTML = linked;
+  } else {
+    licenseTextDiv.textContent = text;
+  }
+}
+
+
+
+function stopAllAudio() {
+  document.querySelectorAll('audio').forEach(function (audio) {
+    audio.pause();
+    audio.currentTime = 0;
+  });
+}
+
+// Audio-Element pro Frage neu bauen
+function createAudioElement(src) {
+  const audioWrapper = document.getElementById('audio-wrapper');
+  if (!audioWrapper) return;
+
+  audioWrapper.innerHTML = '';
+
+  const audioEl = document.createElement('audio');
+  audioEl.controls = true;
+  audioEl.preload = 'auto';
+  audioEl.src = src;
+
+  audioWrapper.appendChild(audioEl);
+
+  // Erste Audio: nur Controls anzeigen, nicht automatisch starten
+  if (audioPlayCountInRound === 0) {
+    audioPlayCountInRound++;
+    return;
+  }
+
+  // Ab der zweiten Audio versuchen wir autoplay
+  audioPlayCountInRound++;
+
+  const playPromise = audioEl.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(err => {
+      // Falls der Browser Autoplay blockt, tun wir einfach nichts,
+      // dann bleibt der Play-Button sichtbar.
+      console.warn('Autoplay blockiert:', err);
+    });
+  }
+}
+
+
+let nextAudioObj = new Audio();
+nextAudioObj.preload = 'auto';
+let isLoadingNext = false;
+
+let preloadInFlight = null;
+
+// Preload: nutzt NUR shuffledPhotos[photoIndex], kein nextImage()
+async function preloadNextQuestion() {
+  if (preloadInFlight) return preloadInFlight;   // laufenden Preload wiederverwenden
+
+  preloadInFlight = (async () => {
+    const upcoming = shuffledPhotos[photoIndex] || null;
+    if (!upcoming) {
+      nextItem = null;
+      nextImageObj = null;
+      nextAudioObj = null;
+      nextDistractors = null;
+      return;
+    }
+
+    nextItem = upcoming;
+    nextImageObj = null;
+    nextAudioObj = null;
+    nextDistractors = null;
+
+    if (upcoming.filetype === 'audio') {
+      nextAudioObj = new Audio();
+      nextAudioObj.preload = 'auto';
+      nextAudioObj.src = upcoming.url_vorschau;
+    } else {
+      nextImageObj = new Image();
+      nextImageObj.src = upcoming.url_vorschau;
+    }
+
+    nextDistractors = await fetchDistractorsFromDB(upcoming);
+  })();
+
+  try {
+    await preloadInFlight;
+  } finally {
+    preloadInFlight = null;
+  }
+}
+
+
+// --- Nächstes Bild ---
+async function loadNextImage() {
+  console.log(">>> loadNextImage START", {
+    shownCount,
+    totalShown,
+    quizLength,
+    photoIndex,
+    nextItem: !!nextItem
+  });
+  if (isLoadingNext) return;    // verhindert parallel laufende Aufrufe
+  isLoadingNext = true;
+
+  try {
+    // Quiz ggf. schon fertig
+    if (answeredCount >= quizLength) {
+      console.log("loadNextImage called but quiz already finished");
+      endQuiz();
+      return;
+    }
+
+    // 🔄 Immer zuerst zurück in den Vorschau-Modus
+    isDetailLoading = false;
+    isDetailLoaded  = false;
+    cancelImageLoads();
+    showingDetail = false;
+
+    // Elemente holen
+    const imageEl        = document.getElementById('species-image');
+    const audioWrapper   = document.getElementById('audio-wrapper');
+    const licenseTextDiv = document.getElementById('license-text');
+    const licenseToggleBtn = document.getElementById('license-toggle');
+    const imageToggleHint = document.getElementById("image-toggle-hint");
+
+    if (imageToggleHint) {
+      imageToggleHint.style.display = "none";  // Default: aus
+    }
+
+    // Lizenzhinweis immer einklappen
+    licenseTextDiv.style.display = 'none';
+    if (licenseToggleBtn) {
+      licenseToggleBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    // Audio stoppen, bevor wir etwas Neues anzeigen
+    stopAllAudio();
+
+    // Bild-Styles zurücksetzen
+    imageEl.className = "preview";
+    imageEl.style.width = "";
+    imageEl.style.height = "";
+    imageEl.style.objectFit = "";
+    imageEl.style.transform = "translate(0,0)";
+
+    // Falls noch nichts vorgeladen wurde: auf Preload warten
+    if (!nextItem) {
+      await preloadNextQuestion();
+    }
+
+    // Nächstes Item bestimmen
+    let itemToUse = nextItem || shuffledPhotos[photoIndex] || null;
+    if (!itemToUse) {
+      console.error("Kein weiteres Item mehr", {
+        photoIndex,
+        length: shuffledPhotos.length,
+        answeredCount,
+        quizLength
+      });
+      endQuiz();
+      return;
+    }
+
+    currentItem = itemToUse;
+    nextItem = null;
+    console.log('PRELOAD/FALLBACK currentItem', currentItem);
+
+    shownCount++;
+    totalShown++;
+    // Index jetzt wirklich verbrauchen
+    photoIndex++;
+
+    resetUI();
+
+    // Statistik-Update
+    const id = currentItem.id;
+    if (!stats[id]) stats[id] = 0;
+    stats[id]++;
+
+    // Erst alles ausblenden
+    imageEl.style.display = 'none';
+    audioWrapper.style.display = 'none';
+
+    // Je nach filetype
+    if (currentItem.filetype === 'audio') {
+      // Platzhalter-Bild
+      imageEl.src = `${R2_BASE_URL_VORSCHAU}/fqvorschau/Icons/audio_platzhalter.webp`;
+      imageEl.style.display = 'block';
+
+      // Audio-Player neu erzeugen
+      createAudioElement(currentItem.url_vorschau);
+      audioWrapper.style.display = 'block';
+
+      if (imageToggleHint) {
+        imageToggleHint.style.display = "none";
+      }
+    } else {
+      audioWrapper.style.display = 'none';
+
+      if (nextImageObj && nextImageObj.src === currentItem.url_vorschau) {
+        // vorgeladenes Bild verwenden
+        imageEl.src = nextImageObj.src;
+        imageEl.style.display = 'block';
+      } else {
+        // regulär rendern
+        renderImage(currentItem);
+      }
+
+      if (imageToggleHint) {
+        imageToggleHint.style.display = "block";
+      }
+    }
+
+    questionAreaEl.style.display = 'block';
+
+    document.getElementById('photo-id').textContent =
+      currentItem.id_nummer ? `# ${currentItem.id_nummer}` : '';
+
+    document.getElementById('photo-credit').textContent =
+      currentItem.author ? `© ${currentItem.author}` : '';
+
+    setLicenseTextWithLink(licenseTextDiv, currentItem.Lizenz);
+
+    // Distraktoren aus dem Preload nutzen (Fallback: live holen)
+    const distractors = nextDistractors || await fetchDistractorsFromDB(currentItem);
+    await buildAnswerUIWithGivenDistractors(currentItem, distractors);
+    updateQuizStatus();
+
+    // Fokus für Texteingabe
+    if (selectedAnswerMode === "text" && window.innerWidth > MOBILE_MAX_WIDTH) {
+      setTimeout(focusAnswer, 0);
+    }
+
+    console.log(">>> loadNextImage END", {
+      shownCount,
+      totalShown,
+      quizLength,
+      photoIndex,
+      nextItem: !!nextItem
+    });
+
+    // Nächste Frage im Hintergrund vorladen
+    await preloadNextQuestion();
+
+  } finally {
+    isLoadingNext = false;
+  }
+}
+
+
+
+
+
+
+// --- Quiz beenden ---
+function endQuiz() {
+  stopAllAudio();
+  clearInterval(quizTimerInterval);
+  showQuizSummary();
+  document.getElementById("abort-button").style.display = "none";
+}
+
+function showQuizSummary() {
+  quizEl.style.display = "none";
+  document.getElementById("quiz-status").style.display = "none";
+
+  const durationSec = Math.floor((Date.now() - quizStartTime) / 1000);
+  const minutes = Math.floor(durationSec / 60);
+  const seconds = durationSec % 60;
+
+  // ⭐ Spruch oben je nach Quote
+  const rate = (correctCount / totalShown) * 100;
+  let quote = "";
+
+  if (rate === 100) quote = "Nailed it!";
+  else if (rate >= 80) quote = "Great job, you were really close!";
+  else if (rate >= 50) quote = "You already know quite a bit! Why not give it another try?";
+  else if (rate >= 25) quote = "Not to bad, but can you top this";
+  else quote = "Getting started is always hard, but practice makes perfect!";
+
+  document.getElementById("summary-quote").textContent = quote;
+
+  // ✅ Satz mit Anzahl richtig
+  document.getElementById("summary-count").textContent =
+    `You have correctly identified ${correctCount} out of ${answeredCount} animals!`;
+
+  // ✅ Dauer mit Leerzeichen
+  document.getElementById("summary-time").textContent =
+    `Duration: ${minutes}:${String(seconds).padStart(2,"0")} minutes`;
+
+  // Summary anzeigen
+  document.getElementById("quiz-summary").style.display = "flex";
+}
+
+function hideQuizSummary() {
+  const summary = document.getElementById("quiz-summary");
+  if (summary) summary.style.display = "none";
+}
+
+
+// ==========================
+// EVENT-LISTENER
+// ==========================
+
+const licenseToggleBtn = document.getElementById('license-toggle');
+const licenseTextDiv  = document.getElementById('license-text');
+
+if (licenseToggleBtn && licenseTextDiv) {
+  licenseToggleBtn.addEventListener('click', () => {
+    const isVisible = licenseTextDiv.style.display === 'block';
+    licenseTextDiv.style.display = isVisible ? 'none' : 'block';
+    licenseToggleBtn.setAttribute('aria-expanded', isVisible ? 'false' : 'true');
+  });
+}
+
+// Übersicht anzeigen (nur Kategorien sichtbar)
+function showCategoryOverview() {
+  quizSummaryEl.style.display = "none";
+  quizEl.style.display = "none";
+  hideQuizConfig();
+  abortButtonEl.style.display = "none";
+
+  categorySectionEl.style.display = "flex"; // wichtig: flex
+  window.scrollTo(0, 0);
+}
+
+// --- Quiz abbrechen ---
+abortButtonEl.onclick = () => {
+  stopAllAudio();
+  endQuiz();
+};
+
+// Summary -> Übersicht
+document.getElementById("back-to-overview-btn").onclick = () => {
+  const base = "index.html";               // falls deine Seite so aufgerufen wird
+  const url  = base + "?refresh=" + Date.now();
+  window.location.href = url;
+};
+
+revealButtonEl.onclick = revealAnswer;
+
+// Initial: beim ersten Laden Kategorienübersicht anzeigen + Kategorien laden
+document.addEventListener("DOMContentLoaded", () => {
+  showCategoryOverview();
+  loadCategories();
+});
+</script>
+</main>
+<footer>
+  <div class="page">
+    <a href="impressum.html">Impressum (Legal notice)</a>
+  </div>
+</footer>
+</body>
+</html>  padding: 10px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+button:hover { background: #0056b3; }
+button:disabled { background: #6c757d; cursor: not-allowed; }
+
+.status { margin-top: 10px; min-height: 24px; font-weight: bold;}
+
+#quiz,
+#quiz-config,
+#quiz-summary {
+  display: none;
+}
+/* ===============================
+   Quiz Status
+   =============================== */
+#quiz-status {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  color: var(--text-muted);
+  font-weight: bold;
+  font-size: 1.125rem; /* 18px */
+  gap: 1rem;
+}
+#category-loading {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+/* ===============================
+   Kategorien-Buttons
+   =============================== */
+
+#category-section {
+  flex: 1 1 auto; 
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* wichtig, damit Flex-Kind wächst */
+}
+
+#category-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* jede Zeile passt sich der Höhe der Items an */
+  grid-auto-rows: auto;         /* <– wichtig */
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.category-button {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  width: 100%;
+  /* KEINE feste Höhe hier */
+  /* height: 100%;  entfernen */
+  aspect-ratio: 3 / 2;          /* steuert jetzt wirklich das Seitenverhältnis */
+}
+
+.category-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  /* Verlauf: unten dunkler → nach oben transparent */
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.25) 35%,
+    rgba(0, 0, 0, 0) 100%
+  );
+
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1;   /* über dem Bild … */
+}
+.category-button:hover::before {
+  opacity: 1;
+}
+.category-button img {
+  display: block;         /* entfernt kleine Lücken */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* Bild füllt den Container komplett */
+  transition: transform 0.5s ease;
+  border-radius: 0;       /* kein Radius */
+  transform: translateZ(0); /* subtile Rendering-Glättung */
+}
+
+.category-button:hover img {
+  transform: scale(1.06); /* sanftes Zoomen bei Hover */
+}
+
+/* Label unten links */
+.category-label {
+  position: absolute;
+  left: 20px;        /* Abstand vom linken Rand */
+  bottom: 16px;      /* Abstand vom unteren Rand */
+  padding: 4px 6px;
+  color: #fff;
+  pointer-events: none;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: auto;
+  max-width: 90%;    /* passt sich der Grid-Zelle an */
+  border-radius: 0;  /* kein Radius */
+  box-sizing: border-box;
+}
+
+/* Titel innerhalb Label */
+.category-label .cat_title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Untertitel einblenden bei Hover */
+.category-label .cat_untertitel {
+ font-size: 12px;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.5s ease, max-height 0.5s ease;
+}
+
+.category-button:hover .cat_untertitel {
+  opacity: 1;
+  max-height: 40px;
+}
+
+/* Standard: Mobile/klein – alles untereinander wie gehabt */
+#quiz-layout {
+  display: block;
+}
+
+
+
+/* ===============================
+   Quiz-Karte
+   =============================== */
+#quiz {
+  --quiz-content-width: clamp(260px, 80vw, 700px);
+  background: var(--bg-card);
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+  width: 90%;
+  margin: 0.5rem auto;
+  padding:
+    clamp(0.75rem, 2vh, 1.25rem)
+    clamp(1rem, 3vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  max-height: 95svh;
+  width: 100%;
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: clamp(0.6rem, 0.5vh, 0.65rem);
+}
+
+
+#quiz-status-wrapper {
+  display: flex;
+  justify-content: flex-start;  
+  width: 100%;
+  margin: 0 auto 10px;          
+  gap: 1rem;                     
+  color: var(--text-muted);
+  font-weight: bold;
+  flex-shrink: 1;
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+#quiz-status {
+  display: flex;
+  justify-content: flex-start;      
+  width: 100%;           
+  margin: 0 auto 5px;              
+  gap: 1rem;
+  color: var(--text-muted);
+  font-weight: bold;
+  box-sizing: border-box;   
+  flex-shrink: 1;
+  font-size: clamp(0.8rem, 1rem, 1.125rem);
+  line-height: 1.1;
+  margin-bottom: 0.25rem;        
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+
+}
+#status{
+  display: none;
+  position: absolute;
+  z-index: 0;
+}
+
+#image-wrapper-container { 
+  display: inline-block; 
+  position: relative;
+  width: auto;
+  margin-bottom: 0;
+}
+
+#image-wrapper {
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin: 0 0 0;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  flex: 1 1 auto;
+  max-height: 100%;
+  min-height: 100%;
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+img { 
+  border-radius: 5px;
+}
+
+#image-toggle-hint {
+  position: absolute;
+  bottom: 100%;
+  right: 4px;
+  margin-bottom: 2px;
+  color: black;
+  font-size: 0.75rem;
+  padding: 1px 5px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+#species-image.preview { 
+  width: 100%; 
+  height: auto; 
+  object-fit: cover; 
+  transform: none !important; 
+}
+
+#species-image.detail { 
+  width: auto; 
+  height: auto;
+  object-fit: unset; 
+}
+
+
+input[type="text"] {
+  width: 80%;
+  border: 2px solid #dde3dd;
+  background: #fff;
+  color: var(--text-main);
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(0.85rem, 2.1vh, 1.125rem);
+  padding: clamp(0.45rem, 1.8vh, 0.875rem)
+           clamp(0.65rem, 2.5vh, 1.125rem);
+
+  border-radius: clamp(0.5rem, 1.5vh, 0.875rem);
+}
+
+#question-area{
+  margin-bottom: 6%;
+}
+
+#answer-container {
+  min-height: 0;
+  flex-shrink: 1;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 0;
+}
+
+#answer-container .revealed-answer {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--green-mid);
+  text-align: center;
+  display: inline-block;
+}
+
+.mc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  flex-shrink: 1;
+  gap: clamp(0.4rem, 1.5vh, 1rem);
+  margin-top: clamp(0.4rem, 1.2vh, 1.25rem);
+  max-width: var(--quiz-content-width);
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+.mc-option {
+  border-radius: 14px;
+  background: #fff;
+  border: 2px solid #dde3dd;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  padding: clamp(0.5rem, 3.5vh, 5rem) 0;
+}
+
+
+.mc-option:not(.disabled):hover {
+  border-color: var(--green-dark);
+  background-color: var(--green-light);
+  color: var(--text-main);
+}
+
+.mc-scientific {
+  display: block;
+  font-style: italic;
+  font-size: 14px;
+  margin-top: 5px;
+  color: inherit; 
+}
+
+
+.mc-option.correct {
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+  color: white;
+}
+.mc-option.correct .mc-trivial,
+.mc-option.correct .mc-scientific {
+  color: #ffffff;
+}
+
+.mc-option.wrong {
+  background: #c41425;
+  border-color: #c41425;
+  color: white;
+}
+.mc-option.wrong .mc-trivial,
+.mc-option.wrong .mc-scientific {
+  color: #ffffff;
+}
+
+.mc-trivial { 
+  font-size: clamp(0.8rem, 1rem, 1.5rem);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.mc-scientific { 
+  font-style: italic; 
+  font-size: clamp(0.7rem, 0.8rem, 1.1rem);
+  line-height: 1.1;
+  color: var(--text-muted); 
+}
+
+.mc-option.correct { background: var(--green-dark); border-color: var(--green-dark); color: #fff; }
+.mc-option.correct .mc-trivial, .mc-option.correct .mc-scientific { color: #fff; }
+.mc-option.wrong { background: #c41425; border-color: #c41425; color: #fff; }
+.mc-option.wrong .mc-trivial, .mc-option.wrong .mc-scientific { color: #fff; }
+
+.mc-option.disabled { 
+  pointer-events: none; 
+  opacity: 1; 
+}
+
+
+#button-container {
+  margin-top: auto;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.4rem, 1.2vh, 0.625rem);
+  flex-shrink: 0;
+  padding-bottom: 0;
+  padding-top: clamp(0.4rem, 1.2vh, 0.8rem);
+  margin-bottom: 0;
+}
+
+#button-container button {
+  font-size: clamp(0.85rem, 2.1vh, 1.125rem);
+  padding: clamp(0.45rem, 1.8vh, 0.95rem)
+           clamp(0.9rem, 3vh, 1.75rem);
+  border-radius: clamp(0.5rem, 1.4vh, 0.75rem);
+}
+
+#reveal-button {
+  background: var(--green-mid);
+  color: #fff;
+}
+
+#next-button {
+  background: var(--green-mid);
+  color: #fff;
+  margin-bottom: 0;
+}
+
+
+#quiz-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  margin-top: 0;        
+  max-height: 95vh; 
+}
+
+#abort-button {
+  display: none;               
+  position: absolute;          
+  top: 100px;                   
+  left: 20px;                  
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background: #c41425;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+}
+
+#photo-meta, #photo-id, #photo-credit {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+/* Container linksbündig */
+#license-wrapper {
+  margin-top: 0.25rem;
+  padding-right: 2%;
+  text-align: right;
+}
+
+/* Button ohne Hintergrund, wie ein Link */
+#license-toggle {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;         /* Link-Farbe nach Geschmack */
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: #111;
+}
+
+/* Hover/Focus für bessere Usability */
+#license-toggle:hover,
+#license-toggle:focus {
+  text-decoration: none;
+}
+
+/* Lizenztext linksbündig, dezent hinterlegt (oder Hintergrund entfernen) */
+#license-text {
+  padding: 0;
+  font-size: 0.85rem;
+  background: none;     /* falls du gar keinen Hintergrund willst: background: none; */
+  border-radius: 4px;
+  margin-top: 0.25rem;
+  text-align: right;
+}
+
+
+
+.page {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+
+
+/* --- Obere Menüleiste --- */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg-card);
+  border-bottom: 1px solid #dde3dd;
+  flex-shrink: 0;
+}
+
+.top-nav-inner {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0.05% 10%;
+  display: flex;
+  align-items: baseline;
+  gap: 54px;
+  position: relative;
+}
+
+.nav-primary {
+  color: var(--green-dark);
+  text-decoration: none;
+  font-family: "Cairo", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0;
+  font-size: 28px;
+}
+
+.nav-secondary {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.nav-secondary:hover {
+  color: var(--green-dark);
+}
+.language {
+  position: absolute;
+  top: 8%;
+  right: 5%;           /* passend zu deinem padding */
+}
+h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+.slider-container {
+  width: 50%;
+  margin: 40px auto;
+  text-align: center;
+}
+.config-category-select{
+  font-size: 20px;
+}
+.custom-slider {
+  display: flex;
+  position: relative;
+  height: 40px;
+  background: #eee;
+  border-radius: 8px;
+  user-select: none;
+}
+
+.slider-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: #eee;
+  border-radius: 8px;
+  position: relative;
+}
+
+.slider-option {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1;
+  font-weight: 600;
+}
+
+.slider-thumb {
+  position: absolute;
+  top: 0;
+  width: 25%; /* 4 Optionen */
+  height: 100%;
+  background: #5f8f73;
+  border-radius: 8px;
+  transition: left 0.2s;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  pointer-events: none; /* damit Klicks auf Optionen gehen */
+}
+
+.slider-value {
+  margin-top: 5px;
+  font-weight: bold;
+}
+.slider-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.slider-buttons button {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  background: #d6d6d6;      /* dunkleres Grau */
+  color: #1f2a24;           /* dunkle Schrift */
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 20px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.slider-buttons button.active {
+  background: #5f8f73;      /* Grün wie vorher */
+  color: white;
+}
+#start-quiz-btn {
+  font-size: 25px;
+  padding: 20px 40px;
+}
+#back-to-categories {
+  position: fixed;
+  top: 75px;
+  left: 20px;
+  background: #c41425;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 0;
+}
+
+#quiz-config {
+  display: none;
+  position: relative; /* nötig für absolute Positionierung des Back-Buttons */
+  background: var(--bg-main);
+  border-radius: 12px;
+  width: 100%;           /* nimmt Containerbreite */
+  flex-direction: column;
+  align-items: center;   /* Inhalte horizontal zentrieren */
+  padding: 2rem;
+  margin: 0;
+}
+.config-category-title {
+  font-size: 38px;      /* größer */
+  margin: 30px 0 18px;  /* etwas Abstand */
+  color: var(--green-dark);
+}
+.config-category-subtitle{
+  font-size: 1.7rem;
+  font-weight: 400;
+}
+
+.slider-container {
+  width: 100%;
+  max-width: 500px;
+}
+
+#category-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  min-height: calc(100vh - var(--nav-height) - var(--footer-height));
+}
+
+
+#category-section p {
+  color: var(--text-muted);
+  margin-bottom: 0px;
+}
+#start-quiz-btn {
+  display: block;      /* Block-Level für margin auto */
+  margin: 40px auto 0; /* oben Abstand, horizontal zentriert */
+  font-size: 25px;
+  padding: 20px 40px;
+  background: var(--green-dark);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 8vh;
+}
+
+.quiz-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+#species-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;         /* 3:2 Verhältnis */
+  object-fit: contain;         /* ganzes Bild sichtbar, wie bisher */
+  background: #fff;
+  z-index: 1;
+  position: relative;
+}
+#audio-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.3rem 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  display: none;             /* wird im JS ein-/ausgeblendet */
+  background-color: var(--green-dark);
+  padding-bottom: 5%;
+  padding-top: 3%;
+  z-index: 2;
+}
+
+#audio-wrapper audio {
+  width: 80%;
+  transform: scale(1.2);
+}
+
+#quiz-summary {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: none;               /* wichtig */
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+.quiz-summary-card {
+  background: var(--bg-main);
+  padding: 48px 40px;
+  border-radius: 16px;
+  max-width: 520px;
+  width: 90%;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+
+  display: flex;
+  flex-direction: column;
+  gap: 28px;              /* 🔹 Hauptabstand */
+}
+.quiz-summary-card h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+.summary-item {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 18px;
+}
+.summary-quote {
+  text-align: center;
+  font-style: italic;
+  margin: 10px 0 20px;
+  font-size: 1rem;
+  color: #5f8f73;
+}
+
+#photo-id {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  font-size: 12px;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+#photo-credit {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 12px;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+#photo-id,
+#photo-credit {
+  z-index: 3;
+}
+
+footer {
+  background: var(--bg-card);
+  border-top: 1px solid #dde3dd;
+  text-align: center;
+  padding: 16px 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  position: static;
+}
+
+
+footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: var(--green-dark);
+  text-decoration: underline;
+}
+
+/* ===============================
+   Media Queries für Smartphones & Tablets
+   =============================== */
+/* Ab z.B. 900px Breite: zweispaltiges Layout */
+@media (orientation: landscape) {
+#quiz-erklaerung {
+  top: 5.6%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;      /* nicht baseline */
+  justify-content: flex-end;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  color: var(--green-dark);
+  background-color: var(--bg-main);
+  padding-left: 4%; 
+  padding-right: 4%;            /* linker Abstand */
+  padding-top: 4%;              /* oberer Abstand */
+  padding-bottom: 4%;  
+  height: 7rem;          /* unterer Abstand */
+  gap: 13%;
+}
+
+#quiz-erklaerung-prim {
+  font-size: 1.8rem;
+  font-weight: 600;
+  width: 100%;
+  text-align: left;
+}
+
+#quiz-erklaerung-sek {
+  font-size: 1.2rem;
+  font-weight: 400;
+  width: 100%;
+  text-align: left;
+}
+
+  .quiz-card {        /* oder wie dein Container heißt */
+  background: white;
+  padding: 12px;    /* z.B. 12–20px nach Geschmack */
+  border-radius: 8px;
+  }
+  #quiz {
+    display: flex;
+    flex-direction: column;
+    --quiz-content-width: 85vw;     /* deutlich breiter */
+    max-width: 85vw;
+    max-height: 90vh;
+  }
+
+  #quiz-layout {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  #quiz-left,
+  #quiz-right {
+    flex: 2 1 0;
+    min-width: 0; /* wichtig gegen Überlaufen */
+  }
+  .mc-trivial, 
+  .mc-scientific {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+#quiz-left {
+  /* nicht das Bild bestimmen lassen, sondern nur den Spaltenanteil */
+  flex: 4 1 0;   /* kann so bleiben, das regelt nur Verhältnis links/rechts */
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+  #quiz-right {
+    flex: 2 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Inhalt nach unten schieben */
+  }
+  #quizfrage{
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 3%;
+  }
+    #question-area {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Kinder im question-area nach unten */
+    margin-bottom: 0;
+  }
+    #button-container {
+    margin-top: 1rem;
+    justify-content: center;
+  }
+  /* Bild links nicht mehr auf volle Card-Breite strecken */
+  #image-wrapper {
+    max-width: 55vw;
+    margin-left: 0;
+    margin-right: 0;
+    max-height: 95vh;       /* deutlich höher */
+    min-height: 350px;
+    width: 100%;
+    margin: 0;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    position: relative;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  #species-image.detail {
+    width: auto;
+    height: auto;
+    object-fit: unset;
+    transform: scale(1.3);  /* 130 % */
+}
+
+  #species-image.preview {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transform: none !important;
+  }
+  /* Antwortbereich rechts voll nutzen */
+  #answer-container,
+  .mc-grid,
+  input[type="text"] {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .mc-grid{
+  grid-template-columns: repeat(2, 1fr);
+  }
+  #abort-button {
+    margin: 0rem auto 0;
+    display: none;              /* initially hidden */
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background: #c41425;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;          /* Position relativ zum nächsten positioned ancestor (z.B. body) */
+    top: auto;                   /* Abstand unter der Nav-Leiste */
+    left: auto; 
+  }
+}
+
+@media (orientation: landscape) and (max-width: 1300px) {
+  #category-buttons {
+    grid-template-columns: repeat(2, 1fr); /* 2 Spalten auf Tablet */
+    grid-auto-rows: 1fr;
+    height: auto;
+  }
+  #quiz-erklaerung-prim{
+    font-size: 1.6rem;
+  }
+  #quiz-erklaerung-sek{
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 1250px) {
+  #abort-button {
+    margin: 1rem auto 0;
+    display: none;              /* initially hidden */
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background: #c41425;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;          /* Position relativ zum nächsten positioned ancestor (z.B. body) */
+    top: auto;                   /* Abstand unter der Nav-Leiste */
+    left: auto; 
+  }
+    #quizfrage{
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 3%;
+  }
+  .mc-trivial { 
+  font-size: clamp(0.8rem, 0.9rem, 1.5rem);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.mc-scientific { 
+  font-style: italic; 
+  font-size: clamp(0.7rem, 0.65rem, 1.1rem);
+  line-height: 1.1;
+  color: var(--text-muted); 
+}
+
+}
+
+
+
+
+@media (max-width: 750px), (orientation: portrait) {
+  #quiz { 
+    width: 90%; 
+    margin: 1rem auto; 
+    padding: 1.25rem; 
+  }
+   #category-buttons { 
+    grid-template-columns: 1fr; 
+    grid-auto-rows: 1fr; /* statt auto */
+    min-height: 0;       /* wichtig für Flexbox */
+  }
+  #button-container {
+    position: static;   /* NICHT mehr absolut */
+    width: 100%;
+    margin-top: 1rem;
+  }
+  button { 
+    font-size: 1rem; 
+    padding: 0.75rem 1.25rem; 
+  }
+  #quiz-status,
+  #quiz-status-wrapper,
+  .mc-grid{
+  width: 100%;
+  }
+  #image-wrapper{
+    width: 100%;
+    max-height: 30svh;
+  }
+  input[type="text"] {
+    width: 70%;
+  }
+  #quiz{
+    background: none;
+      border-radius: 0;
+      box-shadow: none;
+  }
+  .quiz-summary-card{
+   margin: 20px;
+  }
+  #answer-container {
+    min-height: 40px;
+    margin-bottom: 0.75rem;
+    margin-top: 0.8rem;
+  }
+}
+
+
+@media (max-width: 400px){
+  button { font-size: 0.875rem; padding: 0.5rem 1rem; }
+}
+
+@media (orientation: portrait) {
+  .nav-primary{
+    font-size: clamp(10px, 2rem, 100px);
+    white-space: nowrap;
+  }
+  .nav-secondary{
+    font-size: clamp(7px, 0.8rem, 16px);
+    max-width: 10%;
+  }
+  .top-nav-inner{
+      padding: 2vh 4vh;
+      gap: 15%;
+      align-items: last baseline;
+  }
+  .top-nav{
+    position: static;
+    background: none;
+  }
+  main{
+    background-color: var(--green-light);
+  }
+#quiz-erklaerung {
+  top: 5.6%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;      /* nicht baseline */
+  justify-content: flex-end;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  color: #fff;
+  background-color: #5c725c;
+  padding-left: 5%; 
+  padding-right: 6%;            /* linker Abstand */
+  padding-top: 4%;              /* oberer Abstand */
+  padding-bottom: 6%;  
+  height: 6rem;          /* unterer Abstand */
+  gap: 2%;
+}
+
+#quiz-erklaerung-prim {
+  font-size: 1.2rem;
+  font-weight: 600;
+  width: 65%;
+  text-align: left;
+}
+
+#quiz-erklaerung-sek {
+  font-size: 0.8rem;
+  font-weight: 400;
+  width: 100%;
+  text-align: left;
+}
+.category-button {
+  position: relative;
+  overflow: hidden;  
+}
+.category-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+  #category-buttons { 
+    grid-template-columns: 1fr; 
+    grid-auto-rows: 1fr; /* statt auto */
+    min-height: 0;       /* wichtig für Flexbox */
+  }
+  #button-container {
+    position: static;   /* NICHT mehr absolut */
+    width: 100%;
+    margin-top: 1rem;
+  }
+  button { 
+    font-size: 1rem;
+    padding: 0.75rem 1.25rem; 
+  }
+  .category-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  padding: 0.6rem 0.6rem;            /* Höhe des Balkens steuert die Padding */
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.3) 0%,
+    rgba(0,0,0,0.3) 20%,
+    rgba(0,0,0,0)   100%
+  );
+  color: #fff;
+
+  display: flex;
+  text-align: left;
+
+}
+
+  .category-label .cat_title {
+    font-size: 1.1rem;
+    text-align: left;
+    padding-left: 1rem;
+  }
+  .category-label .cat_untertitel {
+    font-size: 0.8rem;
+    display: none;
+  }
+
+#back-to-categories {
+  position: absolute;
+  top: 1vh;
+  left: 1vh;
+  background: #c41425;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+#quiz-config {
+  width: 100%;        /* statt 100vw */
+  display: none;
+  flex-direction: column;
+  align-items: center; /* zentriert alle direkten Kinder horizontal */
+  background: none;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+#config-category-title{
+  margin-top: 6vh;
+  margin-bottom: 2vh;
+}
+.config-category-subtitle{
+  margin-top: 0;
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+.slider-container {
+  display: flex;
+  flex-direction: column; /* Label über den Buttons */
+  align-items: center;    /* zentriert Label + Buttons */
+  width: 100%;
+  margin-bottom: 2vh;     /* Abstand zwischen den Slidern */
+  text-align: center;
+}
+
+.custom-slider {
+  display: flex;
+  position: relative;
+
+  background: #eee;
+  border-radius: 8px;
+  user-select: none;
+}
+.config-category-select{
+  font-size: 1rem;
+}
+.slider-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: #eee;
+  border-radius: 8px;
+  position: relative;
+  justify-content: center;
+}
+
+.slider-option {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1;
+  font-weight: 600;
+}
+
+.slider-thumb {
+  position: absolute;
+  top: 0;
+  width: 25%; 
+  height: 100%;
+  background: #5f8f73;
+  border-radius: 8px;
+  transition: left 0.2s;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  pointer-events: none; 
+}
+
+.slider-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.2vh;
+  margin-top: 1.5vh;
+}
+.slider-buttons button {
+  padding: 1.5vh 2.5vh;
+  border: none;
+  border-radius: 8px;
+  background: #d6d6d6;      
+  color: #1f2a24;           
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.2s, color 0.2s;
 }
 #start-quiz-btn {
   font-size: 1.5rem;
