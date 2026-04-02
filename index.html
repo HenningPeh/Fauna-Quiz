@@ -221,12 +221,12 @@ button:disabled { background: #6c757d; cursor: not-allowed; }
   display: flex;
   flex-direction: column;
   position: relative;
-  max-height: 95svh;
   width: 100%;
   max-width: var(--quiz-content-width);
   margin-left: auto;
   margin-right: auto;
   padding-bottom: clamp(0.6rem, 0.5vh, 0.65rem);
+  margin-top: 20px;
 }
 
 
@@ -341,7 +341,7 @@ input[type="text"] {
 }
 
 #question-area{
-  margin-bottom: 6%;
+  margin-top: 4%;
 }
 
 #answer-container {
@@ -352,7 +352,7 @@ input[type="text"] {
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 0;
+  padding-top: 3%;
 }
 
 #answer-container .revealed-answer {
@@ -483,7 +483,6 @@ input[type="text"] {
   flex-direction: column;
   align-items: flex-start; 
   margin-top: 0;        
-  max-height: 95vh; 
 }
 
 #abort-button {
@@ -498,7 +497,6 @@ input[type="text"] {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-
 }
 
 #photo-meta, #photo-id, #photo-credit {
@@ -508,12 +506,19 @@ input[type="text"] {
 }
 
 /* Container linksbündig */
-#license-wrapper {
-  margin-top: 0.25rem;
+#meta-wrapper {
+  margin-top: 0.35rem;
   padding-right: 2%;
+}
+#meta-buttons {
   text-align: right;
 }
 
+#question-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 /* Button ohne Hintergrund, wie ein Link */
 #license-toggle {
   padding: 0;
@@ -525,10 +530,77 @@ input[type="text"] {
   font-weight: 500;
   color: #111;
 }
+#question-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: baseline;
+  width: 100%;
+}
+#features-toggle {
+  grid-column: 3;
+  justify-self: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  line-height: 1.2;
+}
+#quizfrage {
+  grid-column: 2;
+  justify-self: center;
+  margin: 0;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+#features-toggle img {
+  display: block;
+  width: 20px;   /* anpassen */
+  height: 20px;  /* anpassen */
+  object-fit: contain;
+}
+.features-intro {
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin-bottom: 0.25rem;
+  text-align: left;
+  display: none;
+}
+
+#features-text {
+  width: 100%;
+  text-align: left;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 0.5rem;
+  margin-bottom: 0;
+  font-size: 0.75rem;
+}
+
+#features-text.is-open {
+  display: grid;
+}
+
+.feature-entry {
+  min-width: 0;
+  border: var(--green-mid);
+  padding: 3px;
+}
+
+.feature-name,
+.feature-tip {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+
+
 
 /* Hover/Focus für bessere Usability */
 #license-toggle:hover,
-#license-toggle:focus {
+#license-toggle:focus,
+#features-toggle:hover,
+#features-toggle:focus {
   text-decoration: none;
 }
 
@@ -922,7 +994,6 @@ footer a:hover {
     flex-direction: column;
     --quiz-content-width: 85vw;     /* deutlich breiter */
     max-width: 85vw;
-    max-height: 90vh;
   }
 
   #quiz-layout {
@@ -956,11 +1027,6 @@ footer a:hover {
     display: flex;
     flex-direction: column;
     justify-content: flex-end; /* Inhalt nach unten schieben */
-  }
-  #quizfrage{
-    font-size: 1.3rem;
-    font-weight: 500;
-    margin-bottom: 3%;
   }
     #question-area {
     width: 100%;
@@ -1060,7 +1126,6 @@ footer a:hover {
     #quizfrage{
     font-size: 1rem;
     font-weight: 500;
-    margin-bottom: 3%;
   }
   .mc-trivial { 
   font-size: clamp(0.8rem, 0.9rem, 1.5rem);
@@ -1358,14 +1423,17 @@ footer a:hover {
   padding-bottom: 7%;
 }
 /* Container linksbündig */
-#license-wrapper {
-  margin-top: 0.25rem;
+#meta-wrapper {
+  margin-top: 0.35rem;
   padding-right: 2%;
+}
+#meta-buttons {
   text-align: right;
 }
 
 /* Button ohne Hintergrund, wie ein Link */
-#license-toggle {
+#license-toggle,
+#features-toggle {
   padding: 0;
   margin: 0;
   border: none;
@@ -1378,7 +1446,9 @@ footer a:hover {
 
 /* Hover/Focus für bessere Usability */
 #license-toggle:hover,
-#license-toggle:focus {
+#license-toggle:focus,
+#features-toggle:hover,
+#features-toggle:focus {
   text-decoration: none;
 }
 
@@ -1392,10 +1462,9 @@ footer a:hover {
   text-align: right;
 }
   #quizfrage{
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 600;
-    margin-bottom: 3%;
-    margin-top: 5%;
+    margin-top: 8%;
   }
 
 input[type="text"] {
@@ -1514,20 +1583,31 @@ input[type="text"] {
   display: flex;
   flex-direction: column;
   position: relative;
-  max-height: 95svh;
   width: 100%;
   max-width: var(--quiz-content-width);
   margin-left: auto;
   margin-right: auto;
   padding-bottom: clamp(0.6rem, 1.5vh, 1.25rem);
   background-color: #fff;
-  max-height: 95vh; 
 }
 #status{
   display: none;
   position: absolute;
 }
-
+.features-intro {
+  font-size: 0.75rem;
+  display: none;
+}
+#features-text {
+  grid-template-columns: 1fr;
+  gap: 0;
+  padding: 0;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+}
+.feature-entry {
+  padding: 5px;
+}
   #detail-overlay {
     display: none;            
     position: fixed;            
@@ -1678,6 +1758,7 @@ footer{
   font-size: 1.2rem;
   display: none;
 }
+#features-toggle,
 #license-toggle {
   font-size: 0.85rem;
 }
@@ -1798,8 +1879,10 @@ footer{
           <span id="photo-id"></span>
           <span id="photo-credit"></span>
         </div>
-        <div id="license-wrapper">
-          <button id="license-toggle" type="button" aria-expanded="false" aria-controls="license-text">Lizenzhinweis</button>
+        <div id="meta-wrapper">
+          <div id="meta-buttons">
+            <button id="license-toggle" type="button" aria-expanded="false" aria-controls="license-text">Lizenzhinweis</button>
+          </div>
           <div id="license-text" style="display:none;"></div>
         </div>
       </div>
@@ -1807,7 +1890,15 @@ footer{
 
     <div id="quiz-right">
       <div id="question-area" style="display:none;">
-        <div id="quizfrage">Wie heißt diese Art?</div>
+        <div id="question-header">
+          <div id="features-text" style="display:none;"></div>
+          <div id="question-row">
+            <div id="quizfrage">Wie heißt diese Art?</div>
+            <button id="features-toggle" type="button" aria-expanded="false" aria-controls="features-text" aria-label="Bestimmungshilfe">
+              <img src="Buch_icon.webp" alt="" />
+            </button>
+          </div>
+        </div>
         <div id="answer-container"></div>
         <div id="button-container">
           <button id="reveal-button" style="background:#1e9d20; color:white;">Auflösen</button>
@@ -1986,6 +2077,7 @@ let isDetailLoading = false;
 let isDetailLoaded  = false;
 let selectedFiletype = "image"; // Default: Bilder
 let audioPlayCountInRound = 0;
+let currentAnswerItems = [];
 
 
 
@@ -2045,6 +2137,18 @@ async function loadDetailImage(path) {
   }
 }
 
+const FEATURE_CATEGORIES = [
+  'Säugetiere',
+  'Amphibien',
+  'Reptilien'
+];
+
+function shouldShowFeatures(item) {
+  if (selectedAnswerMode !== 'mc') return false;
+  if (!item || !item.category) return false;
+
+  return FEATURE_CATEGORIES.includes(item.category);
+}
 
 
 // =========================
@@ -2203,6 +2307,7 @@ async function buildAnswerUIWithGivenDistractors(item, distractors) {
   const container = document.getElementById('answer-container');
   container.innerHTML = "";
   resetAnswerButtons();
+  updateMetaVisibility(item);
 
   if (selectedAnswerMode === "text") {
     const input = document.createElement('input');
@@ -2229,6 +2334,11 @@ async function buildAnswerUIWithGivenDistractors(item, distractors) {
   const correctItem = item;
 
   const answerItems = shuffle([correctItem, ...distractors]).slice(0, 4);
+
+  currentAnswerItems = answerItems;
+
+  const featuresTextDiv = document.getElementById('features-text');
+  setFeaturesText(featuresTextDiv, currentAnswerItems);
 
   const grid = document.createElement("div");
   grid.className = "mc-grid";
@@ -2451,6 +2561,24 @@ function focusAnswer() {
   if (window.matchMedia("(orientation: portrait)").matches) return; // nur Desktop
   const input = document.getElementById("answer-input");
   if (input) input.focus();
+}
+
+function updateMetaVisibility(currentItem) {
+  const metaButtons     = document.getElementById('meta-buttons');
+  const featuresToggle  = document.getElementById('features-toggle');
+  const featuresTextDiv = document.getElementById('features-text');
+
+  if (!metaButtons || !featuresToggle || !featuresTextDiv) return;
+
+  if (shouldShowFeatures(currentItem)) {
+    featuresToggle.style.display = '';
+    metaButtons.style.justifyContent = 'space-between';
+  } else {
+    featuresToggle.style.display = 'none';
+    featuresTextDiv.style.display = 'none';
+    featuresToggle.setAttribute('aria-expanded', 'false');
+    metaButtons.style.justifyContent = 'flex-end';
+  }
 }
 
 
@@ -3646,6 +3774,61 @@ function loadDetailForCurrentItem() {
   img.src = currentItem.url_detail;
 }
 
+
+function setupMetaToggles() {
+  const licenseToggle   = document.getElementById('license-toggle');
+  const licenseTextDiv  = document.getElementById('license-text');
+  const featuresToggle  = document.getElementById('features-toggle');
+  const featuresTextDiv = document.getElementById('features-text');
+
+  if (!licenseToggle || !licenseTextDiv || !featuresToggle || !featuresTextDiv) return;
+
+  function closeLicense() {
+    licenseTextDiv.style.display = 'none';
+    licenseToggle.setAttribute('aria-expanded', 'false');
+  }
+
+  function openLicense() {
+    licenseTextDiv.style.display = 'block';
+    licenseToggle.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeFeatures() {
+    featuresTextDiv.style.display = 'none';
+    featuresToggle.setAttribute('aria-expanded', 'false');
+  }
+
+  function openFeatures() {
+    featuresTextDiv.style.display = 'grid';
+    featuresToggle.setAttribute('aria-expanded', 'true');
+  }
+
+  licenseToggle.addEventListener('click', () => {
+    const isOpen = licenseToggle.getAttribute('aria-expanded') === 'true';
+
+    closeLicense();
+    closeFeatures();
+
+    if (!isOpen) {
+      openLicense();
+    }
+  });
+
+  featuresToggle.addEventListener('click', () => {
+    const isOpen = featuresToggle.getAttribute('aria-expanded') === 'true';
+
+    closeLicense();
+    closeFeatures();
+
+    if (!isOpen) {
+      openFeatures();
+    }
+  });
+}
+
+
+document.addEventListener('DOMContentLoaded', setupMetaToggles);
+
 function setLicenseTextWithLink(licenseTextDiv, rawText) {
   let text = rawText || 'Kein Lizenzhinweis vorhanden.';
 
@@ -3666,6 +3849,44 @@ function setLicenseTextWithLink(licenseTextDiv, rawText) {
   }
 }
 
+function setFeaturesText(featuresTextDiv, answerItems) {
+  if (!featuresTextDiv) return;
+
+  if (!Array.isArray(answerItems) || answerItems.length === 0) {
+    featuresTextDiv.innerHTML = 'Keine Merkmale vorhanden.';
+    return;
+  }
+
+  const introHtml = `
+    <div class="features-intro">
+      Die folgenden Merkmale sowie der Gesamteindruck können bei der Bestimmung helfen.
+    </div>
+  `;
+
+  const entriesHtml = answerItems.map(item => {
+    const trivialName =
+      Array.isArray(item.trivialname) && item.trivialname.length
+        ? item.trivialname[0]
+        : item.scientific_name;
+
+    const rawTip = item.tipp || 'Keine Merkmale hinterlegt.';
+
+    const formattedTip = String(rawTip)
+      .split('\n')
+      .map(line => line.trim())
+      .filter(Boolean)
+      .join('<br>');
+
+    return `
+      <div class="feature-entry">
+        <div class="feature-name">${trivialName}:</div>
+        <div class="feature-tip">${formattedTip}</div>
+      </div>
+    `;
+  }).join('');
+
+  featuresTextDiv.innerHTML = introHtml + entriesHtml;
+}
 
 
 function stopAllAudio() {
@@ -3785,6 +4006,8 @@ async function loadNextImage() {
     const audioWrapper   = document.getElementById('audio-wrapper');
     const licenseTextDiv = document.getElementById('license-text');
     const licenseToggleBtn = document.getElementById('license-toggle');
+    const featuresTextDiv   = document.getElementById('features-text');
+    const featuresToggleBtn = document.getElementById('features-toggle');
     const imageToggleHint = document.getElementById("image-toggle-hint");
 
     if (imageToggleHint) {
@@ -3793,9 +4016,11 @@ async function loadNextImage() {
 
     // Lizenzhinweis immer einklappen
     licenseTextDiv.style.display = 'none';
+    featuresTextDiv.style.display = 'none';
     if (licenseToggleBtn) {
       licenseToggleBtn.setAttribute('aria-expanded', 'false');
     }
+    if (featuresToggleBtn) featuresToggleBtn.setAttribute('aria-expanded', 'false');
 
     // Audio stoppen, bevor wir etwas Neues anzeigen
     stopAllAudio();
@@ -3965,17 +4190,6 @@ function hideQuizSummary() {
 // ==========================
 // EVENT-LISTENER
 // ==========================
-
-const licenseToggleBtn = document.getElementById('license-toggle');
-const licenseTextDiv  = document.getElementById('license-text');
-
-if (licenseToggleBtn && licenseTextDiv) {
-  licenseToggleBtn.addEventListener('click', () => {
-    const isVisible = licenseTextDiv.style.display === 'block';
-    licenseTextDiv.style.display = isVisible ? 'none' : 'block';
-    licenseToggleBtn.setAttribute('aria-expanded', isVisible ? 'false' : 'true');
-  });
-}
 
 // Übersicht anzeigen (nur Kategorien sichtbar)
 function showCategoryOverview() {
