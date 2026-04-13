@@ -1954,7 +1954,6 @@ footer{
       <button data-value="1">1</button>
       <button data-value="2">2</button>
       <button data-value="3">3</button>
-      <button data-value="all">Mix (1-3)</button>
     </div>
   </div>
 
@@ -2078,7 +2077,7 @@ let isDetailLoaded  = false;
 let selectedFiletype = "image"; // Default: Bilder
 let audioPlayCountInRound = 0;
 let currentAnswerItems = [];
-
+let currentQuestionTracked = false;
 
 
 
@@ -2086,6 +2085,24 @@ let currentAnswerItems = [];
 // Utility Funktionen
 // =========================
 
+async function trackQuestionOnce(item, wasCorrect) {
+  console.log("trackQuestionOnce called", {
+    id_nummer: item?.id_nummer,
+    currentQuestionTracked,
+    wasCorrect
+  });
+
+  if (!item || currentQuestionTracked) {
+    console.log("trackQuestionOnce skipped", {
+      hasItem: !!item,
+      currentQuestionTracked
+    });
+    return;
+  }
+
+  currentQuestionTracked = true;
+  await trackQuestionResult(item, wasCorrect);
+}
 
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -2666,7 +2683,7 @@ async function buildAnswerUI(item) {
 }
 
 // --- Antwort prüfen ---
-function checkAnswer() {
+async function checkAnswer() {
   if (!currentItem || !answerInputEl) return;
 
   const val = answerInputEl.value.trim();
@@ -2678,58 +2695,62 @@ function checkAnswer() {
     ? currentItem.trivialname.map(n => normalize(n))
     : [];
 
-  // Early return, wenn Eingabe noch zu kurz
-  if (normInput.length < normSci.length && !trivialNames.some(tn => normInput.length >= tn.length)) return;
+  if (
+    normInput.length < normSci.length &&
+    !trivialNames.some(tn => normInput.length >= tn.length)
+  ) return;
 
   const tolerantMatch = (input, target) =>
-    input.length >= target.length && (input === target || levenshtein(input, target) <= 1);
+    input.length >= target.length &&
+    (input === target || levenshtein(input, target) <= 1);
 
   const okSci = tolerantMatch(normInput, normSci);
   const okTriv = trivialNames.some(tn => tolerantMatch(normInput, tn));
 
   if (okSci || okTriv) {
-  answerInputEl.disabled = true;
-  correctCount++;
-  answeredCount++;
-  updateQuizStatus();
-  console.log(">>> before deciding next", {
-  answeredCount,
-  correctCount,
-  totalShown,
-  shownCount,
-  photoIndex,
-  hasNextItem: !!nextItem
-});
+    await trackQuestionOnce(currentItem, true);
 
-  setTimeout(() => {
-    console.log("END CHECK TEXT", {
-    answeredCount,
-    quizLength,
-    from: "checkAnswer"
-  });
+    answerInputEl.disabled = true;
+    correctCount++;
+    answeredCount++;
+    updateQuizStatus();
 
-    if (answeredCount >= quizLength) {
-      console.log("CALL endQuiz FROM checkAnswer");
+    console.log(">>> before deciding next", {
+      answeredCount,
+      correctCount,
+      totalShown,
+      shownCount,
+      photoIndex,
+      hasNextItem: !!nextItem
+    });
 
-  endQuiz();
-} else {
-  console.log("CALL loadNextImage FROM checkAnswer");
+    setTimeout(() => {
+      console.log("END CHECK TEXT", {
+        answeredCount,
+        quizLength,
+        from: "checkAnswer"
+      });
 
-  loadNextImage();
-}
-  }, 300);
+      if (answeredCount >= quizLength) {
+        console.log("CALL endQuiz FROM checkAnswer");
+        endQuiz();
+      } else {
+        console.log("CALL loadNextImage FROM checkAnswer");
+        loadNextImage();
+      }
+    }, 300);
   }
 }
 
 
-function handleMCClick(clickedOption, isCorrect) {
+async function handleMCClick(clickedOption, isCorrect) {
   console.log("handleMCClick CALLED", {
     hasCurrentItem: !!currentItem,
     answeredCount,
     quizLength
   });
 
-  if (!currentItem) return;  // Schutz vor null
+  if (!currentItem) return;
 
   const options = document.querySelectorAll(".mc-option");
   const correctSciName = currentItem.scientific_name;
@@ -2744,6 +2765,8 @@ function handleMCClick(clickedOption, isCorrect) {
   resetImageState();
 
   if (isCorrect) {
+    await trackQuestionOnce(currentItem, true);
+
     correctCount++;
     answeredCount++;
     updateQuizStatus();
@@ -2751,22 +2774,22 @@ function handleMCClick(clickedOption, isCorrect) {
 
     setTimeout(() => {
       console.log("END CHECK MC_CORRECT", {
-    answeredCount,
-    quizLength,
-    from: "MC_CORRECT"
-  });
+        answeredCount,
+        quizLength,
+        from: "MC_CORRECT"
+      });
 
       if (answeredCount >= quizLength) {
         console.log("CALL endQuiz FROM MC_CORRECT");
-
         endQuiz();
       } else {
         console.log("CALL loadNextImage FROM MC_CORRECT");
-
         loadNextImage();
       }
     }, 800);
   } else {
+    await trackQuestionOnce(currentItem, false);
+
     clickedOption.classList.add("wrong");
     answeredCount++;
     updateQuizStatus();
@@ -2775,19 +2798,16 @@ function handleMCClick(clickedOption, isCorrect) {
     nextButtonEl.style.display = "inline-block";
     nextButtonEl.onclick = () => {
       console.log("END CHECK NEXT_BUTTON", {
-    answeredCount,
-    quizLength,
-    from: "NEXT_BUTTON"
-  });
+        answeredCount,
+        quizLength,
+        from: "NEXT_BUTTON"
+      });
 
-      // HIER ist der entscheidende Fix:
       if (answeredCount >= quizLength) {
         console.log("CALL endQuiz FROM NEXT_BUTTON");
-
         endQuiz();
       } else {
         console.log("CALL loadNextImage FROM NEXT_BUTTON");
-
         loadNextImage();
       }
     };
@@ -2796,10 +2816,11 @@ function handleMCClick(clickedOption, isCorrect) {
 
 
 
-
 // --- Auflösen ---
-function revealAnswer() {
+async function revealAnswer() {
   if (!currentItem) return;
+
+  await trackQuestionOnce(currentItem, false);
 
   const tn = Array.isArray(currentItem.trivialname) && currentItem.trivialname.length
     ? currentItem.trivialname[0]
@@ -2807,12 +2828,12 @@ function revealAnswer() {
 
   const scientific = currentItem.scientific_name;
 
-  document.getElementById('answer-container').innerHTML = `
+  document.getElementById("answer-container").innerHTML = `
     <span class="revealed-answer">${tn} <em>(${scientific})</em></span>
   `;
 
-  revealButtonEl.style.display = 'none';
-  nextButtonEl.style.display = 'inline-block';
+  revealButtonEl.style.display = "none";
+  nextButtonEl.style.display = "inline-block";
   nextButtonEl.onclick = loadNextImage;
 }
 
@@ -3252,8 +3273,8 @@ const CATEGORY_CONFIG = {
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
-    defaultDifficulty: "all",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
   "Reptilien": {
@@ -3261,8 +3282,8 @@ const CATEGORY_CONFIG = {
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
-    defaultDifficulty: "all",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
   "Amphibien": {
@@ -3270,8 +3291,8 @@ const CATEGORY_CONFIG = {
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",
     allowedFiletypes: ["image", "audio", "all"],
-    defaultDifficulty: "all",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
   "Libellen": {
@@ -3280,7 +3301,7 @@ const CATEGORY_CONFIG = {
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
     defaultDifficulty: "1",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
     "Heuschrecken": {
@@ -3289,7 +3310,7 @@ const CATEGORY_CONFIG = {
     defaultFiletype: "image",                  
     allowedFiletypes: ["image", "audio", "all"],
     defaultDifficulty: "1",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
   "Tagfalter": {
@@ -3298,7 +3319,7 @@ const CATEGORY_CONFIG = {
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
     defaultDifficulty: "1",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
   "Nachtfalter": {
@@ -3307,7 +3328,7 @@ const CATEGORY_CONFIG = {
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
     defaultDifficulty: "1",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
     "Käfer": {
@@ -3316,7 +3337,7 @@ const CATEGORY_CONFIG = {
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
     defaultDifficulty: "1",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
     "Zweiflügler": {
@@ -3324,8 +3345,8 @@ const CATEGORY_CONFIG = {
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
-    defaultDifficulty: "all",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
     "Spinnentiere": {
@@ -3333,8 +3354,8 @@ const CATEGORY_CONFIG = {
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
-    defaultDifficulty: "all",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
     "Sonstige Insekten": {
@@ -3342,8 +3363,8 @@ const CATEGORY_CONFIG = {
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
-    defaultDifficulty: "all",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    defaultDifficulty: "1",
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
     "Artenmix": {
@@ -3352,7 +3373,7 @@ const CATEGORY_CONFIG = {
     defaultFiletype: "image",
     allowedFiletypes: ["image", "audio", "all"],
     defaultDifficulty: "1",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
   // fallback für Kategorien ohne speziellen Eintrag
@@ -3362,7 +3383,7 @@ const CATEGORY_CONFIG = {
     defaultFiletype: "image",                  
     allowedFiletypes: ["image"],
     defaultDifficulty: "1",
-    allowedDifficulties: ["1", "2", "3", "all"],
+    allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   }
 };
@@ -3559,6 +3580,53 @@ async function fetchAllImages(baseQuery) {
   return all;
 }
 
+async function trackQuizStart() {
+  const difficultyParam =
+    selectedDifficulty === "all" ? null : parseInt(selectedDifficulty, 10);
+
+  const { error } = await client.rpc("track_quiz_start", {
+    p_category: selectedCategory,
+    p_difficulty: difficultyParam,
+    p_filetype: selectedFiletype,
+    p_answer_mode: selectedAnswerMode
+  });
+
+  if (error) console.error("track_quiz_start error", error);
+}
+
+async function trackQuestionResult(item, wasCorrect) {
+  const difficultyParam =
+    selectedDifficulty === "all" ? 0 : parseInt(selectedDifficulty, 10);
+
+  const payload = {
+    p_photo_id: String(item.id_nummer),          // ← stabile Bild-ID
+    p_scientific_name: item.scientific_name,
+    p_category: item.category,
+    p_difficulty: difficultyParam,
+    p_was_correct: wasCorrect
+  };
+
+  console.log("track_question_result payload:", payload);
+
+  const { error } = await client.rpc("track_question_result", payload);
+  if (error) {
+    console.error("track_question_result error", error);
+  }
+}
+
+async function trackQuizAbort() {
+  const difficultyParam =
+    selectedDifficulty === "all" ? null : parseInt(selectedDifficulty, 10);
+
+  const { error } = await client.rpc("track_quiz_abort", {
+    p_category: selectedCategory,
+    p_difficulty: difficultyParam,
+    p_filetype: selectedFiletype,
+    p_answer_mode: selectedAnswerMode
+  });
+
+  if (error) console.error("track_quiz_abort error", error);
+}
 
 // =========================
 // Start-/Setup-Funktionen
@@ -3567,6 +3635,9 @@ async function fetchAllImages(baseQuery) {
 startQuizBtn.onclick = async () => {
   audioPlayCountInRound = 0;
   currentCategory = selectedCategory;
+
+  await trackQuizStart();
+
   const numPhotos = selectedNumPhotos;
   const difficulty = selectedDifficulty;
 
@@ -3977,13 +4048,6 @@ async function preloadNextQuestion() {
 
 // --- Nächstes Bild ---
 async function loadNextImage() {
-  console.log(">>> loadNextImage START", {
-    shownCount,
-    totalShown,
-    quizLength,
-    photoIndex,
-    nextItem: !!nextItem
-  });
   if (isLoadingNext) return;    // verhindert parallel laufende Aufrufe
   isLoadingNext = true;
 
@@ -4051,6 +4115,7 @@ async function loadNextImage() {
     }
 
     currentItem = itemToUse;
+    currentQuestionTracked = false;
     nextItem = null;
     console.log('PRELOAD/FALLBACK currentItem', currentItem);
 
@@ -4203,7 +4268,8 @@ function showCategoryOverview() {
 }
 
 // --- Quiz abbrechen ---
-abortButtonEl.onclick = () => {
+abortButtonEl.onclick = async () => {
+  await trackQuizAbort();
   stopAllAudio();
   endQuiz();
 };
