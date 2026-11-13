@@ -824,6 +824,103 @@ h1 {
   cursor: pointer;
   margin-top: 8vh;
 }
+#subgroup-select {
+  /* Native Gestaltung und Standardpfeil entfernen */
+  -webkit-appearance: none;
+  appearance: none;
+
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  min-height: 50px;
+  box-sizing: border-box;
+  margin: 12px auto 0;
+
+  /* Rechts Platz für den eigenen Pfeil lassen */
+  padding: 13px 48px 13px 18px;
+
+  border: 1px solid #cbd8ce;
+  border-radius: 14px;
+
+  background-color: var(--bg-card);
+  color: var(--text-main);
+
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.4;
+
+  box-shadow: 0 3px 10px rgba(47, 93, 70, 0.08);
+
+  /* Eigener Dropdownpfeil */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%232f5d46' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 20px 20px;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+@media (hover: hover) {
+  #subgroup-select:hover {
+    border-color: var(--green-mid);
+    background-color: #f8fbf8;
+    box-shadow: 0 5px 14px rgba(47, 93, 70, 0.12);
+  }
+}
+
+#subgroup-select:focus {
+  outline: 2px solid var(--green-mid);
+  outline-offset: 3px;
+  border-color: var(--green-mid);
+}
+
+#subgroup-select:focus {
+  outline: 2px solid var(--green-mid);
+  outline-offset: 2px;
+  border-color: var(--green-mid);
+}
+#difficulty-buttons button:disabled {
+  background-color: #e5e5e5;
+  color: #888;
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+#difficulty-buttons button:disabled:hover {
+  background-color: #e5e5e5;
+  color: #888;
+}
+
+#difficulty-subgroup-hint {
+  margin: 10px 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+#filetype-buttons button:disabled {
+  background-color: #e5e5e5;
+  color: #888;
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+#filetype-buttons button:disabled:hover {
+  background-color: #e5e5e5;
+  color: #888;
+}
+
+#subgroup-audio-hint {
+  margin: 10px 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
 
 .quiz-overlay {
   position: fixed;
@@ -1927,6 +2024,22 @@ footer{
     <button id="back-to-categories">Zurück</button>
     <h2 id="config-category-title" class="config-category-title"></h2><br><br>
     <h3 class="config-category-subtitle">Wähle deine Parameter für diese Quiz-Runde</h3>
+<div
+  class="slider-container"
+  id="subgroup-container"
+  style="display: none;"
+>
+  <label
+    class="config-category-select"
+    for="subgroup-select"
+  >
+    Artengruppe:
+  </label>
+
+  <select id="subgroup-select" name="subgroup">
+    <option value="">Alle</option>
+  </select>
+</div>
   <div class="slider-container">
     <label class="config-category-select">Anzahl von Fragen:</label>
     <div id="num-photos-buttons" class="slider-buttons">
@@ -2013,7 +2126,7 @@ const questionAreaEl = document.getElementById('question-area');
 const revealButtonEl = document.getElementById('reveal-button');
 const nextButtonEl = document.getElementById('next-button');
 const statusEl = document.getElementById('status');
-const categoriesWithConfig = ["Tagfalter", "Libellen", "Amphibien", "Reptilien", "Säugetiere", "Nachtfalter", "Heuschrecken", "Käfer", "Zweiflügler", "Spinnentiere", "Sonstige Insekten", "Artenmix"];
+const categoriesWithConfig = ["Tagfalter", "Libellen", "Amphibien", "Reptilien", "Säugetiere", "Nachtfalter", "Heuschrecken", "Käfer", "Zweiflügler", "Spinnentiere", "Wanzen", "Artenmix"];
 const quizConfigEl = document.getElementById("quiz-config");
 const startQuizBtn = document.getElementById("start-quiz-btn");
 const speciesImageEl = document.getElementById('species-image');
@@ -2024,7 +2137,236 @@ const quizSummaryEl = document.getElementById("quiz-summary");
 const abortButtonEl = document.getElementById("abort-button");
 const stats = {}; // key: photo id, value: count
 const DETAILFUNCTIONURL = "https://detail-image-signer.yj79nr7hwk.workers.dev";
+const QUIZ_SUBGROUPS = {
+  "Reptilien": [
+    {
+      id: "eidechsen",
+      label: "Eidechsen",
+      phylogenyTag: "Lacertidae"
+    },
+    {
+      id: "schlangen",
+      label: "Schlangen",
+      phylogenyTag: "Schlangen"
+    }
+  ],
+  
+  "Amphibien": [
+    {
+      id: "braunfroesche",
+      label: "Braunfrösche",
+      phylogenyTag: "Braunfroesche"
+    },
+    {
+      id: "molche",
+      label: "Molche",
+      phylogenyTag: "Molch",
+      hasAudio: false
+    },
+    {
+      id: "kroeten",
+      label: "Kröten",
+      phylogenyTag: "Kroeten"
+    }
+  ],
 
+  "Libellen": [
+    {
+      id: "blaue kleinlibellen",
+      label: "Blaue Kleinlibellen",
+      phylogenyTag: "Schlanklibellen"
+    },
+    {
+      id: "blaupfeile",
+      label: "Blaupfeile",
+      phylogenyTag: "Orthetrum"
+    },
+    {
+      id: "edellibellen",
+      label: "Edellibellen",
+      phylogenyTag: "Aeshnidae"
+    },
+    {
+      id: "falkenlibellen",
+      label: "Falkenlibellen",
+      phylogenyTag: "Falkenlibellen"
+    },
+    {
+      id: "flussjungfern",
+      label: "Flussjungfern",
+      phylogenyTag: "Gomphidae"
+    },
+    {
+      id: "heidelibellen",
+      label: "Heidelibellen",
+      phylogenyTag: "Heidelibellen"
+    },
+    {
+      id: "moosjungfern",
+      label: "Moosjungfern",
+      phylogenyTag: "Moosjungfern"
+    },
+    {
+      id: "teichjungfern",
+      label: "Teichjungfern",
+      phylogenyTag: "Lestidae"
+    }
+  ],
+
+  "Heuschrecken": [
+    {
+      id: "feldheuschrecken",
+      label: "Feldheuschrecken",
+      phylogenyTag: "Acrididae"
+    },
+    {
+      id: "grillen",
+      label: "Grillen",
+      phylogenyTag: "Grillen"
+    },
+    {
+      id: "laubheuschrecken",
+      label: "Laubheuschrecken",
+      phylogenyTag: "Tettigoniidae"
+    }/*,
+    {
+      id: "dornschrecken",
+      label: "Dornschrecken",
+      phylogenyTag: "Tetrigidae",
+      hasAudio: false
+    }*/
+  ],
+
+  "Tagfalter": [
+    {
+      id: "augenfalter",
+      label: "Augenfalter",
+      phylogenyTag: "Augenfalter"
+    },
+    {
+      id: "dickkopffalter",
+      label: "Dickkopffalter",
+      phylogenyTag: "Hesperiidae"
+    },
+    {
+      id: "eigentliche blaeulinge",
+      label: "Eigentliche Bläulinge",
+      phylogenyTag: "Blau"
+    },
+    {
+      id: "feuerfalter",
+      label: "Feuerfalter",
+      phylogenyTag: "Lycaena"
+    },
+    {
+      id: "perlmuttfalter",
+      label: "Perlmuttfalter",
+      phylogenyTag: "Perlmuttfalter"
+    },
+    {
+      id: "scheckenfalter",
+      label: "Scheckenfalter",
+      phylogenyTag: "Scheckenfalter"
+    },
+    {
+      id: "weisslinge",
+      label: "Weißlinge",
+      phylogenyTag: "Pieridae"
+    },
+    {
+      id: "zipfelfalter",
+      label: "Zipfelfalter",
+      phylogenyTag: "Zipfelfalter"
+    }
+  ],
+/*
+  "Käfer": [
+    {
+      id: "aaskaefer",
+      label: "Aaskäfer",
+      phylogenyTag: "Silphidae"
+    },
+    {
+      id: "blatthornkaefer",
+      label: "Blatthornkäfer",
+      phylogenyTag: "Scarabaeidae"
+    },
+    {
+      id: "blattkaefer",
+      label: "Blattkäfer",
+      phylogenyTag: "Chrysomelidae"
+    },
+    {
+      id: "bockkaefer",
+      label: "Bockkäfer",
+      phylogenyTag: "Cerambycidae"
+    },
+    {
+      id: "laufkaefer",
+      label: "Laufkäfer",
+      phylogenyTag: "Carabidae"
+    },
+    {
+      id: "marienkaefer",
+      label: "Marienkäfer",
+      phylogenyTag: "Coccinellidae"
+    },
+    {
+      id: "schroeter",
+      label: "Schröter",
+      phylogenyTag: "Lucanidae"
+    }
+  ],
+
+  "Nachtfalter": [
+    {
+      id: "erebidae",
+      label: "Erebiden",
+      phylogenyTag: "Erebidae"
+    },
+    {
+      id: "eulenfalter",
+      label: "Eulenfalter",
+      phylogenyTag: "Noctuidae"
+    },
+    {
+      id: "schwaermer",
+      label: "Schwärmer",
+      phylogenyTag: "Sphingidae"
+    },
+    {
+      id: "spanner",
+      label: "Spanner",
+      phylogenyTag: "Geometridae"
+    },
+    {
+      id: "glasflügler",
+      label: "Glasflügler",
+      phylogenyTag: "Sesiidae"
+    },
+    {
+      id: "sichelflügler",
+      label: "Eulenspinner und Sichelflügler",
+      phylogenyTag: "Drepanidae"
+    },
+    {
+      id: "widderchen",
+      label: "Widderchen",
+      phylogenyTag: "Zygaenidae"
+    },
+    {
+      id: "zahnspinner",
+      label: "Zahnspinner",
+      phylogenyTag: "Notodontidae"
+    }
+  ]*/
+};
+
+function getSelectedSubgroup() {
+  const groups = QUIZ_SUBGROUPS[selectedCategory] || [];
+
+  return groups.find(group => group.id === selectedSubgroupId) || null;
+}
 
 
 let scale = 1;
@@ -2061,6 +2403,8 @@ let speciesOrder = [];
 let speciesPointer = 0;
 let quizLength = null;
 let selectedCategory = null;
+let selectedSubgroupId = "";
+let difficultyBeforeSubgroup = null;
 let selectedAnswerMode = "mc"; // Standard  
 let photoPool = [];
 let shuffledPhotos = [];
@@ -2078,7 +2422,8 @@ let selectedFiletype = "image"; // Default: Bilder
 let audioPlayCountInRound = 0;
 let currentAnswerItems = [];
 let currentQuestionTracked = false;
-
+let numPhotosBeforeSubgroup = null;
+let filetypeBeforeAudioRestriction = null;
 
 
 // =========================
@@ -2171,6 +2516,212 @@ function shouldShowFeatures(item) {
 // =========================
 // QUIZ KERNLOGIK
 // =========================
+
+function renderSubgroupButtons(category) {
+  const container = document.getElementById("subgroup-container");
+  const selectEl = document.getElementById("subgroup-select");
+
+  // Bei jeder neu geöffneten Konfiguration zurücksetzen.
+  selectedSubgroupId = "";
+
+  // Bisherige Optionen entfernen.
+  selectEl.replaceChildren();
+
+  // Standardoption: kein Untergruppenfilter.
+  const allOption = document.createElement("option");
+  allOption.value = "";
+  allOption.textContent = "Alle Arten";
+
+  selectEl.appendChild(allOption);
+
+  // Manuell definierte Gruppen der aktuellen Kategorie.
+  const groups = QUIZ_SUBGROUPS[category] || [];
+
+  for (const group of groups) {
+    const option = document.createElement("option");
+
+    option.value = group.id;
+    option.textContent = group.label;
+
+    selectEl.appendChild(option);
+  }
+
+  selectEl.value = selectedSubgroupId;
+
+  // Ohne konfigurierte Gruppen bleibt der Bereich verborgen.
+  container.style.display = groups.length > 0 ? "" : "none";
+
+  // Auswahl für den bestehenden Quizstart speichern.
+  selectEl.onchange = () => {
+  selectedSubgroupId = selectEl.value;
+
+  updateDifficultyForSubgroup();
+  updateSubgroupLimits();
+};
+}
+function updateDifficultyForSubgroup() {
+  const hasSubgroup = getSelectedSubgroup() !== null;
+
+  const buttons = document.querySelectorAll(
+    "#difficulty-buttons button"
+  );
+
+  if (hasSubgroup) {
+    // Vorherige Schwierigkeit nur beim Wechsel in den
+    // Untergruppenmodus speichern.
+    if (selectedDifficulty !== "all") {
+      difficultyBeforeSubgroup = selectedDifficulty;
+    }
+
+    // Alle Schwierigkeitsstufen für die Untergruppe zulassen.
+    selectedDifficulty = "all";
+  } else if (difficultyBeforeSubgroup !== null) {
+    // Beim Zurückwechseln zu "Alle" die vorherige Stufe herstellen.
+    selectedDifficulty = difficultyBeforeSubgroup;
+    difficultyBeforeSubgroup = null;
+  }
+
+  buttons.forEach(button => {
+    button.disabled = hasSubgroup;
+
+    button.classList.toggle(
+      "active",
+      !hasSubgroup &&
+      button.dataset.value === selectedDifficulty
+    );
+  });
+
+  const hint = document.getElementById("difficulty-subgroup-hint");
+
+  if (hint) {
+    hint.hidden = !hasSubgroup;
+  }
+}
+function updateSubgroupLimits() {
+  const subgroup = getSelectedSubgroup();
+  const hasSubgroup = subgroup !== null;
+
+  const cfg =
+    CATEGORY_CONFIG[selectedCategory] ||
+    CATEGORY_CONFIG._default;
+
+  // ====================================
+  // Fragenanzahl
+  // ====================================
+
+  const allowedNumPhotos = hasSubgroup
+    ? ["10", "30"]
+    : cfg.allowedNumPhotos;
+
+  if (hasSubgroup) {
+    // Ursprüngliche Auswahl beim ersten Wechsel speichern.
+    if (numPhotosBeforeSubgroup === null) {
+      numPhotosBeforeSubgroup = selectedNumPhotos;
+    }
+
+    // Beispielsweise 60 oder 100 auf 30 reduzieren.
+    if (!allowedNumPhotos.includes(selectedNumPhotos)) {
+      selectedNumPhotos = "30";
+    }
+  } else {
+    // Beim Zurückwechseln auf "Alle" vorherige Auswahl herstellen.
+    if (numPhotosBeforeSubgroup !== null) {
+      selectedNumPhotos = numPhotosBeforeSubgroup;
+      numPhotosBeforeSubgroup = null;
+    }
+
+    // Sicherheit: Auswahl muss zur aktuellen Kategorie passen.
+    if (!allowedNumPhotos.includes(selectedNumPhotos)) {
+      selectedNumPhotos = cfg.defaultNumPhotos;
+    }
+  }
+
+  document.querySelectorAll("#num-photos-buttons button")
+    .forEach(button => {
+      const allowed = allowedNumPhotos.includes(
+        button.dataset.value
+      );
+
+      button.style.display = allowed ? "inline-flex" : "none";
+      button.disabled = !allowed;
+
+      button.classList.toggle(
+        "active",
+        allowed &&
+        button.dataset.value === selectedNumPhotos
+      );
+    });
+
+  // ====================================
+  // Medientyp
+  // ====================================
+
+  const allowedFiletypes = cfg.allowedFiletypes || ["image"];
+  const imagesOnlyForSubgroup = subgroup?.hasAudio === false;
+
+  if (imagesOnlyForSubgroup) {
+    // Vorherigen Medientyp nur beim Beginn der Sperre speichern.
+    if (filetypeBeforeAudioRestriction === null) {
+      filetypeBeforeAudioRestriction = selectedFiletype;
+    }
+
+    selectedFiletype = "image";
+  } else {
+    // Beim Wechsel zu einer anderen Gruppe oder "Alle"
+    // den vorherigen Medientyp wiederherstellen.
+    if (filetypeBeforeAudioRestriction !== null) {
+      selectedFiletype = filetypeBeforeAudioRestriction;
+      filetypeBeforeAudioRestriction = null;
+    }
+
+    if (!allowedFiletypes.includes(selectedFiletype)) {
+      selectedFiletype = cfg.defaultFiletype || "image";
+    }
+  }
+
+  const filetypeContainer = document.getElementById(
+    "filetype-container"
+  );
+
+  // Reine Bilderkategorien behalten ihren ausgeblendeten Block.
+  const categoryIsImagesOnly =
+    allowedFiletypes.length === 1 &&
+    allowedFiletypes[0] === "image";
+
+  filetypeContainer.style.display =
+    categoryIsImagesOnly ? "none" : "block";
+
+  document.querySelectorAll("#filetype-buttons button")
+    .forEach(button => {
+      const value = button.dataset.value;
+      const allowedByCategory = allowedFiletypes.includes(value);
+
+      const blockedBySubgroup =
+        imagesOnlyForSubgroup && value !== "image";
+
+      button.style.display =
+        allowedByCategory ? "inline-flex" : "none";
+
+      button.disabled =
+        !allowedByCategory || blockedBySubgroup;
+
+      button.classList.toggle(
+        "active",
+        allowedByCategory &&
+        !blockedBySubgroup &&
+        value === selectedFiletype
+      );
+    });
+
+  const audioHint = document.getElementById(
+    "subgroup-audio-hint"
+  );
+
+  if (audioHint) {
+    audioHint.hidden =
+      !imagesOnlyForSubgroup || categoryIsImagesOnly;
+  }
+}
 
 function nextImage() {
   if (photoIndex >= shuffledPhotos.length) return null;
@@ -3189,7 +3740,7 @@ console.log("categories data", { error, count: data?.length, sample: data?.[0] }
     "Käfer",
     "Zweiflügler",
     "Spinnentiere",
-    "Sonstige Insekten",
+    "Wanzen",
     "Artenmix"
   ];
 
@@ -3358,7 +3909,7 @@ const CATEGORY_CONFIG = {
     allowedDifficulties: ["1", "2", "3"],
     extraFilters: []
   },
-    "Sonstige Insekten": {
+    "Wanzen": {
     defaultNumPhotos: "10",
     allowedNumPhotos: ["10", "30", "60", "all"],
     defaultFiletype: "image",                  
@@ -3411,6 +3962,9 @@ function showQuizConfig(category) {
   quizConfigEl.style.display = "block";
 
   const cfg = CATEGORY_CONFIG[category] || CATEGORY_CONFIG._default;
+  numPhotosBeforeSubgroup = null;
+  filetypeBeforeAudioRestriction = null;
+  renderSubgroupButtons(category);
 
   // Antwortmodus: immer gleich, nur Default setzen
   selectedAnswerMode = "mc";
@@ -3451,13 +4005,15 @@ function showQuizConfig(category) {
 
   // Schwierigkeit: Buttons ein-/ausblenden + Default
   selectedDifficulty = cfg.defaultDifficulty;
+  difficultyBeforeSubgroup = null;
   document.querySelectorAll("#difficulty-buttons button").forEach(b => {
     const value = b.dataset.value;
     const enabled = cfg.allowedDifficulties.includes(value);
     b.style.display = enabled ? "inline-flex" : "none";
     b.classList.toggle("active", enabled && value === selectedDifficulty);
   });
-
+  updateDifficultyForSubgroup();
+  updateSubgroupLimits();
   quizConfigEl.scrollIntoView({
     block: "start",    // oberer Rand des Elements
     behavior: "auto"   // kein Smooth-Scroll, damit nichts „nachrutscht“
@@ -3509,7 +4065,7 @@ function initConfigButtons() {
   // Anzahl-Fotos Buttons
   document.querySelectorAll("#num-photos-buttons button").forEach(btn => {
     btn.addEventListener("click", () => {
-      if (btn.style.display === "none") return; // vorsichtshalber
+      if (btn.disabled || btn.style.display === "none") return; // vorsichtshalber
       selectedNumPhotos = btn.dataset.value;
       document.querySelectorAll("#num-photos-buttons button")
         .forEach(b => b.classList.remove("active"));
@@ -3523,7 +4079,7 @@ function initConfigButtons() {
       btn.classList.add("active");
     }
     btn.addEventListener("click", () => {
-      if (btn.style.display === "none") return;
+      if (btn.disabled || btn.style.display === "none") return;
       selectedFiletype = btn.dataset.value;
       document.querySelectorAll("#filetype-buttons button")
         .forEach(b => b.classList.remove("active"));
@@ -3535,7 +4091,7 @@ function initConfigButtons() {
   // Schwierigkeit Buttons
   document.querySelectorAll("#difficulty-buttons button").forEach(btn => {
     btn.addEventListener("click", () => {
-      if (btn.style.display === "none") return;
+      if (btn.disabled || btn.style.display === "none") return;
       selectedDifficulty = btn.dataset.value;
       document.querySelectorAll("#difficulty-buttons button")
         .forEach(b => b.classList.remove("active"));
@@ -3664,20 +4220,48 @@ startQuizBtn.onclick = async () => {
     numPhotos === "all" ? 100 : parseInt(numPhotos, 10);
 
   // Medien holen
-  const { data, error } = await client.rpc('get_random_quiz_images_r2', {
-    p_category:   selectedCategory,
-    p_difficulty: difficultyParam,
-    p_limit:      desired,
-    p_filetype:   filetypeParam
-  });
+const subgroup = getSelectedSubgroup();
+
+const rpcName = subgroup
+  ? "get_random_quiz_images_r2_subgroup"
+  : "get_random_quiz_images_r2";
+
+const rpcParams = {
+  p_category: selectedCategory,
+  p_difficulty: difficultyParam,
+  p_limit: desired,
+  p_filetype: filetypeParam
+};
+
+if (subgroup) {
+  rpcParams.p_phylogeny_tag = subgroup.phylogenyTag;
+}
+
+const { data, error } = await client.rpc(rpcName, rpcParams);
 
   console.log("first item", data?.[0]);
 
   if (error || !data || data.length === 0) {
-    console.error(error);
-    alert('Keine Medien für diese Auswahl gefunden.');
-    return;
+  if (error) {
+    console.error("Quizmedien konnten nicht geladen werden:", error);
   }
+
+  const subgroupLabel = subgroup
+    ? ` in der Untergruppe „${subgroup.label}“`
+    : "";
+
+  alert(
+    error
+      ? "Die Quizmedien konnten nicht geladen werden."
+      : `Keine Medien${subgroupLabel} für diese Auswahl gefunden.`
+  );
+
+  quizEl.style.display = "none";
+  categorySectionEl.style.display = "none";
+  quizConfigEl.style.display = "block";
+
+  return;
+}
 
   // Items vorbereiten
   const items = data.map(row => {
@@ -3751,6 +4335,7 @@ startQuizBtn.onclick = async () => {
 
 
 function startQuizDirect(category) {
+  selectedSubgroupId = "";
   selectedCategory = category;
   selectedNumPhotos = "all";
   selectedDifficulty = "all";
