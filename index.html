@@ -4488,21 +4488,113 @@ document.addEventListener('DOMContentLoaded', setupMetaToggles);
 function setLicenseTextWithLink(licenseTextDiv, rawText) {
   let text = rawText || 'Kein Lizenzhinweis vorhanden.';
 
-  // Alle ungewöhnlichen Bindestriche in normale Minuszeichen umwandeln
+  // Ungewöhnliche Bindestriche normalisieren
   text = text.replace(/[\u2010-\u2015]/g, '-');
 
-  // Jetzt nach der normalisierten Schreibweise suchen
-  const re = /CC BY-NC-SA 4\.0/;
+  const licenses = [
+    {
+      pattern: /CC\s+BY-NC-SA\s+4\.0/i,
+      label: 'CC BY-NC-SA 4.0',
+      url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/'
+    },
+    {
+      pattern: /CC\s+BY-NC\s+4\.0/i,
+      label: 'CC BY-NC 4.0',
+      url: 'https://creativecommons.org/licenses/by-nc/4.0/'
+    },
+    {
+      pattern: /CC\s+BY-SA\s+3\.0/i,
+      label: 'CC BY-SA 3.0',
+      url: 'https://creativecommons.org/licenses/by-sa/3.0/deed.en'
+    },
+    {
+      pattern: /CC0\s+1\.0/i,
+      label: 'CC0 1.0',
+      url: 'https://creativecommons.org/publicdomain/zero/1.0/deed.en'
+    },
+    {
+      pattern: /CC\s+BY\s+4\.0/i,
+      label: 'CC BY 4.0',
+      url: 'https://creativecommons.org/licenses/by/4.0/deed.en'
+    },
+    {
+      pattern: /CC\s+BY\s+2\.0/i,
+      label: 'CC BY 2.0',
+      url: 'https://creativecommons.org/licenses/by/2.0/deed.de'
+    },
+    {
+      pattern: /CC\s+BY-SA\s+4\.0/i,
+      label: 'CC BY-SA 4.0',
+      url: 'https://creativecommons.org/licenses/by-sa/4.0/deed.en'
+    }
+  ];
 
-  if (re.test(text)) {
-    const linked = text.replace(
-      re,
-      '<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a>'
-    );
-    licenseTextDiv.innerHTML = linked;
+  const match = licenses.find((license) => license.pattern.test(text));
+
+  if (match) {
+    const startIndex = text.search(match.pattern);
+    const matchedText = text.match(match.pattern)[0];
+    const endIndex = startIndex + matchedText.length;
+
+    const before = text.slice(0, startIndex);
+    const after = text.slice(endIndex);
+
+    licenseTextDiv.textContent = '';
+
+    if (before) {
+  licenseTextDiv.append(createTextWithLinks(before));
+}
+
+const licenseLink = document.createElement('a');
+licenseLink.href = match.url;
+licenseLink.target = '_blank';
+licenseLink.rel = 'noopener noreferrer';
+licenseLink.textContent = match.label;
+licenseTextDiv.append(licenseLink);
+
+if (after) {
+  licenseTextDiv.append(createTextWithLinks(after));
+}
   } else {
     licenseTextDiv.textContent = text;
   }
+}
+
+function createTextWithLinks(text) {
+  const fragment = document.createDocumentFragment();
+
+  // Findet http(s)- und www-URLs
+  const urlPattern = /(?:https?:\/\/[^\s]+|www\.[^\s]+)/gi;
+
+  let lastIndex = 0;
+  let match;
+
+  while ((match = urlPattern.exec(text)) !== null) {
+    const url = match[0];
+
+    // Text vor dem Link normal ausgeben
+    if (match.index > lastIndex) {
+      fragment.append(text.slice(lastIndex, match.index));
+    }
+
+    // URL in klickbaren Link umwandeln
+    const link = document.createElement('a');
+    link.href = url.startsWith('www.') ? `https://${url}` : url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.textContent = url;
+
+    fragment.append(link);
+
+    lastIndex = match.index + url.length;
+  }
+
+  // Text nach dem letzten Link ausgeben
+  if (lastIndex < text.length) {
+    fragment.append(text.slice(lastIndex));
+  }
+
+  return fragment;
 }
 
 function setFeaturesText(featuresTextDiv, answerItems) {
